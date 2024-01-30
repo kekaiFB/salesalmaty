@@ -1,0 +1,62 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+{% load user_tags %}
+
+{% block list %}
+    <script>
+        var data = {
+            rows: [
+            {% for entry in row_field_checked %}
+            {
+                office: "{{ entry.office }}",
+                post: "{{ entry.post }}",
+                fio: "{{ entry.fio }}",
+                record: "{{ entry.record }}",
+                options: [{% for option in entry.existing_options %}"{{ option }}"{% if not forloop.last %},{% endif %}{% endfor %}]
+            },
+            {% endfor %}
+            ]
+        };
+    </script>
+
+    <div hidden class="modify_column">{{modify_column}}</div>
+    <input hidden class="filed_name_input" value={{field_name}}>
+    <input hidden class="field_name_original" value={{field_name_original}}>
+
+   <a class="btn btn-outline-primary" href={% url 'user:import-snj-detail' import_id %}>Назад</a>
+
+
+   {% csrf_token %}
+   <div class="containter mt-4  rounded">
+        <div class="p4 h3 m-2 mt-3 text-center">
+            Проверка данных в столбце "{{ field_name }}"
+            <select name="existing_option" class="selectpicker mr-2" data-live-search="true" data-hide-disabled="true" title="{{ field_name }}...">
+                <option value="">------</option>
+                {% for option in all_option %}
+                  <option value="{{ option }}">{{ option }}</option>
+                {% endfor %}
+              </select>
+            <button class="btn btn-primary calculate_universal mr-3">Применить для всех</button>
+        </div>
+      
+      
+
+      <table id="data-table-reason-shift" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="column2">Подразделение</th>
+                <th class="column3">Должность</th>
+                <th class="column4">ФИО</th>
+                <th class="column2">{{field_name}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Записи будут добавляться динамически с помощью JavaScript -->
+        </tbody>
+      </table>
+      <button id="applyChanges" class="btn btn-success">Применить изменения</button>
+
+   </div> 
+
+
+{% endblock %}

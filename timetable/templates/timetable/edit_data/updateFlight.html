@@ -1,0 +1,261 @@
+<form method="post">
+  {% csrf_token %}  
+
+  <div class="modal-header">
+    <h3 class="modal-title">Обновить рейс</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+  </div>
+
+  
+  <div class="modal-body">
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+    </div>
+           
+    <div class='val_forms' hidden>
+      <div id="val_field_{{form.title.id_for_label }}" class="val_field">{{ form.title.value }}</div>
+      <div id="{{form.title_2.label}}" class="val_field">{{ form.title_2.value }}</div>
+      <div id="val_field_{{form.type.id_for_label }}" class="val_field">{{ form.type.value }}</div>
+      <div id="val_field_{{form.airline.id_for_label }}" class="val_field">{{ form.airline.value }}</div>
+      <div id="val_field_{{form.airplane.id_for_label }}" class="val_field">{{ form.airplane.value }}</div>
+      <div id="val_field_{{form.equipmentAirplane.id_for_label }}" class="val_field">{{ form.equipmentAirplane.value }}</div>
+      <div id="val_field_{{form.departurelAirport.id_for_label }}" class="val_field">{{ form.departurelAirport.value }}</div>
+      <div id="val_field_{{form.arrivalAirport.id_for_label }}" class="val_field">{{ form.arrivalAirport.value }}</div>
+      <div id="val_field_{{form.type_flight.id_for_label }}" class="val_field">{{ form.type_flight.value }}</div>
+    </div>
+    {% comment %} Кэшируем только нужные данные {% endcomment %}
+    {% include 'timetable/edit_data/cache_flight_form_field.html' %}
+    {{form.company}}
+    {{form.is_active}}
+
+  </div>
+  <div id="meta"></div>
+  <div id="group" hidden>{{user_groups}}</div>
+
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Обновить</button>
+  </div>
+
+</form>
+
+
+<script> 
+  var queryset = []
+  $.ajax({    
+    url: "{% url 'timetable:get_airlane_information'  %}",                  
+    success: function (data) {  
+      queryset = data.queryset
+    }
+  });
+  country_airport = $.map(  $('span.country'), function( val, i ) {
+      return {
+        country_type: val.dataset.country_type,
+        airport: val.dataset.airport
+      };
+  });
+  
+
+ 
+  $('#id_departurelAirport, #id_arrivalAirport').change(function () {
+    check_flight()
+  });
+
+  function check_flight () {
+    //Кнопка отправки
+    if ($('#id_arrivalAirport').val() == '' && $('#id_departurelAirport').val() == '')
+    {
+      $('button[type="submit"]').prop( "disabled", true);
+    } else {
+      $('button[type="submit"]').prop( "disabled", false);
+    }
+    var option_text = ''
+    
+    //Тип рейса
+    if ($('#id_arrivalAirport').val() == '' && $('#id_departurelAirport').val() != '') //заполнен только вылет
+    {
+      option_text = country_airport[country_airport.findIndex(c => c.airport == $('#id_departurelAirport').val())].country_type + ' начальный'
+    }
+    else if ($('#id_departurelAirport').val() == '' && $('#id_arrivalAirport').val() != '') //заполнен только прилет
+    {
+      option_text = country_airport[country_airport.findIndex(c => c.airport == $('#id_arrivalAirport').val())].country_type + ' конечный'
+    }
+    else if ($('#id_departurelAirport').val() != '' && $('#id_arrivalAirport').val() != '') //заполнены оба поля
+    {
+      option_text = country_airport[country_airport.findIndex(c => c.airport == $('#id_departurelAirport').val())].country_type + ' -> ' + country_airport[country_airport.findIndex(c => c.airport == $('#id_arrivalAirport').val())].country_type + ' оборотный'
+    }
+    else if ($('#id_departurelAirport').val() == '' && $('#id_arrivalAirport').val() == '') // не заполнены оба поля
+    {
+      option_text = ''
+    } 
+    
+    if (option_text == '')
+    {
+      $('#id_type_flight').val('')
+
+    } else {
+      $('#id_type_flight option:contains('+ option_text +')').prop('selected', true);
+    }
+    $('#id_type_flight').selectpicker('refresh');           
+
+  }
+
+  // Массив классов, к которым нужно применить изменения
+  var classesToApply = [
+  'id_type',
+  'id_airline',
+  'id_airplane',
+  'id_equipmentAirplane',
+  'id_departurelAirport',
+  'id_arrivalAirport',
+  'id_city',
+  'id_type_flight'
+  ];
+
+  // Применяем атрибуты и selectpicker ко всем элементам по классам
+  $.each(classesToApply, function(index, className) {
+    $('#' + className).attr('data-live-search', 'true');
+    $('#' + className).attr('data-size', 9);
+    $('#' + className).selectpicker({ 
+        noneResultsText: '   Результатов нет',
+    });
+  });
+
+  
+
+  // меняем данные для ВС
+  $('#id_airline').change(function () {
+    get_airplane_ajax()
+  });
+  // меняем данные для ВС
+
+  function get_airplane_ajax () {
+    $.ajax({                       
+      url: "{% url 'timetable:get_airplane_ajax' %}",                 
+      data: {
+        'id_airline': $("#id_airline").val(),  
+      },
+      success: function (data) { 
+      
+        var select = $("#id_airplane");
+
+        // Очистите существующие элементы (за исключением первой опции)
+        select.find("option:not(:first)").remove();
+        // Добавьте новые опции на основе полученных данных
+        $.each(data.queryset, function(index, item) {
+            select.append($('<option>', {
+                value: item.id,
+                text: item.name
+            }));
+        });
+        $('#id_airplane').selectpicker('refresh');  
+
+        $("#id_equipmentAirplane").find("option:not(:first)").remove();
+        $('#id_equipmentAirplane').selectpicker('refresh');  
+      }
+    });
+  }
+
+
+  //   // меняем данные для комплектации
+  $('#id_airplane').change(function () {
+    get_equipmentAirplane_ajax()
+  });
+  
+  function get_equipmentAirplane_ajax () {
+      $.ajax({                       
+        url: "{% url 'timetable:get_equipmentAirplane_ajax' %}",                 
+        data: {
+          'id_airplane': $("#id_airplane").val(),  
+        },
+        success: function (data) { 
+        
+          var select = $("#id_equipmentAirplane");
+
+          // Очистите существующие элементы (за исключением первой опции)
+          select.find("option:not(:first)").remove();
+          // Добавьте новые опции на основе полученных данных
+          $.each(data.queryset, function(index, item) {
+              select.append($('<option>', {
+                  value: item.id,
+                  text: item.name
+              }));
+          });
+          $('#id_equipmentAirplane').selectpicker('refresh');  
+        }
+      });
+  }
+  
+  //Создаем операцию до валидации формы
+  $("form").submit(function(){
+      $('#meta').text('Пожалуйста не закрывайте страницу')
+      $('#meta').addClass('alert alert-warning h6')
+      $('button[type="submit"]').prop( "disabled", true);
+  });
+  
+  // уникальное имя+рейс
+  $('#id_title, #id_airline').change(function () {
+    unique_title_airline()
+  });
+  
+  function unique_title_airline () {
+    if ($('#id_title').val()!='' && $('#id_airline').val()!='')
+    {
+      $.ajax({                       
+        url: "{% url 'timetable:load_ajax_unique_title_airline' %}",                 
+        data: {
+          'id_title': $("#id_title").val(),  
+          'id_airline': $("#id_airline").val(),  
+        },
+        success: function (data) { 
+          if (data.count != '') 
+          {
+            $('#meta').text('Рейс с такой парой значений (название авиакомпания) уже существует')
+            $('#meta').addClass('alert alert-danger h6')
+            $('button[type="submit"]').prop( "disabled", true);
+          } else {
+            $('#meta').text('')
+            $('#meta').removeClass('alert alert-danger h6')
+            $('button[type="submit"]').prop( "disabled", false);
+          }
+        }
+      });
+    }
+  }
+
+  // Проверяем начальные значения и устанавливаем доступность полей ввода номера рейса
+  if($('#id_arrivalAirport').val() != "") {
+    $('#id_title').prop('disabled', false);
+  } else {
+    $('#id_title').prop('disabled', true);
+  }
+  
+  if($('#id_departurelAirport').val() != "") {
+    $('#id_title_2').prop('disabled', false);
+  } else {
+    $('#id_title_2').prop('disabled', true);
+  }
+
+  // При изменении значения поля прилёта активируем или деактивируем поля ввода номера рейса
+  $('#id_arrivalAirport').change(function() {
+    if($(this).val() != "") {
+
+      $('#id_title').prop('disabled', false);
+    } else {
+      $('#id_title').val('')
+      $('#id_title').prop('disabled', true);
+    }
+  });
+  
+  // Аналогично для поля вылета
+  $('#id_departurelAirport').change(function() {
+    if($(this).val() != "") {
+      $('#id_title_2').prop('disabled', false);
+    } else {
+      $('#id_title_2').val('')
+      $('#id_title_2').prop('disabled', true);
+    }
+  });
+</script>

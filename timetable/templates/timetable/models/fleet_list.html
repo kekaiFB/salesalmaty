@@ -1,0 +1,58 @@
+{% extends "timetable/models/model_base.html" %}
+{% load tgo_tags %}
+
+
+{% block list %}
+   <div class="mt-2">
+      
+      <a class="btn btn-outline-primary" href={{prev_url}}>Назад</a>
+      <span id="dt_resetFilter" class="btn btn-warning text-dark">Сбросить фильтры</span>
+      <a class="btn btn-outline-warning" href="{% url 'timetable:equipmentAirplane' %}">Комплектации ВС</a>
+      {% if request.user.is_superuser %}
+        {% add_button_text 'timetable:add_fleet' %}
+      {% endif %}
+   </div>
+   <hr>
+   <table class="table rounded-lgn table_dt col-12 bg-white" style="width:100%">
+   <thead> 
+      <tr>
+         <th>Воздушное судно</th>
+         <th>Код ИАТА</th>
+         <th>Код ИКАО</th>
+         {% if request.user.is_superuser %}
+            <th></th>
+            <th></th>
+         {% endif %}
+      </tr>
+   </thead>
+   <tbody>
+      {% for f in fleet %}  
+         <tr>
+            <td>{{ f.title }}</td>
+            <td>{% if f.code_iata %}{{ f.code_iata }}{% endif %}</td>
+            <td>{% if f.code_ikao %}{{ f.code_ikao }}{% endif %}</td>
+            {% if request.user.is_superuser %}
+               <td>
+                     {% edit_button 'timetable:edit_fleet' f.id %}
+               </td>
+               <td>
+                     {% del_button 'timetable:delete_fleet' f.id %}
+               </td>
+            {% endif %}
+         </tr>     
+      {% endfor %}
+   </tbody>
+   <tfoot> 
+      <tr>
+         <th>Воздушное судно</th>
+         <th>Код ИАТА</th>
+         <th>Код ИКАО</th>
+         {% if request.user.is_superuser %}
+            <th></th>
+            <th></th>
+         {% endif %}
+      </tr>
+   </tfoot>
+   </table>
+      
+{% endblock %}

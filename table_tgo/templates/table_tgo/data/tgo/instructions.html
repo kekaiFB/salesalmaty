@@ -1,0 +1,101 @@
+
+  <button type="button" onClick="$('#modal_alert').modal('show');" class="btn btn-outline-dark instructions ml-2 mt-1 btn-sm" data-toggle="modal" data-target="#exampleModalLong">
+    Пояснения
+  </button>
+
+  
+  <!-- Modal -->
+  <div class="modal_body_instructions">
+    <div class="row">
+      <div class="col">
+        <p>
+          <h4>Ручное редактирование:</h4>
+          <h4 class="ml-2">- Время</h4>
+          <h4 class="ml-2">- Примечание</h4>
+        </p>
+        <p>
+          <span class="material-icons mt-2">
+              arrow_back
+          </span>
+          <span>Вернуться на предыдущую страницу</span>
+        </p>
+        <p>
+          <span class="material-icons mt-2 text-primary">
+              add_box
+          </span>
+          <span>Добавить операцию</span>
+        </p>
+        <p>
+          <span class="material-icons mt-2">
+              undo
+          </span>
+          <span>Назад</span>
+        </p>
+        <p>
+          <span class="material-icons mt-2">
+              redo
+          </span>
+          <span>Вперед</span>
+        </p>
+        <p>
+          <span class="material-icons mt-2">
+              save
+          </span>
+          <span>Сохранить время</span>
+        </p> 
+        <p>
+          <span class="material-icons mt-2">
+            picture_as_pdf
+          </span>
+          <span>Сохранить в PDF</span>
+        </p>
+      </div>
+      
+      <div class="col">
+        <p>
+          <h4>Цвета ячеек</h4>
+        
+        </p>
+        <p>
+          <button style="background-color:#FFFFE0;" class="btn rounded border border-dark">Ручной ввод</button>
+        </p>
+        <p>
+          <button style="background-color:#91DFAB;" class="btn rounded border border-dark">Родительские настройки</button>
+        </p>
+        <p>
+          <button style="background-color:#E0FFFF;" class="btn rounded border border-dark">Зависимость от предыдущих операций</button>
+        </p>
+        <p>
+          <button style="background-color:#D8BFD8;" class="btn rounded border border-dark">Зависимость от последующих операций</button>
+        </p>
+        <p>
+          <button style="background-color:#FFFFFF;" class="btn rounded border border-dark">Автоматический расчет</button>
+        </p>
+      </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col">
+      <p>
+        <h4>Пояснения</h4>
+      </p>
+      {% comment %} <p>
+        - Для сохранения времени требуются ресурсы в операции
+      </p> {% endcomment %}
+      {% comment %} <p>
+        - Для отображения графика необходимо сохранить время.
+      </p> {% endcomment %}
+      <p>
+        - Итоговое время ТГО: создайте и добавьте операцию "Окончание", стобец "G (Окончание)"
+      </p>
+      <p>
+        - Старт ТГО после подготовительных работ: создайте и добавьте операцию "Начало", стобец "F (Начало)"
+      </p>
+      {% comment %} <p>
+        - При изменении операций, во избежание статичной пунктуации, нажмите кнопку "Выровнять пункты", для приведения к типу 1 2 3 ...
+      </p> {% endcomment %}
+      
+    </div>
+  </div>
+</div>
+  

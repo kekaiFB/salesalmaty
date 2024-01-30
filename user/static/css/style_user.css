@@ -1,0 +1,40 @@
+.row_instructions:hover {
+  padding: 7px;
+  border: none;
+  border-radius: 1px;
+  font-weight: 700;
+  transition: 0.5s;
+}
+
+/* Основной стиль кнопки */
+.button-52 {
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  padding: 13px 20px;
+  outline: 0;
+  border: 1px solid black;
+  cursor: pointer;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  overflow: hidden; /* Для скрытия части текста, который будет подпрыгивать */
+}
+
+/* Эффект при наведении мыши и свечение */
+.button-52:hover {
+  transform: translateY(-5px); /* Поднимаем кнопку на 5 пикселей */
+}
+
+/* Анимация подпрыгивающей надписи */
+.button-52 span {
+  display: inline-block;
+  transition: transform 0.3s ease-in-out;
+}
+
+.button-52:hover span {
+  transform: translateY(-10px); /* Поднимаем текст на 10 пикселей */
+}

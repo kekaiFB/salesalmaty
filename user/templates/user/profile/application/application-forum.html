@@ -1,0 +1,38 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+            <div class="d-flex justify-content-center h2 alert alert-success">Форум</div>
+                <div class="models-content">
+                    <table class="table_dt_application table table-bordered table-hover table-condensed bg-white rounded-lg border border-white" style="width:100%">
+                        <thead> 
+                            <tr>
+                                <th>Таблица</th>
+                                <th>Название</th>
+                                <th>Комментарий пользователя</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            {% for elem in forum %} 
+                                <tr>  
+                                    <td><a target="_blank" class="navbar-brand" href="{% url 'forum:question_list' %}">Вопрсоы</a></td>
+                                    <td>{{ elem }}</td>
+                                    <td>{% if elem.comment %}{{ elem.comment }}{% else %}...{% endif %}</td>
+                                    <td>{% del_button 'forum:question-delete' elem.id %}</td>
+                                </tr>  
+                            {% endfor %}  
+                            
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Таблица</th>
+                                <th>Название</th>
+                                <th>Комментарий пользователя</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+{% endblock %} 

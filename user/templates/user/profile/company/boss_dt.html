@@ -1,0 +1,73 @@
+{% load tgo_tags %}
+{% load user_tags %}
+
+<div class="h3">Начальники</div>
+<table border="3" id="boss_dt" class="table table-bordered table-hover table-condensed bg-white"  style="width:100%">
+    <thead> 
+        <tr>
+            <th>Роль</th>
+            <th>Подразделение</th>
+            <th>Должность</th>
+            <th>Email</th>
+            <th>ФИО</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for h in human %}  
+            {% check_role_boss h.groups as groups %}
+            {% if groups %}
+                {% if h.post.all|length > 1 %}
+                    {% for h_post in h.post.all  %}  
+                        <tr class="font-weight-bold">
+                            <td class={{ h.is_active }}>
+                                {% for g in groups  %}  
+                                    {{ g }}{% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            </td>
+                            <td class={{ h.is_active }}>
+                                {{ h_post.office }}
+                            </td>
+                            <td class={{ h.is_active }}>
+                                {{ h_post }}
+                            </td>
+                            <td class={{ h.is_active }}>{{ h.user }}</td>
+                            <td class={{ h.is_active }}>{{ h }}</td>
+                            <td><a class="btn btn-success text-black" href={{ h.get_absolute_url }}>Подробнее</a>
+                        </tr>  
+                    {% endfor %}
+                {% else %}
+                        {% for h_post in h.post.all  %}  
+                        <tr>
+                            <td class={{ h.is_active }}>
+                                {% for g in groups  %}  
+                                    {{ g }}{% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            </td>
+                            <td class={{ h.is_active }}>
+                                {{ h_post.office }}
+                            </td>
+                            <td class={{ h.is_active }}>
+                                {{ h_post }}
+                            </td>
+                            <td class={{ h.is_active }}>{{ h.user }}</td>
+                            <td class={{ h.is_active }}>{{ h }}</td>
+                            <td><a class="btn btn-success text-black" href={{ h.get_absolute_url }}>Подробнее</a>
+                        </tr>  
+                    {% endfor %} 
+                {% endif %}
+
+            {% endif %}
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Роль</th>
+            <th>Подразделение</th>
+            <th>Должность</th>
+            <th>Email</th>
+            <th>ФИО</th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>

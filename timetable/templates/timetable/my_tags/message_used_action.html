@@ -1,0 +1,34 @@
+{% load timetable_tags %}
+
+<div style="max-height: 80vh; overflow-y: auto;" class="telegram_record_for_modal" id="{{id}}" hidden> 
+
+<table class="table table-bordered table-hover table-condensed bg-white" cellspacing="0" style="width:100%">
+    <thead>
+      <tr>
+        <th>Строка</th>
+        <th>Действия</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for message in formatted_messages %}
+      <tr>
+        <td>{{ message.new_row|safe }}</td>
+        <td>
+          <ul>
+            {% for elem in message.info_for_row %}
+              <li class="elem_li_for_color list-group-item d-flex justify-content-between align-items-center" style="color: {{ elem.color }};">
+                  {% if "monday" in elem.value %}
+                      {% new_day_flight elem.value %}
+                  {% else %}
+                      {{ elem.value }}
+                  {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>

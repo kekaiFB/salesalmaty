@@ -1,0 +1,68 @@
+{% load tgo_tags %}
+{% load user_tags %}
+
+<table id="user_post_dt" class="table table-bordered table-hover table-condensed bg-white rounded-lg border border-white" style="width:100%">
+    <thead> 
+        <tr>
+            <th>Подразделение</th>
+            <th>Должность </th>
+            
+            {% if 'Администратор' in user_groups %} 
+                <th>{% add_button_parent 'user:add_human_office' h.id %}</th>
+            {% elif 'Начальник' in user_groups %}         
+            {% if 'Начальник' in h.groups or 'Администратор' in h.groups %}{% else %}
+                    <th>{% add_button_parent 'user:add_human_office' h.id %}</th>
+                {% endif %}
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody> 
+        {% get_post_update h.history_id posts post_history as list %}
+        {% for elem in list %}  
+            <tr>  
+                <td>
+                    {{ elem.0 }}
+                </td>
+                <td class="p-3 h5">
+                    {{ elem.1 }} 
+                </td>
+
+                {% if 'Администратор' in user_groups %} 
+                    <td> 
+                        {% if h.is_active %}
+                            {% del_human 'user:delete_human' h.id elem.3 elem.2 %}
+                        {% else %}
+                            {% restore_button 'user:human-is-active' h.id %}  
+                        {% endif %}
+                    </td>
+                {% elif 'Начальник' in user_groups %} 
+                    {% if 'Начальник' in h.groups or 'Администратор' in h.groups %}{% else %}
+                    <td> 
+                        {% if h.is_active %}
+                            {% del_human 'user:delete_human' h.id elem.3 elem.2 %}
+                        {% else %}
+                            {% restore_button 'user:human-is-active' h.id %}  
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                {% endif %}
+            </tr> 
+        {% endfor %} 
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Подразделение</th>
+            <th>Должность </th>
+            
+            
+            {% if 'Администратор' in user_groups %} 
+                <th></th>
+            {% elif 'Начальник' in user_groups %}         
+            {% if 'Начальник' in h.groups or 'Администратор' in h.groups %}{% else %}
+                <th></th>
+            {% endif %}
+            {% endif %}
+        </tr>
+    </tfoot>
+</table>
+

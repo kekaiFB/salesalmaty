@@ -1,0 +1,35 @@
+{% extends "user/user/email.html" %}
+
+{% block content %}
+    <div class="container alert-info rounded p-4">
+        <div class="h3 btn btn-success">
+            <strong>Polyslot.ru</strong>
+        </div>
+        Здравствуйте 
+        <strong>{{ initials }}</strong>.
+        
+        <div class="">
+           Вас зарегистрировали на сайте 
+            <strong>{{ domain }}</strong>. Вам была назначена роль
+            <strong>{{ role }}</strong>.
+        </div>
+        <div class="">
+           Данные для входа:
+        </div>
+        <div style="margin-left:2%;">
+           Логин: {{user}}
+        </div>
+        <div style="margin-left:2%;">
+           Пароль: {{password}}
+        </div>
+        <p></p>
+        <div class="">
+            Вы можете сменить свой пароль в личном кабинете сайта
+         </div>
+        <div class="">
+            Нажмите на <a href="http://{{ domain }}{% url 'user:login' %}">ссылку</a>, чтобы начать вход в систему  
+        </div>
+        
+      
+    </div> 
+{% endblock %}

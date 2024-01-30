@@ -1,0 +1,11 @@
+<td style="background-color: {{ style }};" 
+    class=
+        "{% for c in clas %}  
+        {{ c }}
+        {% endfor %}">
+    {% if '/' in t_value %}
+        <a href="{{ t_value }}" class="text-primary">{{ label }}</a>
+    {% else %}
+        {{ t_value }}
+    {% endif %} 
+</td>

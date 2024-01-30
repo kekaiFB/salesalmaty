@@ -1,0 +1,87 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+    <div class="d-flex justify-content-center h2 alert alert-success">Импорт абсентезима</div>
+    {% comment %} <a class="btn btn-outline-success" href={% url 'user:import' %}>Назад</a> {% endcomment %}
+    <a class="mt-3 mb-3">{% add_button_text 'user:import-snj-create' %}</a>
+    
+    <div class="card-body">
+           <div class="uploaded-file-container text-center">
+              <div style="display: inline-block; position: relative;"> 
+                    <div class="h4 alert alert-success">Шаблон</div>
+                    {% csrf_token %}
+
+                    {% if example_file_import %}
+                    <a href="{{ example_file_import.url }}" class="uploaded-file-link" download>
+                        <i class="fa fa-file-download fa-3x" aria-hidden="true" style="vertical-align: middle;"></i><br> 
+                        <span class="uploaded-file-name">{{ example_file_import.name|basename }}</span> 
+                    </a>
+                    
+                    {% else %}
+                        <!-- Если файла нет, показываем область для загрузки -->
+                        <div class="d-flex justify-content-center align-items-center upload-drop-zone file_input_import" id="drop_zone">
+                            <div class="text-center">
+                                <i class="fa fa-file-upload fa-3x" aria-hidden="true"></i>
+                                <p class="soft-font-text">Перетащите файл сюда или <span class="file-browse">кликните для выбора</span></p>
+                                <!-- Input остается скрытым -->
+                                <input type="file" id="file_input" class="d-none">
+                                <input hidden id="status_input" value="example">
+                            </div>
+                        </div>
+                    {% endif %}
+                  
+              </div>
+           </div>
+      </div>
+
+
+    <div class="models-content mt-3">
+        <table class="table_dt_application table table-bordered table-hover table-condensed bg-white rounded-lg border border-white" style="width:100%">
+            <thead> 
+                <tr>
+                    <th>Автор</th>
+                    <th>Название</th>
+                    <th>Дата создания</th>
+                    <th>Входной файл</th>
+                    <th>Выходной файл</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for elem in importList %} 
+                    <tr>  
+                        <td>{{elem.author}}</td>
+                        <td>{{elem.title}}</td>
+                        <td>{{elem.created_at}}</td>
+                        <td>{{ elem.input_file.name|basename }}</td>
+                        <td>{{ elem.output_file.name|basename }}</td>                                             
+                        {% if elem.author == request.user %}
+                            <td><a class="btn btn-outline-warning" href={% url 'user:import-snj-detail' elem.id %}>Подробнее</a></td>   
+                            <td>{% edit_button 'user:import-snj-update' elem.id %}</td>
+                            <td>{% del_button 'user:import-snj-delete' elem.id %}</td>
+                        {% else %}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        {% endif %}
+                    </tr>  
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Автор</th>
+                    <th>Название</th>
+                    <th>Дата создания</th>
+                    <th>Входной файл</th>
+                    <th>Выходной файл</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %} 

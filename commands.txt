@@ -1,0 +1,54 @@
+pipenv shell
+py manage.py runserver
+py manage.py collectstatic 
+MODE=dev
+
+py manage.py runserver 
+
+py manage.py makemigrations
+py manage.py migrate
+# py manage.py migrate --fake
+
+django-admin startproject dashboard
+py manage.py startapp timetable
+
+
+git add .
+MODE=dev  
+git commit -m "обновление"
+git pull
+git push
+
+----------Для sqlite3---------------------
+#py manage.py dumpdata --indent 4 > data_dump.json 
+#py manage.py loaddata data_dump.json
+MODE=dev
+
+
+PIPENV
+https://webdevblog.ru/pipenv-rukovodstvo-po-novomu-instrumentu-python/
+
+pip install pipenv
+
+pipenv install -r requirements.txt
+
+pipenv lock
+
+pipenv shell
+
+добавляем пакет в файл pipfile, например chardet = "*"
+а потом pipenv lock
+
+
+
+docker-compose up -d --build
+
+
+pip install chardet
+
+
+
+
+
+
+   

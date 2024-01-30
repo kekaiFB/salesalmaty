@@ -1,0 +1,51 @@
+  {% load widget_tweaks %}
+
+  <form method="post" action="">
+    {% csrf_token %}
+
+    <div class="modal-header">
+      <h3 class="modal-title">Добавление подразделения</h3>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+    </div>
+    
+
+    <div class="modal-body">
+
+      <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+
+      {% for field in form %}
+        {% if not field.is_hidden %}
+          <div class="form-group">
+            <label class="ml-1" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% render_field field class="form-control" %}
+            <div class="mt-2 {% if field.errors %} invalid{% endif %}">
+              {% for error in field.errors %}
+                <p class="alert alert-warning">{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+        {{ field }}
+        {% endif %}
+      
+      {% endfor %}
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Создать</button>
+    </div>
+
+  </form>
+
+  <input id="my_name_comapny" hidden value={{name_company}}>
+  <input id="my_id_company" hidden value={{id_company}}>
+  
+<script>
+  var company_option = `<option value=${$('#my_id_company').val()} selected="selected">${$('#my_name_comapny').val()}</option>`
+  $('#id_сompany').html(company_option); 
+  $('#id_сompany').hide(); 
+</script>

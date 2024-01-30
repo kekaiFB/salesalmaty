@@ -1,0 +1,1411 @@
+
+{% load tgo_tags %}
+{% load timetable_tags %}
+
+<form method="post" id='form_group_timetable'>
+  {% csrf_token %}
+  <div class="modal-header">
+    <h3 class="modal-title">Добавление записи  <a class="btn btn-primary" target="_blank"  href="{% url 'timetable:airlines' %}">Справочники</a>
+    </h3>
+    <button type="button" class="my-btn-close btn-close"></button> 
+  </div>
+  
+
+  <div class="modal-body">
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+      {{ form.timetablelist }}
+      {{ form.author }}
+      {{ form.editor }}
+      {{ form.group }}
+      {{ form.fictive_id }}
+      
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+            <p><label class="form-label" for="{{ form.airline.id_for_label }}">{{form.airline.label}}: </label>{{ form.airline }}</p>
+            <div class="form-error">{{ form.airline.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+          <p><label class="form-label" for="{{ form.flight.id_for_label }}">{{form.flight.label}}:<a class="text-decoration-none flight_add_button" target="_blank" href="{% url 'timetable:flight' %}">➕</a><span class="add_flight_no_refresh">{% add_button_text 'timetable:add_flight_no_refresh' %}</span> </label>{{ form.flight }} </p>
+          <div class="form-error">{{ form.flight.errors }}</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.airplane.id_for_label }}">{{form.airplane.label}}: </label>{{ form.airplane }}</p>
+          <div class="form-error">{{ form.airplane.errors }}</div>
+      </div>
+      <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.equipmentAirplane.id_for_label }}">{{form.equipmentAirplane.label}}: </label>{{ form.equipmentAirplane }}</p>
+          <div class="form-error">{{ form.equipmentAirplane.errors }}</div>
+      </div>
+    </div>
+
+
+    
+    <div class="form-row">
+        <div class="form-group col">
+          <p><label class="form-label" for="{{ form.arrival_time.id_for_label }}">{{form.arrival_time.label}}: </label>{{ form.arrival_time }}</p>
+          <div class="form-error">{{ form.arrival_time.errors }}</div>
+        </div>
+        <div class="form-group col">
+          <p><label class="form-label" for="{{ form.departure_time.id_for_label }}">{{form.departure_time.label}}: </label>{{ form.departure_time }}</p>
+          <div class="form-error">{{ form.departure_time.errors }}</div>
+        </div>
+        <div class="form-group col form-check form-switch ">
+          <p><label class="form-label" for="{{ form.next_day_status.id_for_label }}">{{form.next_day_status.label}}: </label><br>{{ form.next_day_status }}</p>
+          <div class="form-error">{{ form.next_day_status.errors }}</div>
+        </div>
+        <div class="form-group col form-check form-switch ">
+          <p><label class="form-label" for="{{ form.transition_day.id_for_label }}">{{form.transition_day.label}}: </label><br>{{ form.transition_day }}</p>
+          <div class="form-error">{{ form.transition_day.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <p><label class="form-label" for="{{ form.start_register_time.id_for_label }}">{{form.start_register_time.label}}: </label>{{ form.start_register_time }}</p>
+            <div class="form-error">{{ form.start_register_time.errors }}</div>
+        </div>
+        <div class="form-group col">
+          <p><label class="form-label" for="{{ form.end_register_time.id_for_label }}">{{form.end_register_time.label}}: </label>{{ form.end_register_time }}</p>
+          <div class="form-error">{{ form.end_register_time.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6 mb-0">
+            <p><label class="form-label" for="{{ form.date_start.id_for_label }}">{{form.date_start.label}}: </label>{{ form.date_start }}</p>
+            <div class="form-error">{{ form.date_start.errors }}</div>
+        </div>
+        <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.date_end.id_for_label }}">{{form.date_end.label}}: </label>{{ form.date_end }}</p>
+          <div class="form-error">{{ form.date_end.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+      
+      <div class="form-group col-md-5 ml-2 mt-4">
+        <span>{{ form.monday }}</span>
+        <span class="form-error">{{ form.monday.errors }}</span>
+
+        <span>{{ form.tuesday }}</span>
+        <span class="form-error">{{ form.tuesday.errors }}</span>
+    
+        <span>{{ form.wednesday }}</span>
+        <span class="form-error">{{ form.wednesday.errors }}</span>
+    
+        <span>{{ form.thursday }}</span>
+        <span class="form-error">{{ form.thursday.errors }}</span>
+    
+        <span>{{ form.friday }}</span>
+        <span class="form-error">{{ form.friday.errors }}</span>
+    
+        <span>{{ form.saturday }}</span>
+        <span class="form-error">{{ form.saturday.errors }}</span>
+    
+        <span>{{ form.sunday }}</span>
+        <span class="form-error">{{ form.sunday.errors }}</span>
+      </div>
+        
+        <div class="form-group col-md-6 mb-0">
+            <p><label class="form-label" for="{{ form.comment.id_for_label }}">{{form.comment.label}}: </label>{{ form.comment }}</p>
+            <div class="form-error">{{ form.comment.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row bg-white rounded border border-success p-1">
+      <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.additional_dates.id_for_label }}">{{form.additional_dates.label}} </label>{{ form.additional_dates }}</p>
+          <div class="form-error">{{ form.additional_dates.errors }}</div>
+      </div>
+      <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.excluded_dates.id_for_label }}">{{form.excluded_dates.label}}: </label>{{ form.excluded_dates }}</p>
+          <div class="form-error">{{ form.excluded_dates.errors }}</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.tgo.id_for_label }}">{{form.tgo.label}}:<a class="text-decoration-none" target="_blank" href="{% url 'table_tgo:index' %}">➕</a> </label>{{ form.tgo }}</p>
+          <div class="form-error">{{ form.tgo.errors }}</div>
+      </div>
+      <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.timetablestatusight.id_for_label }}">{{form.timetablestatusight.label}}: </label>{{ form.timetablestatusight }}</p>
+          <div class="form-error">{{ form.timetablestatusight.errors }}</div>
+      </div>
+    </div>
+
+    <div id="meta"></div>
+    <div id="meta-2"></div>
+
+  <div class="modal-footer">
+    <a class="btn btn-primary btn-create" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" data-title="Вы уверены?" data-original-title="" title="">
+        Создать
+    </a>
+    <a class="btn btn-success btn-update" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" data-title="Вы уверены?" data-original-title="" title="">
+        Обновить
+    </a>
+  </div>
+
+  <div class="tableContainer"></div>
+  <div class="current_page" hidden>{{current_page}}</div>
+  
+</form>
+
+
+<script>
+  
+  {% comment %} $('#meta-2').text('Внимание! После совершения изменений, необходимо выйти из формы и обновить страницу чтобы получить свежие данные! могу сделать чтобы при выходе из формы автоматически обновлялась страница')
+  $('#meta-2').addClass('alert alert-primary h6') {% endcomment %}
+
+
+  $(document).off('click', '.btn-close');
+  var obj_goup_for_table = []
+  satus_modal_second = true
+  var arrayOfRequests = [];
+  var row_selected_form;
+  var queryset = {}
+
+  var ajax_airline
+  var ajax_airline_2
+  var ajax_airplane
+  var ajax_flight_aiplane
+
+
+
+  $.ajax({                       
+    url: "{% url 'timetable:ajax_load_flight_airlane' %}",                 
+    success: function (data) { 
+      queryset = data['queryset']
+    }
+  });
+  
+  $("input[type='checkbox']").addClass('ml-2');
+
+
+  // .selectpicker
+  $('#id_airline, #id_flight, #id_tgo, #id_timetablestatusight, #id_airplane, #id_equipmentAirplane').attr('data-live-search', 'true');  
+  $('#id_airline, #id_flight, #id_tgo, #id_timetablestatusight, #id_airplane, #id_equipmentAirplane').selectpicker({ 
+    noneResultsText:'   Результатов нет',
+  });      
+  
+  // Функция для проверки и обновления атрибута required
+  function toggleRequired(isRequired) {
+    $('#id_start_register_time').prop('required', isRequired);
+    $('#id_end_register_time').prop('required', isRequired);
+  }
+  
+  $('#id_departure_time').change(function () {
+      toggleRequired($(this).val() != '');
+  });
+  
+  
+  // меняем данные для Flight
+  $('#id_airline').change(function () {
+    $('#id_tgo, #id_departure_time, #id_arrival_time').val('')
+    $('#id_tgo, #id_departure_time, #id_arrival_time').selectpicker('refresh');  
+    
+    $('#id_flight').val('').show()
+    $('#id_flight').val('')
+    $('#id_flight').selectpicker('refresh');  
+   
+
+    // Берем Полеты
+    get_flight_with_airline_ajax()
+
+    // Берем ВС
+    get_airplane_ajax()
+  });
+  
+
+  // меняем данные для ВС
+  function get_airplane_ajax (callback) {
+    ajax_airline =  $.ajax({                       
+      url: "{% url 'timetable:get_airplane_ajax' %}",                 
+      data: {
+        'id_airline': $("#id_airline").val(),  
+      },
+      success: function (data) { 
+      
+        var select = $("#id_airplane");
+
+        // Очистите существующие элементы (за исключением первой опции)
+        select.find("option:not(:first)").remove();
+        // Добавьте новые опции на основе полученных данных
+        $.each(data.queryset, function(index, item) {
+            select.append($('<option>', {
+                value: item.id,
+                text: item.name
+            }));
+        });
+        $('#id_airplane').selectpicker('refresh');  
+
+        $("#id_equipmentAirplane").find("option:not(:first)").remove();
+        $('#id_equipmentAirplane').selectpicker('refresh');  
+
+        
+        // Проверка и вызов callback, если он предоставлен и является функцией
+        if (callback && typeof callback === 'function') {
+          callback();
+        }  
+      }
+    });
+    arrayOfRequests.push(ajax_airline);
+  }
+
+
+  //   // меняем данные для комплектации
+  $('#id_airplane').change(function () {
+    get_equipmentAirplane_ajax()
+  });
+  
+  function get_equipmentAirplane_ajax (callback) {
+    ajax_airplane = $.ajax({                       
+        url: "{% url 'timetable:get_equipmentAirplane_ajax' %}",                 
+        data: {
+          'id_airplane': $("#id_airplane").val(),  
+        },
+        success: function (data) { 
+        
+          var select = $("#id_equipmentAirplane");
+
+          // Очистите существующие элементы (за исключением первой опции)
+          select.find("option:not(:first)").remove();
+          // Добавьте новые опции на основе полученных данных
+          $.each(data.queryset, function(index, item) {
+              select.append($('<option>', {
+                  value: item.id,
+                  text: item.name
+              }));
+          });
+          $('#id_equipmentAirplane').selectpicker('refresh');  
+
+        
+          // Проверка и вызов callback, если он предоставлен и является функцией
+          if (callback && typeof callback === 'function') {
+            callback();
+          }  
+        }
+      });
+      arrayOfRequests.push(ajax_airplane);  
+  }
+
+
+  // меняем данные для Flight
+  function get_flight_with_airline_ajax (callback) {
+    ajax_airline_2 = $.ajax({                       
+      url: "{% url 'timetable:get_flight_with_airline_ajax' %}",                 
+      data: {
+        'id_airline': $("#id_airline").val(),  
+      },
+      success: function (data) { 
+      
+        var select = $("#id_flight");
+
+        // Очистите существующие элементы (за исключением первой опции)
+        select.find("option:not(:first)").remove();
+        // Добавьте новые опции на основе полученных данных
+        $.each(data.queryset, function(index, item) {
+            select.append($('<option>', {
+                value: item.id,
+                text: item.name
+            }));
+        });
+        $('#id_flight').selectpicker('refresh');  
+
+        
+        // Проверка и вызов callback, если он предоставлен и является функцией
+        if (callback && typeof callback === 'function') {
+          callback();
+        }  
+      }
+    });
+    arrayOfRequests.push(ajax_airline_2); 
+  }
+
+    
+  var flight_type = '';
+  // Рейс и ТГО
+  $('#id_flight, #id_airplane').change(function () {
+    $('#id_tgo, #id_departure_time, #id_arrival_time').val('')
+    $('#id_tgo, #id_departure_time, #id_arrival_time').selectpicker('refresh');  
+     
+    load_ajax_fligh_data()
+  });
+  
+  // меняем данные для Flight
+  function load_ajax_fligh_data (callback) {
+    ajax_flight_aiplane =  $.ajax({                       
+      url: "{% url 'timetable:load_ajax_fligh_data' %}",                 
+      data: {
+        'id_flight': $("#id_flight").val(),   
+        'id_airplane': $("#id_airplane").val(),  
+      },
+      success: function (data) {  
+        flight_type = data.flight_type;
+          if (typeof data.tgo != 'undefined')
+          {
+            var select = $("#id_tgo");
+
+            // Очистите существующие элементы (за исключением первой опции)
+            select.find("option:not(:first)").remove();
+            // Добавьте новые опции на основе полученных данных
+            $.each(data.tgo, function(index, item) {
+                select.append($('<option>', {
+                    value: item.id,
+                    text: item.name
+                }));
+            });
+            $('#id_tgo').selectpicker('refresh');  
+
+
+             
+          }
+          $('#id_tgo').selectpicker('refresh');   
+          if( $('#id_departure_time').val() != '')
+          {
+            departure_time_registration()
+          }  
+        
+          // Проверка и вызов callback, если он предоставлен и является функцией
+          if (callback && typeof callback === 'function') {
+            callback();
+          }     
+      }
+    });
+    arrayOfRequests.push(ajax_flight_aiplane);
+  }
+
+
+  
+
+  $('#id_departure_time').change(function () {
+    if( $('#id_flight').val() != '')
+    {
+      departure_time_registration()
+    }
+  });
+
+ 
+  $('#id_departure_time, #id_arrival_time').change(function () {
+    check_next_day_status() 
+  });
+
+  function check_next_day_status () {
+    var id_departure_time = $('#id_departure_time').val()
+    var id_arrival_time = $('#id_arrival_time').val()
+
+    if (id_departure_time != '' && id_arrival_time != '')
+    {
+      // Разбивка строк на часы и минуты
+      var departure_time_parts = id_departure_time.split(':');
+      var arrival_time_parts = id_arrival_time.split(':');
+
+      // Получение часов и минут
+      var departure_hours = parseInt(departure_time_parts[0]);
+      var departure_minutes = parseInt(departure_time_parts[1]);
+      var arrival_hours = parseInt(arrival_time_parts[0]);
+      var arrival_minutes = parseInt(arrival_time_parts[1]);
+
+      // Создание объектов Date для departure и arrival time
+      var departure_time = new Date(0, 0, 0, departure_hours, departure_minutes);
+      var arrival_time = new Date(0, 0, 0, arrival_hours, arrival_minutes);
+
+      // Проверка, если arrival_time меньше departure_time
+      if (arrival_time > departure_time) {
+        // если arrival меньше departrure то след день
+        $('#id_next_day_status').prop('checked', true);
+      } else {
+        $('#id_next_day_status').prop('checked', false);
+      }
+    }
+  }
+
+
+  
+ // время вылета, регистрации
+ function departure_time_registration () {
+  if ($('#id_departure_time').val() != '')
+  {
+      Toast.setTheme(TOAST_THEME.DARK);
+      Toast.setPlacement(TOAST_PLACEMENT.TOP_RIGHT);
+      Toast.create("Статус полета", flight_type, TOAST_STATUS.SUCCESS, 3000);
+
+      var departure_time = $('#id_departure_time').val()
+      var date = moment(departure_time, 'HH:mm')
+      if (flight_type == 'Международный') {
+        $("#id_start_register_time").val(date.subtract(3, 'hours').format('HH:mm')) 
+        $("#id_end_register_time").val(moment(departure_time, 'HH:mm').subtract(40, 'minutes').format('HH:mm')) 
+      } 
+      else if (flight_type == 'Внутренний') {
+        $("#id_start_register_time").val(date.subtract(2, 'hours').format('HH:mm')) 
+        $("#id_end_register_time").val(moment(departure_time, 'HH:mm').subtract(40, 'minutes').format('HH:mm')) 
+      }
+  }
+}
+
+  // Словарь с русскими сокращениями дней недели
+  var days = {
+    'monday': 'Пн',
+    'tuesday': 'Вт',
+    'wednesday': 'Ср',
+    'thursday': 'Чт',
+    'friday': 'Пт',
+    'saturday': 'Сб',
+    'sunday': 'Вс'
+  };
+
+  // Скрываем чекбоксы и создаем span для визуального представления
+  $('.form-check-input-days').each(function() {
+    var dayId = this.id.replace('id_', '');
+    var dayShort = days[dayId];
+    $(this).hide().after('<span class="day-span h5" data-day-id="' + dayId + '">' + dayShort + '</span>');
+    updateCheckbox($(this), dayId);
+  });
+
+  // Функция для обновления внешнего вида span на основе состояния чекбокса
+  function updateCheckbox(checkbox, dayId) {
+    var span = $('[data-day-id="' + dayId + '"]');
+    if (checkbox.is(':checked')) {
+      span.addClass('highspanghted').removeClass('not-highspanghted');
+    } else {
+      span.addClass('not-highspanghted').removeClass('highspanghted');
+    }
+  }
+
+  // Обработчик клика на span
+$('.day-span').click(function() {
+  var dayId = $(this).data('day-id');
+  var checkbox = $('#id_' + dayId);
+  // Изменяем состояние чекбокса и вызываем событие 'change'
+  checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
+});
+
+// Обработчик изменения состояния чекбоксов
+$('.form-check-input-days').change(function() {
+  var dayId = this.id.replace('id_', '');
+  updateCheckbox($(this), dayId);
+});
+ var acess_submit_form = true
+//Создаем операцию до валидации формы
+$(".btn-create").off().click(function(e){
+  e.preventDefault(); // Предотвращает стандартную отправку формы
+
+  if (acess_submit_form) {
+    $('#id_fictive_id').val(generate_random_char())
+    acess_submit_form = false
+
+    $('#meta').removeClass('alert alert-success h6');
+    $('#meta').text('Пожалуйста не закрывайте страницу')
+    $('#meta').addClass('alert alert-warning h6')
+    $('button[type="submit"]').prop("disabled", true);
+
+    var formData = new FormData(document.getElementById('form_group_timetable'));
+    formData.delete('action'); 
+    formData.append('action', 'create');
+
+    $.ajax({
+      url: "{% url 'timetable:timetable_ajax_group' %}",
+      method: 'POST',
+      headers: {
+          'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+      },
+      processData: false,
+      contentType: false,
+      data: formData,
+      success: function (data) { 
+        if(data.status === 'ok') {
+          $('#meta').text('Запись успешно добавлена в БД. Если вы дальше продолжите заполнять данные не закрывая всплывающее окно, то эти данные будут принадлежать одной "группе" ');
+          $('#meta').removeClass('alert alert-warning h6');
+          $('#meta').addClass('alert alert-success h6');
+
+          addObjectToTable(formData);
+          $(".flight_add_button").hide()
+
+          setTimeout(function() {
+              $('button[type="submit"]').prop("disabled", false);
+              acess_submit_form = true
+
+          }, 2000);
+          
+        } else {
+            $('button[type="submit"]').prop("disabled", false);
+        }
+      }
+    });
+  }
+});
+
+
+
+
+var acess_submit_form_update = true
+//Создаем операцию до валидации формы
+$(".btn-update").off().click(function(e){
+  e.preventDefault(); // Предотвращает стандартную отправку формы
+
+  if (acess_submit_form_update) {
+    acess_submit_form_update = false
+
+    $('#meta').removeClass('alert alert-success h6');
+    $('#meta').text('Пожалуйста не закрывайте страницу')
+    $('#meta').addClass('alert alert-warning h6')
+    $('button[type="submit"]').prop("disabled", true);
+
+    var formData = new FormData(document.getElementById('form_group_timetable'));
+    formData.delete('action'); 
+    formData.set('action', 'update');
+    
+    $.ajax({
+      url: "{% url 'timetable:timetable_ajax_group' %}",
+      method: 'POST',
+      headers: {
+          'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+      },
+      processData: false,
+      contentType: false,
+      data: formData,
+      success: function (data) { 
+        if(data.status === 'ok') {
+          $('#meta').text('Запись успешно добавлена в БД. Если вы дальше продолжите заполнять данные не закрывая всплывающее окно, то эти данные будут принадлежать одной "группе" ');
+          $('#meta').removeClass('alert alert-warning h6');
+          $('#meta').addClass('alert alert-success h6');
+
+          // обновить таблицу
+          addObjectToTable(formData, edit_status=true);
+
+          $(".flight_add_button").hide()
+
+          setTimeout(function() {
+              $('button[type="submit"]').prop("disabled", false);
+              acess_submit_form_update = true
+
+          }, 2000);
+          
+        } else {
+            $('button[type="submit"]').prop("disabled", false);
+        }
+      }
+    });
+  }
+});
+
+
+
+function generate_random_char() {
+  // Получаем текущую дату и время в формате 'ГГГГММДДЧЧММСС'
+  var currentDate = new Date().toISOString().replace(/[^0-9]/g, '');
+
+  // Генерируем случайное трехзначное число
+  var randomThreeDigitNumber = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+
+  // Создаем уникальную строку, объединяя текущую дату и случайное число
+  var uniqueString = currentDate + randomThreeDigitNumber;
+
+  return uniqueString
+}
+
+
+function addObjectToTable(formData, edit_status=false) {
+  // Преобразование FormData в обычный объект
+  var obj = {
+    'Действия': '',
+    'csrfmiddlewaretoken': '',
+    'timetablelist': '',
+    'author': '',
+    'editor': '',
+    'group': '',
+    'fictive_id': '',
+    'airline': '',
+    'flight': '',
+    'airplane': '',
+    'equipmentAirplane': '',
+    'arrival_time': '',
+    'departure_time': '',
+    'next_day_status': '',
+    'start_register_time': '',
+    'end_register_time': '',
+    'date_start': '',
+    'date_end': '',
+    'monday': '',
+    'tuesday': '',
+    'wednesday': '',
+    'thursday': '',
+    'friday': '',
+    'saturday': '',
+    'sunday': '',
+    'comment': '',
+    'tgo': '',
+    'timetablestatusight': '',
+    'transition_day': '',
+    'additional_dates': '',
+    'excluded_dates': '',
+  };
+  
+
+  formData.forEach((value, key) => {
+    // Проверяем, существует ли ключ в объекте obj
+    if (obj.hasOwnProperty(key)) {
+      // Если ключ начинается с "checkbox_", то это чекбокс
+      if (key == 'date_start' || key == 'date_end')
+      {
+        var dateParts = value.split("-");
+        obj[key] = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+      } else {
+        obj[key] = value; // Для других полей оставляем значение как строку
+      } 
+    }
+  });
+
+  if (edit_status) {
+    // Находим объект по fictive_id и обновляем его
+    var fictiveIdToUpdate = obj['fictive_id'];
+    for (var i = 0; i < obj_goup_for_table.length; i++) {
+      if (obj_goup_for_table[i]['fictive_id'] === fictiveIdToUpdate) {
+        // Обновляем существующий объект данными из formData
+        obj_goup_for_table[i] = obj;
+        break;
+      }
+    }
+  } else {
+    // Добавляем новый объект в массив
+    obj_goup_for_table.push(obj);
+  }
+
+  formTimetable_obj = obj_goup_for_table
+  $(".add_flight_no_refresh").hide();
+
+  // Обновляем таблицу
+  updateTable();
+}
+
+function createTableHeaders(table, obj) {
+  var thead = document.createElement('thead');
+  var tr = document.createElement('tr');
+  
+  // Итерация по всем ключам первого объекта для создания заголовков
+  for (var key in obj) {
+      if (obj.hasOwnProperty(key) ) {
+          var th = document.createElement('th');
+          
+          th.textContent = key; //создать словарь с ключами и русскими значениями для замены
+          tr.appendChild(th);
+      }
+  }
+
+  thead.appendChild(tr);
+  table.appendChild(thead);
+}
+
+// Функция для обновления таблицы
+function updateTable() {
+  var table = document.getElementById('tableGroupTimetable');
+  if (!table) {
+    table = document.createElement('table');
+    table.id = 'tableGroupTimetable'
+    // Проверяем, есть ли объекты в массиве
+    if (obj_goup_for_table.length > 0) {
+      // Создаем заголовки для таблицы
+      createTableHeaders(table, obj_goup_for_table[0]);
+    }
+
+    // Создаем заголовок
+    var header = document.createElement('h4');
+    header.textContent = 'Данные в группе';
+    
+    var container = document.querySelector('.tableContainer'); 
+
+    // Устанавливаем стили для контейнера и таблицы
+    container.style.maxWidth = '100%';
+    container.style.overflowX = 'auto';
+    table.classList.add('table', 'table-striped');
+
+    // Добавляем заголовок и таблицу в DOM
+    container.appendChild(header); // Добавляем заголовок
+    container.appendChild(table); // Добавляем таблицу
+  }
+
+  // Очищаем tbody
+  var tbody = table.querySelector('tbody');
+  if (!tbody) {
+    tbody = document.createElement('tbody');
+  } else {
+    tbody.innerHTML = ''; // Очищаем содержимое tbody
+  }
+
+  for (var i = 0; i < obj_goup_for_table.length; i++) {
+    var tr = document.createElement('tr');
+
+    // Итерация по всем ключам и значениям последнего объекта
+
+    for (var key in obj_goup_for_table[i]) {
+      var td = document.createElement('td');
+  
+      // Если ключ равен 'Действия', создаем кнопки
+      if (key === 'Действия') {
+        var data_fictive_id = obj_goup_for_table[i]['fictive_id'];
+      
+        // Создание кнопки "Изменить"
+        var editButton = document.createElement('span');
+        editButton.innerHTML = '⚙️';
+        editButton.classList.add('btn', 'btn-primary', 'btn-sm', 'text-white', 'edit-button-form-field');
+        editButton.setAttribute('data-fictive_id', data_fictive_id);
+  
+        // Создание кнопки "Удалить"
+        var deleteButton = document.createElement('span');
+        deleteButton.innerHTML = '❌';
+        deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'text-white', 'delete-button-form-field');
+        deleteButton.setAttribute('data-fictive_id', data_fictive_id); // Навешиваем атрибут data-id
+        
+        td.appendChild(editButton);
+        td.appendChild(deleteButton);  
+      } 
+      else {
+        try {
+          // Попытка получить значение из элемента с id, если элемент существует
+          var $element = $('#id_' + key);
+          var value_element = obj_goup_for_table[i][key];
+          if ($element.is('input')) {
+            
+            if ($element.attr('type') === 'checkbox') {
+              if (value_element !== '' && value_element !== false) {
+                td.textContent = '✅';
+                td.dataset.id = true;
+              } else {
+                td.textContent = '❌';
+                td.dataset.id = false;
+              }
+            } else {
+              td.textContent = value_element;
+              td.dataset.id = value_element;
+            }
+          } else if ($element.is('select') && $element.val() !== '') {
+            td.textContent = $element.find('option[value="' + obj_goup_for_table[i][key] + '"]').text();
+            td.dataset.id = obj_goup_for_table[i][key];
+          }
+        } catch (error) {
+          console.error('Ошибка при получении значения:', error);
+        }
+      }
+  
+      tr.appendChild(td);
+    }    
+    tbody.appendChild(tr);
+  }
+  
+
+
+  table.appendChild(tbody);
+  addEventButtonInTable()
+
+  
+  // Список столбцов, которые нужно скрыть
+  var hiddenColumns = ['csrfmiddlewaretoken', 'fictive_id', 'group', 'timetablelist', 'author', 'editor'];
+
+  if (table) {
+    // Устанавливаем стили для таблицы
+    table.style.borderCollapse = 'collapse';
+    table.style.width = '100%';
+    table.style.marginBottom = '20px';
+
+
+    // Получаем заголовки таблицы
+    var headers = table.querySelectorAll('thead th');
+    
+    // Создаем словарь для сопоставления заголовков и индексов столбцов
+    var headerIndexMap = {};
+    
+    // Проходим по заголовкам и записываем индексы столбцов в словарь
+    headers.forEach(function(header, index) {
+      header.style.border = '1px solid #ddd';
+      header.style.padding = '8px';
+      header.style.backgroundColor = '#f2f2f2';
+      // header.style.textAlign = 'left';
+      headerIndexMap[header.textContent] = index;
+    });
+  
+    // Получаем все строки таблицы
+    var rows = table.querySelectorAll('tbody tr');
+    
+    // Проходим по каждой строке и скрываем соответствующие столбцы в данных
+    rows.forEach(function(row) {
+      // Получаем все ячейки в текущей строке
+      var cells = row.querySelectorAll('td');
+      
+      // Проходим по каждой ячейке и проверяем, нужно ли скрыть этот столбец
+      cells.forEach(function(cell, index) {
+        var headerText = headers[index].textContent;
+        
+        if (hiddenColumns.includes(headerText)) {
+          cell.style.display = 'none';
+        }
+
+        cell.style.border = '1px solid #ddd';
+        cell.style.padding = '8px';
+        cell.style.textAlign = 'left';
+
+        // Добавляем зебровый фон для четных строк
+        if (index % 2 === 0) {
+          cell.style.backgroundColor = '#f2f2f2';
+        }
+
+      });
+    });
+    
+    
+
+    // Теперь скроем заголовки, если они указаны в hiddenColumns
+    headers.forEach(function(header) {
+      if (hiddenColumns.includes(header.textContent)) {
+        header.style.display = 'none';
+      } else if (headersMapHeaders.hasOwnProperty(header.textContent)) {
+        header.textContent = headersMapHeaders[header.textContent];
+      }
+    });
+
+    // Получаем ширину таблицы
+    var tableWidth = table.offsetWidth;
+
+    // Находим модальное окно Bootstrap
+    var modal = document.querySelector('#modal'); // Используем идентификатор "modal" для получения модального окна
+
+    // Устанавливаем ширину модального окна в зависимости от ширины таблицы
+    if (modal) {
+      var modalDialog = modal.querySelector('.modal-dialog');
+      modalDialog.style.maxWidth = '100%'; 
+
+    } 
+  }
+}
+
+
+ function addEventButtonInTable() {
+
+    $('.edit-button-form-field').off('click').on('click', function() {
+      var fictiveId = $(this).data('fictive_id');
+    
+      if (window.confirm("Вы хотите редактировать запись? они заменят текущие настройки в форме, пожалуйста убедитесь что вы сохранили их или они вам не нужны?")) {
+        edit_existInTable_record(fictiveId)
+      }
+    });
+
+
+    $('.delete-button-form-field').off('click').on('click', function() {
+      var fictiveId = $(this).data('fictive_id');
+    
+      if (window.confirm("Вы хотите удалить запись?")) {
+     
+        $.ajax({        
+          url: "{% url 'timetable:delete_timetable_ajax_group' %}",                 
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+          },         
+          data: {
+            'id': fictiveId,  
+            'action': 'delete'
+          },
+          success: function (data) { 
+             // Удаление элемента из массива
+              obj_goup_for_table = obj_goup_for_table.filter(function(item) {
+                return item.fictive_id !== fictiveId;
+              });
+
+
+              // Найти индекс столбца с fictive_id
+              var columnIndex;
+              $('table#tableGroupTimetable th').each(function(index) {
+                if ($(this).text() === 'fictive_id') {
+                  columnIndex = index;
+                  return false; // Прервать цикл
+                }
+              });
+
+              // Удалить строку, у которой по индексу значение равно fictiveId
+              $('table#tableGroupTimetable tr').each(function() {
+                var row = $(this);
+
+                if (row.find('td').eq(columnIndex).text() === fictiveId) {
+                  row.remove();
+                }
+              });
+          }
+        });
+
+      }
+    });
+  }
+
+  function replaceFormValuesWithFoundItem(foundItem) {
+    alert("Начинаем устанавливать данные")
+
+    // Найти элементы формы
+    var form = $('#form_group_timetable');
+    
+    update_ajax_select_fields(foundItem)
+
+
+    // Переберите элементы формы
+    form.find('input, select').each(function() {
+      var input = $(this);
+      var fieldName = input.attr('name');
+      var fieldType = input.attr('type');
+      
+      if (fieldName in foundItem) {
+        if (fieldType === 'date') {
+          var dateParts = foundItem[fieldName].split("-"); 
+          var ISO_date = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+          input.val(ISO_date);
+        } else if (fieldType === 'checkbox') {
+          // Установите checked для чекбокса в зависимости от значения в foundItem
+          input.prop('checked', foundItem[fieldName] === 'on');
+          
+          // Найти соответствующий <span> элемент
+          var spanElement = $('span[data-day-id="' + fieldName + '"]');
+          
+
+          if (foundItem[fieldName] === 'on' || foundItem[fieldName] === true) {
+            // Если значение равно 'on', то удалите класс 'not-highspanghted' и добавьте 'highspanghted'
+            spanElement.removeClass('not-highspanghted').addClass('highspanghted');
+          } else {
+            // В противном случае удалите класс 'highspanghted' и добавьте 'not-highspanghted'
+            spanElement.removeClass('highspanghted').addClass('not-highspanghted');
+          }
+        } else if (fieldType === 'select-one') {}  else {
+          // это правильно
+          input.val(foundItem[fieldName]);
+        }
+      }
+    });
+
+
+    alert("Все данные успешно установлены")
+  }
+
+  function update_ajax_select_fields(foundItem) {
+    var flightOrAirplaneChanged = false;
+
+    // Функция для обновления поля tgo и завершающих действий
+    function updateTgoAndFinalize() {
+      if ($('#id_tgo').val() !== foundItem['tgo']) {
+          $('#id_tgo').val(foundItem['tgo']);
+      }
+
+      if ($('#id_timetablestatusight').val() !== foundItem['timetablestatusight']) {
+        $('#id_timetablestatusight').val(foundItem['timetablestatusight']);
+      }
+
+      
+      if ($('#id_equipmentAirplane').val() !== foundItem['equipmentAirplane']) {
+        $('#id_equipmentAirplane').val(foundItem['equipmentAirplane']);
+      }
+
+
+      $('select').selectpicker('refresh');
+    }
+
+    // Функция для загрузки данных о рейсе и вызова следующего шага
+    function loadFlightData() {
+        if ($('#id_flight').val() !== foundItem['flight']) {
+          $('#id_flight').val(foundItem['flight']);
+        }
+
+        if (flightOrAirplaneChanged || document.querySelector(".current_page").textContent.trim() === "update") {
+            load_ajax_fligh_data(updateTgoAndFinalize); // Вызов с callback
+        } else {
+            updateTgoAndFinalize();
+        }
+    }
+
+    // Функция для обновления поля airplane и вызова следующего шага
+    function updateAirplane() {
+      if ($('#id_airplane').val() !== foundItem['airplane']) {
+          $('#id_airplane').val(foundItem['airplane']);
+          get_equipmentAirplane_ajax(loadFlightData); // Вызов с callback
+      } else {
+          loadFlightData();
+      }
+    }
+    // Функция для обновления поля airline и вызова следующего шага
+    function updateAirline() {
+        if ($('#id_airline').val() !== foundItem['airline']) {
+          $('#id_airline').val(foundItem['airline']);
+            get_flight_with_airline_ajax(function() {
+                get_airplane_ajax(updateAirplane); // Вызов второй функции с callback
+            });
+        } else {
+          
+            updateAirplane();
+        }
+    }
+
+    // Проверка изменения полета или самолета
+    if ($('#id_flight').val() !== foundItem['flight'] || $('#id_airplane').val() !== foundItem['airplane']) {
+        flightOrAirplaneChanged = true;
+    }
+    // Начало обновления полей
+    updateAirline();
+  }
+
+  function edit_existInTable_record(fictiveId) {
+      // Найти элемент с соответствующим fictive_id
+      var foundItem = obj_goup_for_table.find(function(item) {
+        return item.fictive_id === fictiveId;
+      });
+
+
+    if (foundItem) {
+      replaceFormValuesWithFoundItem(foundItem);
+    } else {
+      console.error('Элемент с fictive_id ' + fictiveId + ' не найден.');
+    }
+      
+
+    // Найти индекс столбца с fictive_id в таблице
+    var columnIndex;
+    $('table#tableGroupTimetable th').each(function(index) {
+        if ($(this).text() === 'fictive_id') {
+            columnIndex = index;
+            return false; 
+        }
+    });
+
+    // Удалить строку с соответствующим fictiveId и применить стиль Bootstrap
+    $('table#tableGroupTimetable tr').each(function() {
+        var row = $(this);
+        var cell = row.find('td').eq(columnIndex);
+
+        if (cell.text() === fictiveId) {
+          row.addClass('table-active'); // Добавить стиль Bootstrap для выделения строки
+          row.addClass('animated flash'); // Добавить анимацию (например, из библиотеки animate.css)
+          row.css('background-color', 'lightblue'); // Изменить цвет фона
+      } else {
+          row.removeClass('table-active'); // Удалить стиль Bootstrap
+          row.removeClass('animated flash'); // Удалить анимацию
+          row.css('background-color', ''); // Вернуть стандартный цвет фона
+      }
+    }); 
+    
+    
+    Toast.setTheme(TOAST_THEME.DARK);
+    Toast.setPlacement(TOAST_PLACEMENT.TOP_RIGHT);
+    Toast.create("Опопвещение", 'Вы выбрали строку для редактирования', TOAST_STATUS.SUCCESS, 3000);
+}
+
+  var headersMapHeaders = {
+    'airline': 'Авиакомпания',
+    'flight': 'Рейс',
+    'airplane': 'ВС',
+    'equipmentAirplane': 'Комплектация',
+    'arrival_time': 'Прилет',
+    'departure_time': 'Вылет',
+    'next_day_status': 'Следующий день',
+    'start_register_time': 'Начало Регистрации',
+    'end_register_time': 'Конец Регистрации',
+    'date_start': 'Начало действия',
+    'date_end': 'Конец действия',
+    'tgo': 'ТГО',
+    'timetablestatusight': 'Статус',
+    'comment': 'Комментарий',
+    'monday': 'Пн',
+    'tuesday': 'Вт',
+    'wednesday': 'Ср',
+    'thursday': 'Чт',
+    'friday': 'Пт',
+    'saturday': 'Сб',
+    'sunday': 'Вс',
+    'transition_day': 'Переход ч-з сутки',
+    'additional_dates': 'Дополнительные даты',
+    'excluded_dates': 'Исключенные даты',
+  }
+
+  $('#modal').off('hidden.bs.modal');
+
+
+  // чтоб добавление рейсов рабтало
+  $(".modalButton").each(function () {
+    var formURL = $(this).data("form-url");
+    $(this).modalForm({ formURL: formURL });
+  });
+
+  
+  // предохраняемся
+  $(document).on('click', '.btn-close', function(event) {
+    event.preventDefault();
+      $(this).confirmation({
+          title: "Вы хотите закрыть модальное окно?",
+          btnOkLabel: "Да",
+          btnOkClass: "alert text-success m-2 alert-success",
+          btnCancelLabel: "Нет",
+          btnCancelClass: "alert text-danger m-2 alert-danger",
+          onConfirm: function() {
+             // $('#modal').modal('hide');
+              location.reload()
+          }
+      });
+
+      $(this).confirmation("show");
+  });
+;
+  
+  // предохраняемся
+  $('#modal').modal({
+    backdrop: 'static',
+    keyboard: false
+  });
+
+  function isObjectEmpty(obj) {
+    return Object.keys(obj).length === 0;
+  }
+
+  $.when.apply($, arrayOfRequests).then(function() {
+
+    // если мы открывали до этого рейс
+    if (satus_first_second)
+    {
+      // значит мы добавили рейса и можем вставить значения
+      if (!isObjectEmpty(flight_val)) {
+          obj_goup_for_table = formTimetable_obj
+
+          // Установка значений для элементов формы// Установка значений для селектов
+          $("#id_airline").val(flight_val['id_airline']);
+          $('#id_airline').selectpicker('refresh');  
+          $("#id_flight").val(flight_val['id_flight']);
+          $('#id_flight').selectpicker('refresh');  
+
+          satus_first_second = false
+      }
+    } else {
+      satus_first_second = false
+    }
+  });
+
+
+  function checkFictiveIdValue() {
+    var fictiveId = $('#id_fictive_id').val();
+    var btnUpdate = $('.btn-update');
+
+    if (fictiveId == '') {
+        btnUpdate.hide();
+    } else {
+        // Проверяем, есть ли элемент в массиве obj_goup_for_table
+        var found = obj_goup_for_table.some(function(item) {
+            return item.fictive_id == fictiveId;
+        });
+
+        if (!found) {
+            btnUpdate.hide();
+        } else {
+            btnUpdate.show();
+        }
+    }
+}
+
+
+  // Устанавливаем интервал выполнения функции каждые 0.1 секунды
+  var interval = setInterval(checkFictiveIdValue, 100);
+
+  
+  if (document.querySelector(".current_page").textContent.trim() === "update") {
+
+    var obj = {
+      'Действия': '',
+      'csrfmiddlewaretoken': '',
+      'timetablelist': '',
+      'author': '',
+      'editor': '',
+      'group': '',
+      'fictive_id': '',
+      'airline': '',
+      'flight': '',
+      'airplane': '',
+      'equipmentAirplane': '',
+      'arrival_time': '',
+      'departure_time': '',
+      'next_day_status': '',
+      'start_register_time': '',
+      'end_register_time': '',
+      'date_start': '',
+      'date_end': '',
+      'monday': '',
+      'tuesday': '',
+      'wednesday': '',
+      'thursday': '',
+      'friday': '',
+      'saturday': '',
+      'sunday': '',
+      'comment': '',
+      'tgo': '',
+      'timetablestatusight': '',
+      'transition_day': '',
+      'additional_dates': '',
+      'excluded_dates': '',
+    };
+    
+    var formData = new FormData(document.getElementById('form_group_timetable'));
+
+    formData.forEach((value, key) => {
+      // Проверяем, существует ли ключ в объекте obj
+      if (obj.hasOwnProperty(key)) {
+        // Если ключ начинается с "checkbox_", то это чекбокс
+        if (key == 'date_start' || key == 'date_end')
+        {
+          var dateParts = value.split("-");
+          obj[key] = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+        } else {
+          obj[key] = value; // Для других полей оставляем значение как строку
+        }
+      }
+    });
+    update_ajax_select_fields(obj)
+
+
+    var similar_timetables_json = JSON.parse('{{ similar_timetables_json | safe }}');
+    
+    similar_timetables_json.forEach(item => {
+     // Преобразование FormData в обычный объект
+      var obj = {
+        'Действия': '',
+        'csrfmiddlewaretoken': '',
+        'timetablelist': '',
+        'author': '',
+        'editor': '',
+        'group': '',
+        'fictive_id': '',
+        'airline': '',
+        'flight': '',
+        'airplane': '',
+        'equipmentAirplane': '',
+        'arrival_time': '',
+        'departure_time': '',
+        'next_day_status': '',
+        'start_register_time': '',
+        'end_register_time': '',
+        'date_start': '',
+        'date_end': '',
+        'monday': '',
+        'tuesday': '',
+        'wednesday': '',
+        'thursday': '',
+        'friday': '',
+        'saturday': '',
+        'sunday': '',
+        'comment': '',
+        'tgo': '',
+        'timetablestatusight': '',
+        'transition_day': '',
+        'additional_dates': '',
+        'excluded_dates': '',
+        
+      };
+  
+      for (let key in item.fields) { // Предполагается, что данные находятся в item.fields
+        if (obj.hasOwnProperty(key)) {
+          // Присваиваем значения из similar_timetables_json к obj
+          if (key == 'date_start' || key == 'date_end')
+          {
+            var dateParts = item.fields[key].split("-");
+            obj[key] = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+            
+          } else {
+            obj[key] = item.fields[key];
+          }
+        }
+        
+        // Проверка на наличие ключа csrfmiddlewaretoken и присваивание значения
+        if (key === 'csrfmiddlewaretoken') {
+          obj[key] = $('input[name=csrfmiddlewaretoken]').val();
+        }
+
+      }
+  
+      obj_goup_for_table.push(obj);
+    });
+  
+    // Теперь у вас есть obj_goup_for_table заполненный данными
+    //console.log(obj_goup_for_table);
+    
+    $(".add_flight_no_refresh").hide();
+
+    // Обновляем таблицу
+    updateTable();
+  }
+
+   
+
+  function addDateControls(selector) {
+    var $dateInput = $('<input>', {
+        type: 'date',
+        class: 'form-control mb-2',
+        value: new Date()
+    });
+
+    var $addButton = $('<span>', {
+      text: '+',
+      class: 'text-success mb-2 h5',
+      style: 'width: 10% !important;' // Используем !important для принудительного применения стиля
+    }).click(function() { addDate(selector, $dateInput); });
+    
+    var $removeButton = $('<span>', {
+        text: '✖',
+        class: 'text-danger mb-2',
+        style: 'width: 10% !important;' // Используем !important для принудительного применения стиля
+      }).click(function() { removeDate(selector, $dateInput); });
+    
+    var $buttonGroup = $('<div>', {
+        class: 'd-flex justify-content-between mb-2'
+    }).append($addButton, $removeButton);
+  
+
+    $(selector).after($buttonGroup, $dateInput);
+}
+
+function addDate(selector, $dateInput) {
+    var date = $dateInput.val();
+    
+    // Проверяем, что значение даты не равно "undefined-undefined-"
+    if (date !== "") {
+        var dateParts = date.split("-");
+        date = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+        
+        var $datesList = $(selector);
+        if (date && !$datesList.val().includes(date) && date != 'undefined-undefined-') {
+            $datesList.val($datesList.val() ? $datesList.val() + ", " + date : date);
+        }
+    }
+}
+
+function removeDate(selector, $dateInput) {
+    var dateToRemove = $dateInput.val();
+    var dateParts = dateToRemove.split("-");
+    dateToRemove = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
+
+    var $datesList = $(selector);
+    var datesArray = $datesList.val().split(", ");
+    var dateIndex = datesArray.indexOf(dateToRemove);
+    if (dateIndex > -1) {
+        datesArray.splice(dateIndex, 1);
+        $datesList.val(datesArray.join(", "));
+    }
+  }
+  
+  addDateControls('#id_additional_dates');
+  addDateControls('#id_excluded_dates');
+  $('#id_additional_dates, #id_excluded_dates').prop('readonly', true).css({
+    'overflow-y': 'auto', // Включаем вертикальный скроллинг
+    'height': 'calc(1em * 2)' // Высота как у двух стандартных input
+  });
+
+  $('#id_transition_day').attr({
+    'min': 0,
+    'max': 6
+  });
+</script>
+
+
+
+
+
+

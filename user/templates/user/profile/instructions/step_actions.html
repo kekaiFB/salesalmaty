@@ -1,0 +1,25 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+        <div class="container-fluid">
+            <div class="row justify-content-center h2 pb-2 mb-4 text-dark border-bottom border-success">
+                Пошаговые действия
+              </div>
+            {% for item in data %}
+                {% for key, value in item.items %}
+            <div class="row h3 row_instructions">
+                <div class="col_instructions_1 h4 bg-white rounded col h3 border border-1 p-2 text-center border-end-0">
+                    {{ key }}
+                </div>
+                <div class="col_instructions_1 h4 bg-white rounded col h3 border border-1 p-2 text-center">
+                    {{ value }}
+                </div>
+            </div>
+            {% endfor %}
+        {% endfor %}
+           
+        </div>
+{% endblock %} 
+
+

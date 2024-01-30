@@ -1,0 +1,70 @@
+{% load widget_tweaks %}
+
+<form method="post" action="">
+  {% csrf_token %}
+  {{ form.media.js }}
+  
+  <div class="modal-header">
+    <h3 class="modal-title">Добавить должность</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+  </div>
+
+  <div class="modal-body">
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+
+      {% for field in form %}
+      {% if not field.is_hidden %}
+        <div class="form-group">
+          <label class="ml-1" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {% render_field field class="form-control" %}
+          <div class="mt-2 {% if field.errors %} invalid{% endif %}">
+            {% for error in field.errors %}
+              <p class="alert alert-warning">{{ error }}</p>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+       {{ field }}
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Добавить</button>
+  </div>
+
+</form>
+
+
+<script>
+  $("#id_post").hide()
+  $("#id_office").hide()
+
+  var id_post = $('#id_post').val()
+  var selected_post = 0
+  var selected_office = 0
+
+  id_post.map( function( val ) {
+    $("#id_posts option[value='" + val + "']").remove();
+  }); 
+
+
+  $('#id_posts').change(function () {   
+    //Добавляем должность
+    $("select[name='post'] option[value=" + selected_post +']').removeAttr('selected');
+    $("select[name='post'] option[value=" + $('#id_posts').val() +']').attr("selected","selected");
+      selected_post = $('#id_posts').val()
+    
+    //Добавляем подразделение
+    $('select[name="office"] option:contains('+ selected_office +')').removeAttr('selected');
+    $('select[name="office"] option:contains('+ $('select[name="posts"] option:checked').closest('optgroup').attr('label') +')').attr('selected', 'selected');
+      selected_office = $('select[name="posts"] option:checked').closest('optgroup').attr('label')
+  });
+
+
+  
+</script>

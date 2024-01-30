@@ -1,0 +1,112 @@
+{% load static %} 
+
+
+<html>  
+<head>  
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>{% block title %}{% endblock %}</title>
+   <link rel="icon" href="{% static 'media/logo.png' %}" type="image/x-icon">
+   <link rel="shortcut icon" href="{% static 'media/logo.png' %}" type="image/x-icon">
+
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+   <link rel = "stylesheet" type = "text/css" href = "{% static 'css/styles.css' %}"/>
+
+   <!-- Для всплываюещго окна -->
+   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
+
+   <!-- Jquery DataTable -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+
+   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+
+
+   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+
+   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+   <link rel="stylesheet" href="https://cdn.datatables.net/staterestore/1.2.2/css/stateRestore.dataTables.min.css">
+
+
+   <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.1.2/css/searchPanes.dataTables.min.css">
+   <link rel="stylesheet" href="https://cdn.datatables.net/select/1.6.2/css/select.dataTables.min.css">
+</head> 
+<body class="p-3 mb-2 bg-light text-dark">
+   <div id="loading">
+      <div class="container-fluid" id="myContainer">
+      <div class="row">
+         {% block content %}{% endblock %}
+      </div>
+      </div>
+   </div>
+   
+   <!-- javascript -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+   <!-- конец javascript -->
+
+   
+   <!-- parseDates_to_yyyymmdd -->
+   <script src="{% static 'js/parseDates_to_yyyymmdd.js' %}"></script>
+   <!-- parseDates_to_yyyymmdd END -->
+
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+   <!-- Для всплываюещго окна -->
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+
+
+   <!-- DataTable -->         
+   <script src="{% static 'js/select_filters_cascade.js' %}"></script>
+   <script src="{% static 'js/additional_options.js' %}"></script>
+
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+   <script src = "{% static 'js/filterColumn.js' %}"></script>
+   <script src = "{% static 'js/PopUpWindows.js' %}"></script>
+   <script src = "{% static 'js/Graphics.js' %}"></script>
+   <script src = "{% static 'js/Tooltip.js' %}"></script>
+
+   <!-- Diagramm -->
+   <script src = "{% static 'jsNet/jquery.dataTables.min.js' %}"></script>
+
+   <script src = "https://cdn.datatables.net/searchpanes/2.1.2/js/dataTables.searchPanes.min.js"></script>
+   <script src = "https://cdn.datatables.net/select/1.6.2/js/dataTables.select.min.js"></script>
+   <script src = "https://cdn.datatables.net/plug-ins/1.10.19/sorting/ip-address.js"></script>
+
+
+   <script src="https://cdn.datatables.net/datetime/1.3.1/js/dataTables.dateTime.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+   {% block javascript %} {% endblock %}
+
+   <script src="https://cdn.datatables.net/staterestore/1.2.2/js/dataTables.stateRestore.min.js"></script>
+   <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+
+   <!-- selectpicker -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.css" />
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.js"></script>
+   
+   <!-- ModalForm -->
+   {% include 'table_tgo/data/modal.html' %}
+   <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+   <script src="{% static 'js/modal.js' %}"></script>
+   <!-- ModalForm END -->
+
+
+   
+      <!-- Bootstrap JavaScript -->
+      <script src="{% static 'js/BsMultiSelect.js' %}"></script>
+</body> 
+</html> 

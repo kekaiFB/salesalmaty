@@ -1,0 +1,11 @@
+{% extends "user/base.html" %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <p class="alert alert-success">{{ message }}</p>
+    <p class="alternate"><a href="{% url 'user:login' %}">Войти</a></p>
+{% endblock %}
+
+
+

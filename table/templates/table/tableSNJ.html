@@ -1,0 +1,69 @@
+{% load table_tags %}
+
+{% for elem in snj %}  
+    <tr class="mySelect">  
+    <td>{{ elem.id }}</td>  
+    <td>{% if elem.human.shift %}{{elem.human.shift}}{% endif %}</td>
+
+    <td>{{ elem.office }}</td> 
+    <td>{{ elem.post }}</td> 
+    <td>{{ elem.human }}</td>  
+    <td>{{ elem.reason }}</td>  
+    <td>{{ elem.comment }}</td> 
+
+    {% if elem.length_time %}
+        <td>
+            {{ elem.length_time }}
+        </td>
+    {% else %}
+        <style>
+            td.notfound {
+            background-color: pink;
+            }
+        </style>
+        <td class="notfound">
+            {% now 'd-m-Y' as current_date %}
+            {% with date_start=elem.date_start|date:'d-m-Y' %}     
+                {% different_date current_date date_start %}
+            {% endwith %}
+        </td>
+    {% endif %}
+ 
+    <td>{{ elem.date_start|date:'d-m-Y' }}</td>
+
+    {% if elem.date_end %}
+        <td>
+            {{ elem.date_end |date:'d-m-Y'}}
+        </td>    
+    {% else %}
+        <style>
+            td.notfound {
+            background-color: pink;
+            }
+        </style>
+        <td class="notfound">
+            {% now 'd-m-Y' %}
+        </td>   
+    {% endif %}  
+
+    <td> 
+        {% if 'table.change_schedulenotjob' in perms %}
+            <button type="button"
+            class="btn btn-outline-success modalButton"
+            data-form-url="{% url 'table:edit' elem.id %}">
+                <span class="glyphicon glyphicon-pencil"></span> Изменить
+            </button>
+           
+        {% endif %}
+    </td> 
+    <td>
+        {% if 'table.delete_schedulenotjob' in perms %}
+            <form method="POST" action="{% url 'table:destroy' elem.id %}">
+                {% csrf_token %} 
+                <input class="btn btn-outline-danger delete_confirm" 
+                type="submit" value="Удалить">
+            </form>
+        {% endif %}
+    </td>
+    </tr>  
+{% endfor %}

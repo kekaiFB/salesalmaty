@@ -1,0 +1,203 @@
+{% extends "timetable/models/model_base.html" %}
+{% load tgo_tags %}
+{% load timetable_tags %}
+
+{% block list %}
+   <div class="mt-2">
+      <a class="btn btn-outline-primary" href={{prev_url}}>Назад</a>
+      <a class="btn btn-outline-warning" href="{% url 'timetable:type_flight' %}">Типы рейсов</a>
+      <a class="btn btn-outline-danger" href="{% url 'timetable:timetableStatus' %}">Статусы Рейсов</a>
+      <span id="dt_resetFilter" class="btn btn-warning text-dark">Сбросить фильтры</span>
+      {% if 'timetable.add_flight' in perms %}
+         {% add_button_text 'timetable:add_flight' %} 
+      {% endif %}
+   </div>
+   <hr>
+   <table class="table rounded-lgn table_dt col-12 bg-white" style="width:100%">
+   <thead> 
+      <tr>
+         <th>№ рейса (прилет)</th>
+         <th>№ рейса (вылет)</th>
+         <th>Тип</th>
+         <th>Авиакомпания</th>
+         {% comment %} <th>Воздушное судно</th>
+         <th>Количество мест</th> {% endcomment %}
+         <th>Прилет</th>
+         <th>Вылет</th>
+         <th>Тип рейса</th>
+         <th>Аэропорт прилета</th>
+         <th>Аэропорт вылета</th>
+         {% if 'timetable.add_flight' in perms %}
+            <th></th>
+            <th></th>
+         {% endif %}
+      </tr>
+   </thead>
+   <tbody>
+      {% for f in flight_noMyCompany %}  
+         <tr>
+            <td>
+               {% if f.title is not none %}   
+                  {{ f.title }}
+               {% endif %}
+            </td>
+            <td>
+               {% if f.title_2 is not none %}   
+                  {{ f.title_2 }}
+               {% endif %}
+            </td>
+            <td>
+               {% if f.type is not none %}   
+                  {{ f.type }}
+               {% endif %}
+            </td>
+            <td>
+               {% if f.airline is not none %}   
+                  {{ f.airline }}
+               {% endif %}
+            </td>
+            {% comment %} <td>
+               {% if f.airplane is not none %}   
+                  {{ f.airplane }}
+               {% endif %}
+            </td>
+            <td>
+               {% if f.equipmentAirplane.seats is not none %}   
+                  {{ f.equipmentAirplane.seats }}
+               {% endif %}
+            </td> {% endcomment %}
+            <td>
+               {% if f.arrival is not none %}   
+                  {{ f.arrival }}
+               {% endif %}
+            </td>
+            <td>
+               {% if f.departure is not none %}   
+                  {{ f.departure }}
+               {% endif %}
+            </td>
+            <td>
+               {% if f.type_flight is not none %}   
+                  {{ f.type_flight }}
+               {% endif %}
+            </td>
+            <td>
+               {% if f.arrivalAirport is not none %}   
+                  {{ f.arrivalAirport }}
+               {% endif %}
+            </td>
+            <td>
+               {% if f.departurelAirport is not none %}   
+                  {{ f.departurelAirport }}
+               {% endif %}
+            </td>
+            {% if 'timetable.add_flight' in perms %}
+               <td></td>
+               <td></td>
+            {% endif %}
+         </tr>     
+      {% endfor %}
+
+      {% for f in flight_myCompany %}  
+         <tr>
+            <td class={{f.is_active}}>
+               {% if f.title is not none %}   
+                  {{ f.title }}
+               {% endif %}
+            </td>
+            <td class={{f.is_active}}>
+               {% if f.title_2 is not none %}   
+                  {{ f.title_2 }}
+               {% endif %}
+            </td>
+            <td class={{f.is_active}}>
+               {% if f.type is not none %}   
+                  {{ f.type }}
+               {% endif %}
+            </td>
+            <td class={{f.is_active}}>
+               {% if f.airline is not none %}   
+                  {{ f.airline }}
+               {% endif %}
+            </td>
+            {% comment %} <td class={{f.is_active}}>
+               {% if f.airplane is not none %}   
+                  {{ f.airplane }}
+               {% endif %}
+            </td>
+            <td class={{f.is_active}}>
+               {% if f.equipmentAirplane.seats is not none %}   
+                  {{ f.equipmentAirplane.seats }}
+               {% endif %}
+            </td> {% endcomment %}
+            <td class={{f.is_active}}>
+               {% if f.arrival is not none %}   
+                  {{ f.arrival }}
+               {% endif %}
+            </td>
+            <td class={{f.is_active}}>
+               {% if f.departure is not none %}   
+                  {{ f.departure }}
+               {% endif %}
+            </td>
+            <td class={{f.is_active}}>
+               {% if f.type_flight is not none %}   
+                  {{ f.type_flight }}
+               {% endif %}
+            </td>
+            <td class={{f.is_active}}>
+               {% if f.arrivalAirport is not none %}   
+                  {{ f.arrivalAirport }}
+               {% endif %}
+            </td>
+            <td class={{f.is_active}}>
+               {% if f.departurelAirport is not none %}   
+                  {{ f.departurelAirport }}
+               {% endif %}
+            </td>
+            {% if 'timetable.add_flight' in perms %}         
+               {% check_type_perms_timetable f.type_flight  user_groups as  type_perms_timetable_exist %} 
+               {% if type_perms_timetable_exist %}     
+                  {% if f.is_active %}
+                     <td>
+                        {% edit_button 'timetable:edit_flight' f.id %}
+                     </td>
+                     <td>
+                        {% del_button 'timetable:flight-no-active' f.id %}
+                     </td>
+                  {% else %}
+                     <td></td>
+                     <td>
+                        {% restore_button 'timetable:flight-is-active' f.id %}
+                     </td>
+                  {% endif %}
+               {% else %}
+                  <td></td>
+                  <td></td>
+               {% endif %}         
+            {% endif %}
+         </tr>     
+      {% endfor %}
+   </tbody>
+   <tfoot> 
+      <tr>
+         <th>№ рейса (прилет)</th>
+         <th>№ рейса (вылет)</th>
+         <th>Тип</th>
+         <th>Авиакомпания</th>
+         {% comment %} <th>Воздушное судно</th>
+         <th>Количество мест</th> {% endcomment %}
+         <th>Прилет</th>
+         <th>Вылет</th>
+         <th>Тип рейса</th>
+         <th>Аэропорт прилета</th>
+         <th>Аэропорт вылета</th>
+         {% if 'timetable.add_flight' in perms %}
+            <th></th>
+            <th></th>
+         {% endif %}
+      </tr>
+   </tfoot>
+   </table>
+      
+{% endblock %}

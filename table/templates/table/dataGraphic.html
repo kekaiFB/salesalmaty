@@ -1,0 +1,597 @@
+{% load static %} 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/underscore@1.12.0/underscore-min.js"></script> 
+<script src = "{% static 'js/chartjs-plugin-sorting.js' %}"></script>
+
+<script>
+    $(".single-item").slick({
+        dots: false,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 2,
+        slidesToScroll: 1, 
+        rows: 2,
+        
+    }); 
+
+
+    var myChart1;
+    var label1, value1, datasets1=[]; 
+    const ctx1 = document.getElementById('oneChart').getContext('2d');
+
+    var myChart2;
+    var label2, value2, value2Day, value2Office; 
+    const ctx2 = document.getElementById('twoChart').getContext('2d');
+
+    var myChart3;
+    var label3, value3; 
+    const ctx3 = document.getElementById('threeChart').getContext('2d');
+
+
+    var myChart4;
+    var label4, value4, datasets4=[]; 
+    const ctx4 = document.getElementById('fourChart').getContext('2d');
+    /* 
+        var myChart5;
+        var label5, value5, datasets5=[]; 
+        const ctx5 = document.getElementById('fiveChart').getContext('2d');
+    */
+    var status_load = 0
+
+    
+    const sortChartData = (chart, sortFunc) => {
+      
+    resetChartData(chart);
+    
+    var dataIndexVis = []
+    for (var i=0; i<chart.data.datasets.length; i++)
+    {
+      if (chart.getDatasetMeta(i).visible)
+      {
+        dataIndexVis.push(i)
+      }
+    }
+
+    var chartData = []
+
+    for (var i=0; i<dataIndexVis.length; i++)
+    {
+      for (var j=0; j<chart.data.datasets[0].data.length; j++)
+      {   
+        if(i==0){
+           chartData[j] = chart.data.datasets[dataIndexVis[i]].data[j]
+        } else {
+          chartData[j] += chart.data.datasets[dataIndexVis[i]].data[j]
+        }
+       
+      }
+    }
+
+    var chartLabels = chart.data.labels;
+
+    var chartDataArray = chartData.map((dataPoint, index) => ({
+      data: dataPoint,
+      label: chartLabels[index],
+    }));
+
+
+    chartDataArray.sort(sortFunc);
+
+
+    const sortedChartData = chartDataArray.map(dataObj => dataObj.data);
+    const sortedChartLabels = chartDataArray.map(dataObj => dataObj.label);
+
+
+    
+    var originalLabels = chart.data.labels;
+    var count_datasets = chart.data.datasets.length;
+  
+    var datasets = []
+    //Датасеты должны быть равны по размеру!!!!
+
+    //Проходим по каждамоу из датасетов
+    for (var i=0; i<count_datasets; i++)
+    {
+      var datasets = []
+      //Проходим по всем объектам датасетов
+      for (var j=0; j<originalLabels.length; j++)
+      {
+        // суть такая, берем значение из отсортированного датасета, и ищем индекс такого же элемента в оригинальном
+        var index = originalLabels.indexOf(sortedChartLabels[j])
+
+        // заполняем значение датасета, значением из оригинального, то есть значения те же, а последовательность индексов разная
+        datasets.push(chart.data.datasets[i].data[index])
+      }
+      chart.data.datasets[i].data = datasets
+    }
+      
+     
+   
+    chart.data.labels = sortedChartLabels;
+
+    chart.update();
+    chart.resize();
+  }
+
+  const resetChartData = (chart) => {
+
+    for (var i=0; i<chart.data.datasets.length; i++)
+    {
+      const originalChartData = chart.originalData[i].datasets[0].data;
+      const originalChartLabels = chart.originalData[i].labels;
+
+      // Update the chart with the original data, labels, and colors
+      chart.data.datasets[i].data = originalChartData;
+      chart.data.labels = originalChartLabels;
+    }
+    
+    chart.update();
+    chart.resize();
+  };
+
+    function drawTable (table) {
+
+        //ПЕРВЫЙ ГРАФИК
+        label1 = chartData(table).map( function( value ) {
+            return value['label']
+        });
+        datasets1 = reasonGraphicHuman(table); 
+
+        //ПЯТЫЙ ГРАФИК
+        /* 
+        label5 = chartDataNotReason(table).map( function( value ) {
+                return value['label']
+            });
+            value5 = chartDataNotReason(table).map( function( value ) {
+                return value['value']
+            });
+            */
+        
+        //ВТОРОЙ ГРАФИК
+        label2 = chartDataOffice(table).map( function( value ) {
+            return value['label']
+        });
+
+        value2 = chartDataOffice(table).map( function( value ) {
+            return value['value']
+        })   
+
+        value2Day = chartDataOfficeDay(table).map( function( value ) {
+            return value['value']
+        })   
+
+        value2Office = getEmployeeOffice(table).map( function( value ) {
+            return value['value']
+        }) 
+
+
+        //ТРЕТИЙ ГРАФИК
+        label3 = chartDataDate(table).map( function( value ) {
+            return value['label']
+        });
+        label3 = getMonthOfDayArray(label3)
+        value3 = chartDataDate(table).map( function( value ) {
+            return value['value']
+        }) 
+        
+        // Шаг 1: Найти начальный индекс монотонного нулевого диапазона с начала массива
+        var startIndex = 0;
+        while (startIndex < value3.length && value3[startIndex] === 0) {
+            startIndex++;
+        }
+
+        // Шаг 2: Найти конечный индекс монотонного нулевого диапазона с конца массива
+        var endIndex = value3.length - 1;
+        while (endIndex >= 0 && value3[endIndex] === 0) {
+            endIndex--;
+        }
+
+        // Шаг 3: Удалить только монотонные нулевые диапазоны по краям
+        if (startIndex > 0) {
+            value3.splice(0, startIndex);
+            label3.splice(0, startIndex);
+        }
+
+        if (endIndex < value3.length - 1) {
+            value3.splice(endIndex + 1);
+            label3.splice(endIndex + 1);
+        }
+
+        employeValue3 =  chartDataDateEmployee(table)
+        
+        
+
+        //ЧЕТВЕРТЫЙ ГРАФИК
+        label4 = chartDataMonth(table).map( function( value ) {
+            return value['label']
+        });
+
+        datasets4 = reasonGraphicMonth(table);
+
+        /*
+            let startIndices = [];
+            let endIndices = [];
+
+            datasets4.forEach(dataset => {
+                let [startIndex, endIndex] = findNonZeroRange(dataset.data);
+                if (startIndex !== -1) { 
+                    startIndices.push(startIndex);
+                    endIndices.push(endIndex);
+                }
+            });
+            */
+        /*let commonStartIndex = Math.max(...startIndices);
+        let commonEndIndex = Math.min(...endIndices);
+
+        // Обрезаем массивы данных и меток
+        datasets4.forEach(dataset => {
+            dataset.data = dataset.data.slice(commonStartIndex, commonEndIndex + 1);
+        });
+        label4 = label4.slice(commonStartIndex, commonEndIndex + 1);
+        console.log(label4)*/
+
+
+        if (myChart1) {
+            updateCharts();
+        }
+    }
+
+    function init() {
+        //ПЕРВЫЙ ГРАФИК
+        myChart1 = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels : label1,
+                datasets: datasets1
+            },
+            options: {
+               plugins: {
+                    title: {
+                        display: true,
+                        text: 'Продажи по сотрудникам',
+                        font: {
+                            size: 20
+                          },
+                    },
+                },
+                
+                maintainAspectRatio: false,
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stacked: true,
+                    },
+                    x: {
+                        stacked: true,
+                    }
+                }
+            }
+        })
+        var backgroundColor_office = []
+
+        for (let i = 0; i < label2.length; i++) {
+            backgroundColor_office.push(getRGBA());
+        }
+
+        //ВТОРОЙ ГРАФИК
+        myChart2 = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels : label2,
+                datasets: [{
+                    label: 'Количество сотрудников',
+                    data : value2,
+                    backgroundColor: backgroundColor_office,
+                    borderColor: backgroundColor_office,
+                    borderWidth: 1
+                }]
+            },
+            options: {                
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            labelColor: function(context) {
+                                return {
+                                    borderWidth: 2,
+                                    borderDash: [2, 2],
+                                    borderRadius: 2,
+                                    caretSize: 1,
+                                };
+                            },
+                            label: function(context) {
+                                return label2[context.dataIndex]
+                            },
+                            afterLabel: function(context) {
+                                var data = []
+                                var text =  'Сотрудники ' + value2[context.dataIndex]
+                                data.push(text)
+                                var text =  'Количество дней ' + value2Day[context.dataIndex]
+                                data.push(text)
+                                data.push([])
+                                data.push('Сотрудники:')
+                                
+                                var list = Object.keys(value2Office[context.dataIndex])
+                                var list_values = Object.values(value2Office[context.dataIndex])
+                                for (var m =0; m<list.length; m++) {
+                                    var elem = list[m] + ' ' + list_values[m]
+                                    data.push(elem)
+                                }
+                         
+                                return data
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Продажи по подразделениям',
+                        font: {
+                            size: 20
+                          }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+              
+            }
+        })
+
+
+    
+        //ТРЕТИЙ ГРАФИК
+        //Продажи по дням
+        myChart3 = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    label: "Количество  пропусков",
+                    data : value3,
+                    backgroundColor: 'rgba(75, 192, 50, 0.7)',
+                    borderColor: 'rgba(75, 192, 50, 0.7)',
+                    borderWidth: 1
+                }]
+            },
+            options: {              
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            labelColor: function(context) {
+                                return {
+                                    backgroundColor: 'rgba(212, 237, 191, 0.2)',
+                                    borderWidth: 2,
+                                    borderDash: [2, 2],
+                                    borderRadius: 2,
+                                    caretSize: 1,
+                                };
+                            },
+                            /* beforeLabel: function(context) {
+                                return employeValue3[context.dataIndex][0][0]
+                            }, */
+                            label: function(context) {
+                                count_employe = 'Продажи ' + context.formattedValue
+                                return count_employe
+                            },
+                            afterLabel: function(context) {
+                                var text = 'Сотрудники ' +employeValue3[context.dataIndex].length + ':'
+                                var employe = [' ']
+                                employe.push(text)
+                                for (var m =0; m<employeValue3[context.dataIndex].length; m++) {
+                                    var employe_text = employeValue3[context.dataIndex][m][1] + ' ' + employeValue3[context.dataIndex][m][2]
+                                    employe.push(employe_text)
+                                }
+                                return employe 
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Продажи по дням',
+                        font: {
+                            size: 20
+                          }
+                    }
+                },
+                scales: {
+                    //Дни на графкие
+                    x: { 
+                        labels : cleanConsecutiveDuplicates(label3.map(elem => elem.split(';')[0])),
+                        display: false, // Это скроет ось x, но метки остан
+
+                    },
+                    //Месяцы на графкие
+                    x2: {  
+                        labels : cleanConsecutiveDuplicates(label3.map(elem => elem.split(';')[1])),
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            reverse: false,
+                            stepSize: 1
+                          },
+                    },
+                    
+                },
+            }
+        })
+     
+
+        
+        //ЧЕТВЕРТЫЙ ГРАФИК
+        myChart4 = new Chart(ctx4, {
+            type: 'bar',
+            data: {
+                labels : label4,
+                datasets: datasets4,
+            },
+            options: {              
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Продажи по месяцам',
+                        font: {
+                            size: 20
+                        },
+                       
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stacked: true,
+                    },
+                    x: {
+                        stacked: true,
+                    }
+                }
+            }
+        })
+        sortUserGraph()
+    }
+    
+    function updateCharts() {
+          // Обновление myChart1
+        if (myChart1) {
+            myChart1.data.labels = label1;
+            myChart1.data.datasets = datasets1;
+            myChart1.update();
+        }
+
+        // Обновление myChart2
+        if (myChart2) {
+            myChart2.data.labels = label2;
+            myChart2.data.datasets[0].data = value2;
+            // Если есть другие датасеты в myChart2, то их тоже нужно обновить
+            // Например, если у вас есть datasets[1], то обновляйте его здесь
+            myChart2.update();
+        }
+
+        // Обновление myChart3
+        if (myChart3) {
+            // Извлечение и очистка labels_X и labels_X2
+            var labels_X = cleanConsecutiveDuplicates(label3.map(elem => elem.split(';')[0]));
+            var labels_X2 = cleanConsecutiveDuplicates(label3.map(elem => elem.split(';')[1]));
+
+            myChart3.options.scales.x.labels = labels_X;
+            myChart3.options.scales.x2.labels = labels_X2;
+            myChart3.data.datasets[0].data = value3;
+
+            // Аналогично, обновляйте другие датасеты myChart3 здесь, если они есть
+            myChart3.update();
+        }
+
+        // Обновление myChart4
+        if (myChart4) {
+            myChart4.data.labels = label4;
+            myChart4.data.datasets = datasets4;
+            myChart4.update();
+        }
+
+        // Если myChart5 используется, обновляйте его аналогичным образом
+        // if (myChart5) {
+        //     myChart5.data.labels = label5;
+        //     myChart5.data.datasets[0].data = value5;
+        //     myChart5.update();
+        // }
+        if (myChart4) {
+            sortUserGraph()
+        }
+    
+    }
+
+    function cleanConsecutiveDuplicates(arr) {
+        let result = [];
+        for (let i = 0; i < arr.length; i++) {
+            if (i === 0 || arr[i] !== arr[i - 1]) {
+                result.push(arr[i]);
+            }
+        }
+        return result;
+    }
+    
+    function findNonZeroRange(data) {
+        console.log(data)
+        let startIndex = data.findIndex(value => value !== 0);
+        let endIndex = data.length - 1 - [...data].reverse().findIndex(value => value !== 0);
+
+        // Если массив полностью нулевой, возвращаем -1
+        if (startIndex === -1) return [-1, -1];
+
+        return [startIndex, endIndex];
+    }
+    
+    
+    
+    function sortUserGraph() {
+        $('.chart_1_sort').html(`
+            <div>
+            <span class="sort_chart1_asc h1">↗️</span>
+            <span class="sort_chart1_desc h1">↘️</span>
+            </div>
+        `);
+
+        // Save a copy of the original data for resetting later
+        myChart1.originalData = []
+      
+        for (var i=0; i<myChart1.data.datasets.length; i++)
+        {
+            myChart1.originalData[i] = {
+            datasets: [{ data: [...myChart1.data.datasets[i].data], borderColor: [...myChart1.data.datasets[i].borderColor], backgroundColor: [...myChart1.data.datasets[i].backgroundColor] }],
+            labels: [...myChart1.data.labels]
+            };
+        }
+        sortChartData(myChart1, (a, b) => b.data - a.data);
+
+        $('span').on('click', function () {
+            if (this.className.includes('sort_chart1_asc')) {
+                sortChartData(myChart1, (a, b) => a.data - b.data);
+
+            } else if (this.className.includes('sort_chart1_desc')) {
+                sortChartData(myChart1, (a, b) => b.data - a.data);
+
+            } else if (this.className.includes('reset_chart1')) {
+                resetChartData(myChart1);
+            }
+        });
+
+
+        $('.chart_4_sort').html(`
+            <div>
+                <span class="h1 sort_chart4_asc">↗️</span>
+                <span class="h1 sort_chart4_desc">↘️</span>
+                <span class="h1 reset_chart4">🔄</span>
+            </div>
+        `);
+
+        // Save a copy of the original data for resetting later
+        myChart4.originalData = []
+    
+        for (var i=0; i<myChart4.data.datasets.length; i++)
+        {
+            myChart4.originalData[i] = {
+            datasets: [{ data: [...myChart4.data.datasets[i].data], borderColor: [...myChart4.data.datasets[i].borderColor], backgroundColor: [...myChart4.data.datasets[i].backgroundColor] }],
+            labels: [...myChart4.data.labels]
+            };
+        }
+
+        $('span').on('click', function () {
+            if (this.className.includes('sort_chart4_asc')) {
+                sortChartData(myChart4, (a, b) => a.data - b.data);
+
+            } else if (this.className.includes('sort_chart4_desc')) {
+                sortChartData(myChart4, (a, b) => b.data - a.data);
+
+            } else if (this.className.includes('reset_chart4')) {
+                resetChartData(myChart4);
+            }
+        });
+
+
+    }
+
+</script>

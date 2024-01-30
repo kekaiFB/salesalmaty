@@ -1,0 +1,87 @@
+{% extends "timetable/base.html" %}
+{% load tgo_tags %}
+{% load timetable_tags %}
+{% load user_tags %}
+
+{% block content %}
+   <a class="btn btn-outline-primary" href={{prev_url}}>Назад</a>
+   
+   {% if errors %}
+      <div class="containter alert mt-4 allocation-date_timetable rounded">
+         <div class="alert p4 h3 m-2 mt-3 text-center">
+            Чтобы назначать людей как ресурсы в операциях нужно сначала устранить все ошибки и предупреждения в аналитике
+         </div>
+      </div> 
+   {% else %}
+   {% include 'timetable/analitics/instructions_analitics.html' %} 
+      {% csrf_token %}
+      <div class="containter mt-4 allocation-date_timetable rounded">
+         <div class="p4 h3 m-2 mt-3 text-center">
+            <a href="{% url 'timetable:index_week_group' timetable_list.id %}"  target="_blank" class="text-dark">{{ timetable_list }}</a>
+         </div>
+         <div class="p2 h4 m-2 text-center">
+            {{timetable_list.date_start}} - {{timetable_list.date_end}}
+         </div>
+         <div class="row m-5 alert rounded bg-white">
+            <div class="col analitics-tgo">
+                  <div class="h3 m-2">ТГО:</div>
+                  {% for timetable in timetables %}
+                     <div class="mt-3 ml-4 h5">
+                        <a href="{{ timetable.tgo.get_absolute_url }}"  target="_blank" class="text-primary">{{ timetable.tgo }}</a> {{timetable}} ({{timetable.flight.type_flight}}), 
+                        прилет в: <span class="h4">{{timetable.arrival_time}}. Начало выполнения ТГО в {% check_start_tgo_in_flight timetable.arrival_time timetable.flight.type_flight timetable.tgo.time_start %}</span>
+                     </div>
+                  {% endfor %}
+            </div>
+         </div>
+         <div class="row m-5 alert rounded bg-white">
+            <div class="row">
+               <div class="h3 m-2">Выбор ресурсов для распределния:</div>
+            </div>
+            <div class="row">
+               <div class="col alert alert-warning m-3">
+                  <div class="h5">
+                     <select name="resource_list" class="resource_list">
+                        {% for res, val in resource_info.items %}
+                           <option value="{{ val }}">{{ res }}</option> 
+                        {% endfor %}
+                     </select>
+                  </div>
+               </div>
+               <div class="col alert alert-warning m-3">
+                  <div class="">
+                     <input type="radio" id="single-date" name="date-selection">
+                     <label for="single-date" class="label-single-date h4">Дата</label>
+                     <div class="inputs-single-date"><input class="form-control" type="date" id="input-single-date" min={{timetable_list.date_start|date:"Y-m-d"}} max={{timetable_list.date_end|date:"Y-m-d"}}></div>
+                  </div>
+                  <div class="">
+                     <input type="radio" id="range-date" name="date-selection">
+                     <label for="range-date" class="label-range-date h4">Диапазон дат</label>
+                     <div class="inputs-range-date">   
+                        <div class="m-1 ml-2"> 
+                           от <input class="form-control" min={{timetable_list.date_start|date:"Y-m-d"}} max={{timetable_list.date_end|date:"Y-m-d"}} type="date" id="range-date-first">
+                        </div>
+                        <div class="m-1"> 
+                           до <input class="form-control" min={{timetable_list.date_start|date:"Y-m-d"}} max={{timetable_list.date_end|date:"Y-m-d"}} type="date" id="range-date-second">
+                        </div>
+                     </div> 
+                     <div class="meta-date-info"></div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-11"></div>      
+               <div class="col text-center">
+                  <span class="btn btn-success generate_graphic_button ml-1">Подгрузить ресурсы</span>
+               </div>       
+            </div>
+         </div>
+         <div class="col-md-11 ml-5 alert div-chart-analitics rounded bg-white">
+            <div class="ressurce_time_list">
+            </div>
+         </div>   
+         
+      
+         .
+      </div>
+   {% endif %}
+{% endblock %}

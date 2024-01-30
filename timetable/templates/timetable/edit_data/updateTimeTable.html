@@ -1,0 +1,470 @@
+<form method="post" action="">
+  {% csrf_token %}
+  <div class="modal-header">
+    <div class="row">
+      <div class="col-8">
+        <h4 class="modal-title">Количество версий: {{ timetable.history.count }}</h4>
+      </div>
+      <div class="col-2">
+        <a class="btn btn-outline-primary versionControlButton"
+        target="_blank"  
+        href="{% url 'timetable:historyTimetable' timetable.id %}">Контроль версий</a>
+      </div>
+    </div>  
+    <div class="col-1">
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+    </div>
+
+    
+  </div>
+ 
+  <div class="modal-body">
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+    {{ form.timetablelist }}
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+          <p><label class="form-label" for="{{ form.airline.id_for_label }}">{{form.airline.label}}: </label>{{ form.airline }}</p>
+          <div class="form-error">{{ form.airline.errors }}</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.airplane.id_for_label }}">{{form.airplane.label}}: </label>{{ form.airplane }}</p>
+          <div class="form-error">{{ form.airplane.errors }}</div>
+      </div>
+      <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.equipmentAirplane.id_for_label }}">{{form.equipmentAirplane.label}}: </label>{{ form.equipmentAirplane }}</p>
+          <div class="form-error">{{ form.equipmentAirplane.errors }}</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+          <p><label class="form-label" for="{{ form.flight.id_for_label }}">{{form.flight.label}}:<a class="text-decoration-none" target="_blank" href="{% url 'timetable:flight' %}">➕</a></label>{{ form.flight }} </p>
+          <div class="form-error">{{ form.flight.errors }}</div>
+      </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+          <p><label class="form-label" for="{{ form.arrival_time.id_for_label }}">{{form.arrival_time.label}}: </label>{{ form.arrival_time }}</p>
+          <div class="form-error">{{ form.arrival_time.errors }}</div>
+        </div>
+        <div class="form-group col">
+          <p><label class="form-label" for="{{ form.departure_time.id_for_label }}">{{form.departure_time.label}}: </label>{{ form.departure_time }}</p>
+          <div class="form-error">{{ form.departure_time.errors }}</div>
+        </div>
+        <div class="form-group col form-check form-switch ">
+          <p><label class="form-label" for="{{ form.next_day_status.id_for_label }}">{{form.next_day_status.label}}: </label><br>{{ form.next_day_status }}</p>
+          <div class="form-error">{{ form.next_day_status.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <p><label class="form-label" for="{{ form.start_register_time.id_for_label }}">{{form.start_register_time.label}}: </label>{{ form.start_register_time }}</p>
+            <div class="form-error">{{ form.start_register_time.errors }}</div>
+        </div>
+        <div class="form-group col">
+          <p><label class="form-label" for="{{ form.end_register_time.id_for_label }}">{{form.end_register_time.label}}: </label>{{ form.end_register_time }}</p>
+          <div class="form-error">{{ form.end_register_time.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6 mb-0">
+            <p><label class="form-label" for="{{ form.date_start.id_for_label }}">{{form.date_start.label}}: </label>{{ form.date_start }}</p>
+            <div class="form-error">{{ form.date_start.errors }}</div>
+        </div>
+        <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.date_end.id_for_label }}">{{form.date_end.label}}: </label>{{ form.date_end }}</p>
+          <div class="form-error">{{ form.date_end.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+          <p><label class="form-label" for="{{ form.tgo.id_for_label }}">{{form.tgo.label}}:<a class="text-decoration-none" target="_blank" href="{% url 'table_tgo:index' %}">➕</a> </label>{{ form.tgo }}</p>
+          <div class="form-error">{{ form.tgo.errors }}</div>
+          </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+            <p><label class="form-label" for="{{ form.timetablestatusight.id_for_label }}">{{form.timetablestatusight.label}}: </label>{{ form.timetablestatusight }}</p>
+            <div class="form-error">{{ form.timetablestatusight.errors }}</div>
+          </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+            <p><label class="form-label" for="{{ form.comment.id_for_label }}">{{form.comment.label}}: </label>{{ form.comment }}</p>
+            <div class="form-error">{{ form.comment.errors }}</div>
+          </div>
+    </div>
+ 
+    <div class="form-row">
+      <div class="form-group col ml-1">
+          <p>{{ form.monday }}</p>
+          <div class="form-error">{{ form.monday.errors }}</div>
+      </div>
+      <div class="form-group col">
+          <p>{{ form.tuesday }}</p>
+          <div class="form-error">{{ form.tuesday.errors }}</div>
+      </div>
+      <div class="form-group col">
+          <p>{{ form.wednesday }}</p>
+          <div class="form-error">{{ form.wednesday.errors }}</div>
+      </div>
+      <div class="form-group col">
+          <p>{{ form.thursday }}</p>
+          <div class="form-error">{{ form.thursday.errors }}</div>
+      </div>
+      <div class="form-group col">
+          <p>{{ form.friday }}</p>
+          <div class="form-error">{{ form.friday.errors }}</div>
+      </div>
+      <div class="form-group col">
+          <p>{{ form.saturday }}</p>
+          <div class="form-error">{{ form.saturday.errors }}</div>
+      </div>
+      <div class="form-group col">
+          <p>{{ form.sunday }}</p>
+          <div class="form-error">{{ form.sunday.errors }}</div>
+      </div>
+      <div class="form-group col">
+      </div>
+      <div class="form-group col">
+      </div>
+      <div class="form-group col">
+      </div>
+  </div>
+
+    <div id="meta"></div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Обновить</button>
+    
+  </div>
+
+</form>
+
+<script>
+
+  var queryset = {}
+  $.ajax({                       
+    url: "{% url 'timetable:ajax_load_flight_airlane' %}",                 
+    success: function (data) { 
+      queryset = data['queryset']
+    }
+  });
+  
+ 
+  $("input[type='checkbox']").addClass('ml-2');
+
+
+ // .selectpicker
+ $('#id_airline, #id_flight, #id_tgo, #id_timetablestatusight, #id_airplane, #id_equipmentAirplane').attr('data-live-search', 'true');  
+ $('#id_airline, #id_flight, #id_tgo, #id_timetablestatusight, #id_airplane, #id_equipmentAirplane').selectpicker({ 
+   noneResultsText:'   Результатов нет',
+ }); 
+  
+
+  // меняем данные для Flight
+  $('#id_airline').change(function () {
+    $('#id_tgo, #id_departure_time, #id_arrival_time').val('')
+    $('#id_tgo, #id_departure_time, #id_arrival_time').selectpicker('refresh');  
+    
+    $('#id_flight').val('').show()
+    $('#id_flight').val('')
+    $('#id_flight').selectpicker('refresh');  
+
+    get_flight_with_airline_ajax()
+
+    // Берем ВС
+    get_airplane_ajax()
+  });
+  
+
+  
+  // меняем данные для ВС
+  function get_airplane_ajax () {
+    $.ajax({                       
+      url: "{% url 'timetable:get_airplane_ajax' %}",                 
+      data: {
+        'id_airline': $("#id_airline").val(),  
+      },
+      success: function (data) { 
+      
+        var select = $("#id_airplane");
+
+        // Очистите существующие элементы (за исключением первой опции)
+        select.find("option:not(:first)").remove();
+        // Добавьте новые опции на основе полученных данных
+        $.each(data.queryset, function(index, item) {
+            select.append($('<option>', {
+                value: item.id,
+                text: item.name
+            }));
+        });
+        $('#id_airplane').selectpicker('refresh');  
+
+        $("#id_equipmentAirplane").find("option:not(:first)").remove();
+        $('#id_equipmentAirplane').selectpicker('refresh');  
+      }
+    });
+  }
+
+
+  //   // меняем данные для комплектации
+  $('#id_airplane').change(function () {
+    get_equipmentAirplane_ajax()
+  });
+  
+  function get_equipmentAirplane_ajax () {
+      $.ajax({                       
+        url: "{% url 'timetable:get_equipmentAirplane_ajax' %}",                 
+        data: {
+          'id_airplane': $("#id_airplane").val(),  
+        },
+        success: function (data) { 
+        
+          var select = $("#id_equipmentAirplane");
+
+          // Очистите существующие элементы (за исключением первой опции)
+          select.find("option:not(:first)").remove();
+          // Добавьте новые опции на основе полученных данных
+          $.each(data.queryset, function(index, item) {
+              select.append($('<option>', {
+                  value: item.id,
+                  text: item.name
+              }));
+          });
+          $('#id_equipmentAirplane').selectpicker('refresh');  
+        }
+      });
+  }
+  
+ 
+
+  // меняем данные для Flight
+  function get_flight_with_airline_ajax () {
+    $.ajax({                       
+      url: "{% url 'timetable:get_flight_with_airline_ajax' %}",                 
+      data: {
+        'id_airline': $("#id_airline").val(),  
+      },
+      success: function (data) { 
+        var select = $("#id_flight");
+        // Очистите существующие элементы (за исключением первой опции)
+        select.find("option:not(:first)").remove();
+        // Добавьте новые опции на основе полученных данных
+        $.each(data.queryset, function(index, item) {
+            select.append($('<option>', {
+                value: item.id,
+                text: item.name
+            }));
+        });
+        if (update == true)
+        {
+          select.val(selected_flight)
+          update = false
+        }
+        select.selectpicker('refresh');  
+      }
+    });
+  }
+
+    
+  var flight_type = '';
+  // Рейс и ТГО
+  $('#id_flight, #id_airplane').change(function () {
+    $('#id_tgo, #id_departure_time, #id_arrival_time').val('')
+    $('#id_tgo, #id_departure_time, #id_arrival_time').selectpicker('refresh');  
+     
+    load_ajax_fligh_data()
+  });
+  
+  // меняем данные для ТГО
+  function load_ajax_fligh_data () {
+    $.ajax({                       
+      url: "{% url 'timetable:load_ajax_fligh_data' %}",                 
+      data: {
+        'id_flight': $("#id_flight").val(),  
+        'id_airplane': $("#id_airplane").val(),  
+      },
+      success: function (data) {  
+        flight_type = data.flight_type;
+        var id_tgo = $("#id_tgo")
+          if (typeof data.tgo != 'undefined')
+          {
+            var select = id_tgo;
+
+            // Очистите существующие элементы (за исключением первой опции)
+            select.find("option:not(:first)").remove();
+            // Добавьте новые опции на основе полученных данных
+            $.each(data.tgo, function(index, item) {
+                select.append($('<option>', {
+                    value: item.id,
+                    text: item.name
+                }));
+            });
+
+           // console.log(selected_tgo, update_tgo, data.tgo)
+
+        if (update_tgo == true)
+        {
+          id_tgo.val(selected_tgo)
+          update_tgo = false
+        }
+        id_tgo.selectpicker('refresh');  
+
+
+             
+          }
+          id_tgo.selectpicker('refresh');   
+          if( $('#id_departure_time').val() != '')
+          {
+            departure_time_registration()
+          }     
+      }
+    });
+  }
+
+
+  
+
+  $('#id_departure_time').change(function () {
+    if( $('#id_flight').val() != '')
+    {
+      departure_time_registration()
+    }
+  });
+
+  
+ // время вылета, регистрации
+ function departure_time_registration () {
+  if ($('#id_departure_time').val() != '')
+  {
+      Toast.setTheme(TOAST_THEME.DARK);
+      Toast.setPlacement(TOAST_PLACEMENT.TOP_RIGHT);
+      Toast.create("Статус полета", flight_type, TOAST_STATUS.SUCCESS, 3000);
+
+      var departure_time = $('#id_departure_time').val()
+      var date = moment(departure_time, 'HH:mm')
+      if (flight_type == 'Международный') {
+        $("#id_start_register_time").val(date.subtract(3, 'hours').format('HH:mm')) 
+        $("#id_end_register_time").val(moment(departure_time, 'HH:mm').subtract(40, 'minutes').format('HH:mm')) 
+      } 
+      else if (flight_type == 'Внутренний') {
+        $("#id_start_register_time").val(date.subtract(2, 'hours').format('HH:mm')) 
+        $("#id_end_register_time").val(moment(departure_time, 'HH:mm').subtract(40, 'minutes').format('HH:mm')) 
+      }
+  }
+}
+
+
+    //Создаем операцию до валидации формы
+    $("form").submit(function(){
+      $('#meta').text('Пожалуйста не закрывайте страницу')
+      $('#meta').addClass('alert alert-warning h6')
+      $('button[type="submit"]').prop( "disabled", true);
+  });
+
+
+  $('#id_departure_time, #id_arrival_time').change(function () {
+    check_next_day_status() 
+  });
+
+  function check_next_day_status () {
+    var id_departure_time = $('#id_departure_time').val()
+    var id_arrival_time = $('#id_arrival_time').val()
+
+    if (id_departure_time != '' && id_arrival_time != '')
+    {
+      // Разбивка строк на часы и минуты
+      var departure_time_parts = id_departure_time.split(':');
+      var arrival_time_parts = id_arrival_time.split(':');
+
+      // Получение часов и минут
+      var departure_hours = parseInt(departure_time_parts[0]);
+      var departure_minutes = parseInt(departure_time_parts[1]);
+      var arrival_hours = parseInt(arrival_time_parts[0]);
+      var arrival_minutes = parseInt(arrival_time_parts[1]);
+
+      // Создание объектов Date для departure и arrival time
+      var departure_time = new Date(0, 0, 0, departure_hours, departure_minutes);
+      var arrival_time = new Date(0, 0, 0, arrival_hours, arrival_minutes);
+
+      // Проверка, если arrival_time меньше departure_time
+      if (arrival_time > departure_time) {
+        // если arrival меньше departrure то след день
+        $('#id_next_day_status').prop('checked', true);
+      } else {
+        $('#id_next_day_status').prop('checked', false);
+      }
+    }
+  }
+
+ // Функция для проверки и обновления атрибута required
+ function toggleRequired(isRequired) {
+  $('#id_start_register_time').prop('required', isRequired);
+  $('#id_end_register_time').prop('required', isRequired);
+}
+
+$('#id_departure_time').change(function () {
+    toggleRequired($(this).val() != '');
+});
+
+
+  var update = true
+  var selected_flight= $('#id_flight').val()
+  get_flight_with_airline_ajax()
+
+  var update_tgo = true
+  var selected_tgo= $('#id_tgo').val()
+  load_ajax_fligh_data()
+
+
+  
+  // Словарь с русскими сокращениями дней недели
+  var days = {
+    'monday': 'Пн',
+    'tuesday': 'Вт',
+    'wednesday': 'Ср',
+    'thursday': 'Чт',
+    'friday': 'Пт',
+    'saturday': 'Сб',
+    'sunday': 'Вс'
+  };
+
+  // Скрываем чекбоксы и создаем span для визуального представления
+  $('.form-check-input-days').each(function() {
+    var dayId = this.id.replace('id_', '');
+    var dayShort = days[dayId];
+    $(this).hide().after('<span class="day-span" data-day-id="' + dayId + '">' + dayShort + '</span>');
+    updateCheckbox($(this), dayId);
+  });
+
+  // Функция для обновления внешнего вида span на основе состояния чекбокса
+  function updateCheckbox(checkbox, dayId) {
+    var span = $('[data-day-id="' + dayId + '"]');
+    if (checkbox.is(':checked')) {
+      span.addClass('highspanghted').removeClass('not-highspanghted');
+    } else {
+      span.addClass('not-highspanghted').removeClass('highspanghted');
+    }
+  }
+
+  // Обработчик клика на span
+$('.day-span').click(function() {
+  var dayId = $(this).data('day-id');
+  var checkbox = $('#id_' + dayId);
+  // Изменяем состояние чекбокса и вызываем событие 'change'
+  checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
+});
+
+// Обработчик изменения состояния чекбоксов
+$('.form-check-input-days').change(function() {
+  var dayId = this.id.replace('id_', '');
+  updateCheckbox($(this), dayId);
+});
+
+</script>

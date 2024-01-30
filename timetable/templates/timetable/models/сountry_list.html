@@ -1,0 +1,60 @@
+{% extends "timetable/models/model_base.html" %}
+{% load tgo_tags %}
+
+
+{% load cache %}
+
+    
+{% block list %}
+   <div class="mt-2">
+      <a class="btn btn-outline-primary" href={{prev_url}}>Назад</a>
+      <a class="btn btn-outline-warning" href="{% url 'timetable:type_country' %}">Типы стран</a>
+      <span id="dt_resetFilter" class="btn btn-warning text-dark">Сбросить фильтры</span>
+      {% if request.user.is_superuser %}
+        {% add_button_text 'timetable:add_country' %}
+      {% endif %}
+   </div>
+   <hr>
+
+   {% cache 36000 country_objects %}
+      <table class="table rounded-lgn table_dt col-12 bg-white" style="width:100%">
+      <thead> 
+         <tr>
+            <th>Название</th>
+            <th>Тип</th>
+            {% if request.user.is_superuser %}
+               <th></th>
+               <th></th>
+            {% endif %}
+         </tr>
+      </thead>
+      <tbody>
+         {% for c in country %}  
+            <tr>
+               <td>{{ c.title }}</td>
+               <td>{% if c.type %}{{ c.type }}{% endif %}</td>
+               {% if request.user.is_superuser %}
+                  <td>
+                        {% edit_button 'timetable:edit_country' c.id %}
+                  </td>
+                  <td>
+                        {% del_button 'timetable:delete_country' c.id %}
+                  </td>
+               {% endif %}
+            </tr>     
+         {% endfor %}
+      </tbody>
+      <tfoot> 
+         <tr>
+            <th>Название</th>
+            <th>Тип</th>
+            {% if request.user.is_superuser %}
+               <th></th>
+               <th></th>
+            {% endif %}
+         </tr>
+      </tfoot>
+      </table>
+   {% endcache %}
+
+{% endblock %}

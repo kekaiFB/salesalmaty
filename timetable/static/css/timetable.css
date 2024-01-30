@@ -1,0 +1,371 @@
+body{
+    opacity: 0;
+  }
+  
+  .settingDiv{
+    display: none
+  }
+  
+  * {
+    font-size:  calc(1.8vmin);
+  }
+  
+  #resetFilter {
+      margin: 0 0.5%  0 0; 
+  }
+  
+  
+  .buttonRight {
+    float: right;
+  }
+  
+  body {
+    font-family: Helvetica, Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  
+  
+  #dt-table_wrapper {
+    width: 35%;
+    margin-right: 2%;
+  }
+  
+  
+  foot {
+    display: table-header-group; /* или так */
+  }
+  
+  #thead {
+    margin: 0;
+    padding: 0;
+  }
+  
+  svg {
+    margin: 0;
+    width: calc(2.2vmin);
+  }
+  
+  .marg div{
+    margin-top: 5%;
+  }
+  
+  .marg2 div{
+    margin-top: 2.2%;
+  }
+  
+  .done{
+      color: white;
+  }
+  
+  .resetDiv {
+    margin: 0 0 0.5% 0;
+  }
+  
+  .btn {
+    min-width: 10em;
+  }
+  
+  .userlabelinTable {
+    float: right;
+  }
+  .userlabelinTable span, a {
+    font-size: 130%;
+  }
+  
+  
+  
+  li {
+    text-decoration: none;
+  }
+  
+  .dataTables_filter {
+    float: left !important;
+    margin-left: 10px;
+  }
+
+
+  * {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+
+  .timetable_list {
+    background: linear-gradient(90deg, #ffffff, #eeeeee);
+  }
+
+  .used_timetable th {
+    font-size: 100%;
+  }
+  .used_timetable td {
+    font-size: 90%;
+  }
+
+  input[type=text] {
+    padding: 5px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+
+  .analitics-date_timetable {
+    background: linear-gradient(90deg, #5b4c90, rgb(245, 243, 243));
+    color:rgb(0, 0, 0);
+  }
+  .allocation-date_timetable {
+    background: linear-gradient(90deg, #f8a8a8, rgb(245, 243, 243));
+    color:rgb(0, 0, 0);
+  }
+  .date_start {
+    font-weight: bold;
+    }
+
+
+
+#timetable td {
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+#timetable_week_group td {
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+.allocation-day-module {
+  background: linear-gradient(90deg, #f2f2f2, #e0e0e0); /* Градиент от светло-серого к чуть темнее серому */
+  color: #333; /* Темный серый цвет текста */
+  border: 1px solid #ccc; /* Слабая серая граница */
+  border-radius: 8px; /* Закругленные углы */
+  padding: 10px; /* Внутренний отступ для контента */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Мягкая тень */
+}
+
+
+.highspanghted {
+  /* color: #FFA500; Темно-оранжевый цвет */
+  font-weight: bold; /* Немного более жирный шрифт */
+}
+.not-highspanghted {
+    opacity: 0.5; /* Полупрозрачный текст (можете настроить уровень прозрачности по вашему усмотрению) */
+}
+
+
+.time-label {
+  width: 8%; /* Установите желаемую ширину */
+  display: inline-block;
+}
+.time-label-tgo {
+  display: inline-block;
+  width: 30%; 
+}
+
+.canvas-container {
+  width: 100%; /* Устанавливаем ширину 100% */
+}
+
+
+
+
+
+.upload-drop-zone {
+  height: 200px; /* Определяем высоту зоны */
+  border: 2px dashed #CCCCCC;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #CCCCCC;
+}
+
+/* Эффекты наведения и перетаскивания */
+.upload-drop-zone.dragover,
+.upload-drop-zone:hover {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+.soft-font-text, .file-browse {
+  color: #555; /* Темно-серый цвет делает внешний вид текста мягче */
+  font-weight: 300; /* Более тонкий вес шрифта */
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8); /* Небольшое размытие для добавления мягкости */
+  font-family: 'Helvetica Neue', sans-serif; /* Современный, гладкий шрифт */
+  -webkit-font-smoothing: antialiased; /* Сглаживание шрифта для повышения читаемости на Mac и Chrome */
+  text-align: center;
+}
+
+.uploaded-file-link {
+  text-decoration: none; /* убрать подчеркивание ссылки */
+  color: inherit; /* цвет ссылки */
+  display: inline-block;
+  text-align: center; /* центрирование текста и иконки */
+}
+
+.uploaded-file-name {
+  display: block; /* перенос строки для текста под иконкой */
+  text-transform: capitalize; /* каждое слово с заглавной буквы, если это требуется */
+}
+
+.delete-file-btn {
+  cursor: pointer; /* Изменяет курсор на указатель при наведении */
+  transition: transform 0.3s ease; /* Добавляет анимацию для плавного увеличения */
+}
+
+.delete-file-btn:hover {
+  transform: scale(1.3); /* Увеличивает элемент при наведении */
+}
+
+
+
+
+.importStatus_True {
+  /* Стили для когда status_field.office == True */
+  background-color: #d4edda; /* Пример зеленого фона */
+}
+
+.importStatus_false {
+  /* Стили для когда status_field.office == False */
+  background-color: #f8d7da; /* Пример красного фона */
+}
+
+
+
+#data-table {
+  table-layout: fixed; /* Это убедится, что ширина столбцов остается фиксированной */
+  width: 100%; /* или любая другая ширина, которую вы хотите задать для таблицы */
+}
+
+#data-table .column1 {
+  width: 5%; /* Пример ширины для первого столбца */
+  overflow: hidden; /* Если содержимое слишком длинное для ячейки, оно будет обрезано */
+  white-space: nowrap; /* Это предотвращает перенос текста на новую строку */
+  text-overflow: ellipsis; /* Это добавит многоточие, если текст не умещается в ячейку */
+}
+#data-table .column2 {
+  width: 55%; /* Пример ширины для первого столбца */
+  overflow: hidden; /* Если содержимое слишком длинное для ячейки, оно будет обрезано */
+  white-space: nowrap; /* Это предотвращает перенос текста на новую строку */
+  text-overflow: ellipsis; /* Это добавит многоточие, если текст не умещается в ячейку */
+}
+
+#data-table .column3 {
+  width: 7%; /* Пример ширины для второго столбца */
+  overflow: hidden; /* Если содержимое слишком длинное для ячейки, оно будет обрезано */
+  white-space: nowrap; /* Это предотвращает перенос текста на новую строку */
+  text-overflow: ellipsis; /* Это добавит многоточие, если текст не умещается в ячейку */
+}
+
+#data-table .column4 {
+  width: 33%; /* Пример ширины для третьего столбца */
+  overflow: hidden; /* Если содержимое слишком длинное для ячейки, оно будет обрезано */
+  white-space: nowrap; /* Это предотвращает перенос текста на новую строку */
+  text-overflow: ellipsis; /* Это добавит многоточие, если текст не умещается в ячейку */
+}
+
+#data-table {
+  width: 100%; /* Если хотите, чтобы таблица занимала всю доступную ширину */
+  table-layout: fixed; /* Чтобы ширина столбцов не менялась */
+}
+
+
+
+
+
+/* Обычный стиль кнопки */
+#StartImport {
+  background-color: #4CAF50; /* Зеленый цвет */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  transition-duration: 0.4s; /* Время анимации */
+  border-radius: 4px; /* Скругленные углы */
+}
+
+/* Стиль кнопки при наведении */
+#StartImport:hover {
+  background-color: white; /* Белый фон */
+  color: #4CAF50; /* Зеленый текст */
+  border: 2px solid #4CAF50; /* Зеленая граница */
+}
+
+
+/* Обычный стиль кнопки */
+#RefreshImport {
+  background-color: white; /* Белый фон */
+  color: rgb(153, 53, 58); /* Зеленый текст */
+  border: 2px solid #af4c61; /* Зеленая граница */
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  transition-duration: 0.4s; /* Время анимации */
+  border-radius: 4px; /* Скругленные углы */
+}
+
+/* Стиль кнопки при наведении */
+#RefreshImport:hover {
+  background-color: #741818; /* Зеленый цвет */
+  border: none;
+  color: white;
+}
+
+
+
+.material-select {
+  background-color: #ffffff;
+  border: none;
+  border-bottom: 1px solid #cccccc;
+  padding: 4px 2px;
+  font-size: 14px;
+  color: #333333;
+  outline: none;
+}
+
+.material-select:focus {
+  border-bottom-color: #ff5722;
+  box-shadow: 0 1px 0 0 #ff5722;
+}
+
+
+.button-loading {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+  transform: scale(1);
+  pointer-events: none; /* Этот стиль делает кнопку недоступной для нажатия */
+}
+
+.button-loading:after {
+  content: "🌍"; /* Замените на нужный символ, например, "\f0a4" или другой */
+  margin-left: 5px;
+  display: inline-block;
+  animation: spin 2s infinite linear;
+}
+
+.button-loading:hover {
+  transform: scale(1.05);
+}
+
+@keyframes spin {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}

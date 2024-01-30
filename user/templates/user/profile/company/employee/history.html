@@ -1,0 +1,95 @@
+{% load user_tags %}
+
+<table id="user_history_dt" class="table table-bordered table-hover table-condensed bg-white rounded-lg border border-white" style="width:100%">
+    <thead> 
+        <tr>
+            <th>Вресия</th>
+            <th>Дата обновления</th>
+            <th>Редактор</th>
+            <th>Email</th>
+            <th>Роль</th>
+            <th>ФИО</th>
+            <th>Подразделение</th>
+            <th>Должность</th>
+            <th>Смена</th>
+            <th>Статус</th>
+            <th>Начало работы</th> 
+            <th>Стаж работы</th>
+        </tr>
+    </thead>
+    <tbody> 
+        {% for h in human %} 
+            {% if forloop.counter == 1 %}
+                <tr>  
+                    <td type="number"> {{forloop.revcounter}} </td>
+                    <td class="font-weight-bold">{{ h.history_date }}</td>
+                    <td class="font-weight-bold">{{ h.author_update }}</td>
+                    <td>{% get_or_empty  h.user %}</td>
+                    <td>{{ h.groups}}</td>
+                    <td>{% get_fio  h.last_name h.first_name h.sur_name %}</td>
+
+                    {% get_post_update h.history_id posts post_history as list %}
+                    <td>
+                        {% unique_office list as un_off %}
+                        {% for elem in un_off %}  
+                            {{ elem }}{% if not forloop.last %},{% endif %}
+                        {% endfor %} 
+                    </td>
+                    <td>
+                        {% for elem in list %}  
+                            {{ elem.1 }}{% if not forloop.last %},{% endif %}
+                        {% endfor %} 
+                    </td>
+       
+                    <td>{% get_or_empty  h.shift %}</td>
+                    <td>{% get_or_empty  h.status %}</td>
+                    <td>{{ h.date_start|date:'d-m-Y' }}</td>
+                    <td>{% time_diff h.date_start|date:'d-m-Y' %}</td>
+                </tr>  
+            {% else %} 
+                <tr>  
+                    <td type="number"> {{forloop.revcounter}} </td>
+                    <td class="font-weight-bold">{{ h.history_date }}</td>
+                    <td class="font-weight-bold">{{ h.author_update }}</td>
+                    <td>{% get_or_empty  h.user %}</td>
+                    <td>{{ h.groups }}</td>
+                    <td>{% get_fio  h.last_name h.first_name h.sur_name %}</td>
+
+                    {% get_post_update h.history_id posts post_history as list %}
+                    <td>
+                        {% unique_office list as un_off %}
+                        {% for elem in un_off %}  
+                            {{ elem }}{% if not forloop.last %},{% endif %}
+                        {% endfor %} 
+                    </td>
+                    <td>
+                        {% for elem in list %}  
+                            {{ elem.1 }}{% if not forloop.last %},{% endif %}
+                        {% endfor %} 
+                    </td>
+
+                    <td>{% get_or_empty  h.shift %}</td>
+                    <td>{% get_or_empty  h.status %}</td>
+                    <td>{{ h.date_start|date:'d-m-Y' }}</td>
+                    <td>{% time_diff h.date_start|date:'d-m-Y' %}</td>
+                </tr>     
+            {% endif %}
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Вресия</th>
+            <th>Дата обновления</th>
+            <th>Редактор</th>
+            <th>Email</th>
+            <th>Роль</th>
+            <th>ФИО</th>
+            <th>Подразделение</th>
+            <th>Должность</th>
+            <th>Смена</th>
+            <th>Статус</th>
+            <th>Начало работы</th> 
+            <th>Стаж работы</th>
+        </tr>
+    </tfoot>
+</table>

@@ -1,0 +1,55 @@
+{% extends "user/base.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <h4 class="alert alert-success">Вы уже авторизированы</h4>
+        <h3>{{user.username}}</h3>
+        <a href="{% url 'user:logout' %}">
+            <button class="btn btn-dark">
+                Выйти
+            </button> 
+        </a>
+        <a href="{% url 'table:index' %}">
+            <button class="mt-2 btn btn-dark">
+                Главная
+            </button> 
+        </a>
+    {% else %}
+        {% if message %}
+                <p class="alert alert-success">{{ message }}</p>
+        {% endif %}
+        <form method="post" class="login-form">
+            {% csrf_token %}
+
+            <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+                {% for error in form.non_field_errors %}
+                    <p class="m-1 alert alert-warning">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            {% for field in form %}
+                <div class="form-group">
+                    {% render_field field class="form-control" placeholder=field.label %}
+                    <div class="{% if field.errors %} invalid{% endif %}">
+                    {% for error in field.errors %}
+                        <p class="m-1 alert alert-warning">{{ error }}</p>
+                    {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <input type="hidden" name="next" value="{{ success_url }}">
+
+            <button type="submit" class="btn btn-dark">Войти</button>
+            
+            <p class="alternate">
+                <a class="lefttPosition" href="{% url 'user:password_reset' %}">Забыли пароль?</a>
+                <a class="rightPosition" href="{% url 'user:register' %}">Регистрация</a>
+            </p>
+        </form>
+    {% endif %}
+    
+{% endblock %}

@@ -1,0 +1,59 @@
+{% load tgo_tags %}
+
+<table border="2" id="post_dt" class="table table-bordered table-hover table-condensed bg-white"  style="width:100%">
+    <thead> 
+        <tr>
+            <th>id</th>
+            <th>Подразделение</th>
+            <th>id</th>
+            <th>Должность</th>
+            
+            {% if 'Администратор' in user_groups or 'Начальник' in user_groups %}  
+                <th>
+                    <span class="add_post">
+                        {% add_button_text 'user:add_post' %}
+                    </span>
+                </th>
+                <th></th>
+            {% endif %} 
+           
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in posts %}  
+            <tr>
+                <td>{{ p.office_id }}</td>
+                <td>{{ p.office }}</td>
+                <td>{{ p.id }}</td>
+                <td>{{ p.title }}</td>
+            
+                {% if 'Администратор' in user_groups or 'Начальник' in user_groups %} 
+                    <td>
+                        {% edit_button 'user:edit_post' p.id %}
+                    </td>
+                    <td>
+                        {% del_button 'user:delete_post' p.id %}
+                    </td>
+                {% endif %} 
+            </tr>     
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>id</th>
+            <th>Подразделение</th>
+            <th>id</th>
+            <th>Должность</th>
+            
+            
+            {% if 'Администратор' in user_groups or 'Начальник' in user_groups %}  
+                <th>
+                    <span class="add_post">
+                        {% add_button_text 'user:add_post' %}
+                    </span>
+                </th>
+                <th></th>
+            {% endif %} 
+        </tr>
+    </tfoot>
+</table>

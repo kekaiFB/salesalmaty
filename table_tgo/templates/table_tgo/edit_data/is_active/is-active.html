@@ -1,0 +1,39 @@
+{% load widget_tweaks %}
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h3 class="modal-title">Восстановить запись</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>      
+  </div>
+
+  <div class="modal-body">        
+    <div id="meta" class='alert alert-warning h6'>Вы можете восстановитьзапись пока ее не удалили администратор</div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-outline-success">Восстановить</button>
+  </div>
+
+</form>
+
+
+  
+<script>
+  if ( $("#id_ressource, #id_fleet, #id_airline, #id_type, #id_country, #id_city, #id_baseAirport, #id_office"))
+  {
+    $('#id_ressource, #id_fleet, #id_airline, #id_type, #id_country, #id_city, #id_baseAirport, #id_office').attr('data-live-search', 'true');  
+    $('#id_ressource, #id_fleet, #id_airline, #id_type, #id_country, #id_city, #id_baseAirport, #id_office').selectpicker({ 
+      noneResultsText:'   Результатов нет',
+     }); 
+  }
+
+  //Создаем операцию до валидации формы
+  $("form").submit(function(){
+    $('#meta').text('Пожалуйста не закрывайте страницу')
+    $('#meta').addClass('alert alert-warning h6')
+    $('button[type="submit"]').prop( "disabled", true);
+  });
+  // #id_ressource, #id_fleet, #id_airline, #id_type, #id_country, #id_city, #id_type, #id_country, #id_city
+</script>

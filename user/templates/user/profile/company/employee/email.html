@@ -1,0 +1,35 @@
+{% load tgo_tags %}
+{% load user_tags %}
+
+<div class="row">
+    <div class="col-8 mt-2">
+        <div class="h4">
+            <strong class="font-weight-bold">Email:</strong> {{ h.user }}
+        </div>
+        {% strip_groups h.groups as h_groups %}
+        
+        <div class="h4 ">
+            <strong class="font-weight-bold pb-1">Роли пользователя:</strong> 
+        </div>
+        {% for group in h_groups %}
+            <div class="h4 ml-5">
+                <span class=" h4 text-primary">
+                    - {{ group }}
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="col">  
+        <div class="mt-2">
+            {% if 'Администратор' in user_groups %} 
+                {% if 'Администратор'  in h_groups %}{% else %}
+                    {% edit_button_role 'user:edit_role' h.user_id h.id 'Управление' %}   
+                {% endif %}
+            {% elif 'Начальник' in user_groups %} 
+                {% if 'Начальник'  in h_groups or 'Администратор' in h_groups %}{% else %}
+                    {% edit_button_role 'user:edit_role' h.user_id h.id 'Управление' %}   
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>

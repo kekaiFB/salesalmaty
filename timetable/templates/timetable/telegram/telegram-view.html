@@ -1,0 +1,122 @@
+{% extends "timetable/base.html" %}
+{% load tgo_tags %}
+{% load timetable_tags %}
+{% block content %}
+    {% include 'table/navbar.html' %}
+    
+    {% csrf_token %} 
+    <h4 class="ml-2">
+        <span class="h4 title_timetable">{{title_timetable}}</span>
+        <span hidden class="h4 timetableList_date_start">{{timetableList.date_start}}</span>
+        <span hidden class="h4 timetableList_date_end">{{timetableList.date_end}}</span>
+        <div class="mt-2">
+            <span>
+                <a class="navbar-brand" href="{% url 'timetable:timetable_default_redirect' %}">Расписание</a>
+            </span>
+            <a class="btn btn-outline-primary" href="{% url 'timetable:timetable_list' %}">Все расписания</a>
+            {% referenceTimetable %}
+        </div>
+    </h4> 
+    <div>
+        {% if company.email and company.password_app %}
+            <p class="alert alert-primary text-dark h5">
+                Ваша почта: 
+                <b>{{ company.email }}</b>
+                <button id="showInstructions" class="btn btn-success">Инструкции</button>
+            </p>
+            <div class="text-center">
+              <button class="btn btn-primary m-3 btn-lg" id="get_message">Загрузить сообщения с почты</button>
+            </div>
+
+
+            {% include 'timetable/telegram/table-messages.html' %} 
+        {% else %}
+            <div class="mt-5 alert alert-warning">
+                У вас нет корпоративной почты на этом сайте, для ее добавления пожалуйста обратитесь к администратору сайта.
+            </div> 
+        {% endif %}
+    </div>
+ 
+
+    {% if messages %}
+      <div class="email-display">
+        <p class="alert alert-primary text-dark h5 mt-2">
+          {% if 'timetable.add_flight' in perms %}
+              <button class="btn btn-primary" id="decode_messages">Стркутурировать сообщения</button>
+          {% endif %}
+        </p>
+
+        {% include 'timetable/telegram/table-messages-text.html' %} 
+      </div>
+    {% endif %}
+
+    {% if is_finish %}
+        {% if 'timetable.add_flight' in perms %}
+              <div class="container mt-5">
+                <div class="alert rounded alert-warning" id="step-one">
+                    <div class="row">
+                        <div class="h3 m-2">Выберите расписание в которое будет производиться импорт</div>
+                    </div> 
+                    <div class="row">
+                        <div class="col ml-2">
+                            <select name="timetableList-select" class="timetableList-select">
+                                <option value="">--------</option> 
+                                {% for timetable in timetableList %}
+                                    <option value="{{ timetable.id }}">{{ timetable }}</option> 
+                                {% endfor %}
+                            </select> 
+                        </div> 
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col ml-2">
+                          <button class="btn btn-primary" id="import_telegram">Выполнить импорт</button>
+                        </div> 
+                    </div>
+
+                </div>
+            </div> 
+        {% endif %}
+    {% else %}
+      <div class="mt-5 alert alert-warning">
+        Импортировать телеграммы можно будет после того, как в структурированных сообщениях не будет ни одного сообщения по типу "пользователю необходимо создать". Если вы не видите кнопку "выполнить импорт", значит нажмите кнопку "Посмотреть поодробнее" в выбранной телеграмме, скорее всего там есть сообщение по типу "пользователю необходимо создать".    
+      </div> 
+
+    {% endif %}
+
+  <div class="modal telegram-modal-instructions" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title-instructions"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body-instructions"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal" tabindex="-1" id="telegram-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">\</div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            <button type="button" class="btn btn-primary" id="saveTextEditor">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+
+
+

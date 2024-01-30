@@ -1,0 +1,40 @@
+{% load tgo_tags %}
+{% load timetable_tags %}
+
+<tr style="background-color: {% background t.timetablestatusight %}; color: {% color t.timetablestatusight %}">
+    <td>
+        {{ t.id }}
+    </td>
+    <td>
+        {% check_days_week dw t %}
+    </td>
+    {% classTimetable t.airline 'airline' th %}
+    {% classTimetable t.flight 'flight' th %}
+
+    {% classTimetable t.flight.type_flight 'flight' th %}
+    {% classTimetable t.flight.get_path_flight 'flight' th %}
+
+    {% classTimetable t.flight.departurelAirport 'departurelAirport' th %}
+
+    {% classTimetable t.arrival_time 'arrival_time' th %}
+    {% classTimetable t.start_register_time 'start_register_time' th %}
+    {% classTimetable t.end_register_time 'end_register_time' th %}
+    {% classTimetable t.departure_time 'departure_time' th %}
+    {% classTimetable t.parking 'departure_time' th %}
+
+    {% class_next_day_status t.next_day_status 'next_day_status' th %}
+
+    {% classTimetable t.date_start 'date_start' th %}
+    {% classTimetable t.date_end 'date_end' th %}
+    {% classTimetable t.date_lenght 'date_end' th %}
+
+    {% classTimetable t.tgo.tgo_length 'tgo' th %}
+    {% classTimetable t.timetablestatusight 'timetablestatusight' th %}
+    {% classTimetable t.comment 'comment' th %}
+    <td>
+        {% edit_button 'timetable:edit_timetable' t.id %}
+    </td>
+    <td>
+        {% del_button 'timetable:delete_timetable' t.id %}
+    </td>
+</tr>  

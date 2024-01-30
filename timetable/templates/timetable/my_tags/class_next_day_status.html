@@ -1,0 +1,11 @@
+<td style="background-color: {{ style }};" 
+class=
+    "{% for c in clas %}  
+    {{ c }}
+    {% endfor %}"
+>{% if t_value %}Да{% else %}Нет{% endif %}</td>
+{% comment %} {% if next_day_status %}
+    <input class="form-check-input ml-2" type="checkbox" value="" id="flexCheckChecked" checked disabled>
+{% else %}
+    <input class="form-check-inpu ml-2" type="checkbox" value="" id="flexCheckDefault" disabled>
+{% endif %} {% endcomment %}

@@ -1,0 +1,73 @@
+{% load tgo_tags %}
+{% load timetable_tags %}
+
+<table id="timetable-telegram" class="table table-bordered table-hover table-condensed bg-white" cellspacing="0" style="width:100%">
+    <thead> 
+        <tr>
+            <th>Статус</th>
+            <th>Удалить</th>
+            <th>Выбрать</th>
+            <th>Отправитель</th>
+            <th>Дата</th>
+            <th>Тема</th>
+            <th>Содержание</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+            <tr>
+                <td 
+                    {% if message.message_used.all_is_finish %} 
+                        style="background-color: green; opacity: 0.5;"
+                    {% elif message.message_used.is_used %}
+                        style="background-color: gray; opacity: 0.5;"
+                    {% else %}
+                        style="background-color: yellow; opacity: 0.5;"
+                    {% endif %}>
+                    {% if message.message_used.all_is_finish %}
+                        Завершено
+                    {% elif message.message_used.is_used %}
+                        Используется
+                    {% else %}
+                        Новое
+                    {% endif %}
+                </td>
+                <td>
+                    {% if message.message_used.all_is_finish %}
+                        <!-- Если объект MessageToTimetable существует, не отображаем кнопку удаления -->
+                        ✔
+                    {% else %}
+                        <!-- Если объект MessageToTimetable отсутствует, отображаем кнопку удаления -->
+                        {% if 'timetable.add_flight' in perms %}
+                            {% del_button 'timetable:delete-telegram' message.id %}
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if message.message_used.all_is_finish %}{% else %}
+                        {% if message.message_used.is_used %}
+                            <input type="checkbox" checked data-id="{{ message.id }}">
+                        {% else %}
+                            <input type="checkbox" data-id="{{ message.id }}">
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>{{ message.from_header }}</td>
+                <td>{{ message.processed|date:'Y-m-d' }}</td>
+                <td>{{ message.subject }}</td>
+                <td>{% mailbox_html_to_text message %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Статус</th>
+            <th>Удалить</th>
+            <th>Выбрать</th>
+            <th>Отправитель</th>
+            <th>Дата</th>
+            <th>Тема</th>
+            <th>Содержание</th>
+        </tr>
+    </tfoot>
+</table>

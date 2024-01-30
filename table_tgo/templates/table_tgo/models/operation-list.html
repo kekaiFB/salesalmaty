@@ -1,0 +1,65 @@
+{% extends "table_tgo/base.html" %}
+{% load tgo_tags %}
+
+{% block content %}
+
+{% include 'table/navbar.html' %}
+    
+    <div id="formFilter" class="mt-2">
+        <span class="btn btn-warning text-dark ml-1 dt_resetFilter">Сбросить фильтры</span>
+        <button class="btn btn-primary dropdown-toggle mb-1 ml-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Справочники
+        </button> 
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{% url 'table_tgo:technology' %}">Технологии</a>
+            <a class="dropdown-item" href="{% url 'table_tgo:index' %}">ТГО</a>
+            <a class="dropdown-item" href="{% url 'table_tgo:ressource-view' %}">Ресурсы</a>
+        </div>
+        <span class="h3">Операции</span>
+    </div>
+    <hr>
+    <table class="table rounded-lgn table_dt col-12 bg-white" style="width:100%">
+        <thead> 
+            <tr>
+                <th>Название</th>
+                {% if 'Администратор' in user_groups  %}
+                    <th></th>
+                    <th></th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for elem in operation_list %}  
+                <tr>
+                    <td class="{{ elem.is_active }}">{{ elem.title }}</td>
+                    {% if 'Администратор' in user_groups  %}
+                        {% if elem.is_active %}
+                            <td>
+                                {% edit_button 'table_tgo:operation-edit' elem.id %}
+                            </td>
+                            <td>
+                                {% del_button 'table_tgo:operation-no-active' elem.id %}
+                            </td>
+                        {% else %}
+                            <td></td>
+                            <td>
+                                {% restore_button 'table_tgo:operation-is-active' elem.id %}
+                            </td>
+                        {% endif %}
+                    {% endif %}
+                </tr>     
+            {% endfor %}
+        </tbody>
+        <tfoot> 
+            <tr>
+                {% if 'Администратор' in user_groups  %}
+                    <th>Название {% button_add 'table_tgo:operation-create' name_company_id %}</th>
+                    <th></th>
+                    <th></th>
+                {% else %}
+                    <th>Название</th>
+                {% endif %}
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}

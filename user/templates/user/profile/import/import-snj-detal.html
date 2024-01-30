@@ -1,0 +1,325 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+{% load user_tags %}
+
+{% block list %}
+   <a class="btn btn-outline-primary" href={% url 'user:import-snj' %}>Назад</a>
+
+   {% csrf_token %}
+   <div class="containter mt-4  rounded">
+      <div class="p4 h3 m-2 mt-3 text-center">
+         {{ import.title }}</a>
+      </div>
+      
+
+
+      <div class="row m-5 alert rounded bg-white">
+         <div class="row">
+             <div class="h3 m-2">Файлы:</div>
+         </div>
+         <div class="row">
+             <!-- Входной файл -->
+             <div class="col alert alert-warning m-3">
+                 <div class="container mt-1">
+                     <div class="card">
+                         <div class="card-header bg-light text-dark h5"> <!-- Добавлен заголовок для входного файла -->
+                             Входной файл
+                         </div>
+                         <div class="card-body">
+                           {% if import.input_file %}
+                              <div class="uploaded-file-container text-center">
+                                 <div style="display: inline-block; position: relative;"> <!-- Обертка для позиционирования кнопки удаления -->
+                                    <a href="{{ import.input_file.url }}" class="uploaded-file-link" download>
+                                       <i class="fa fa-file-download fa-3x" aria-hidden="true" style="vertical-align: middle;"></i><br> <!-- Иконка для файла -->
+                                       <span class="uploaded-file-name">{{ import.input_file.name|basename }}</span> <!-- Имя файла -->
+                                    </a>
+                                    {% if not import.output_file %}
+                                        <span class="text-danger delete-file-btn" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path></svg></span>
+                                    {% endif %}
+                                 </div>
+                              </div>
+                           {% else %}
+                              <!-- Если файла нет, показываем область для загрузки -->
+                              <div class="d-flex justify-content-center align-items-center upload-drop-zone file_input_import" id="drop_zone">
+                                 <div class="text-center">
+                                       <i class="fa fa-file-upload fa-3x" aria-hidden="true"></i>
+                                       <p class="soft-font-text">Перетащите файл сюда или <span class="file-browse">кликните для выбора</span></p>
+                                       <!-- Input остается скрытым -->
+                                       <input type="file" id="file_input" class="d-none" accept=".txt">
+                                 </div>
+                              </div>
+                           {% endif %}
+                         </div>
+                     </div>
+                 </div>
+             </div>
+     
+             <!-- Иконка указатель -->
+             <div class="col-1 d-flex align-items-center justify-content-center">
+                 <i class="fa fa-arrow-right fa-3x" aria-hidden="true"></i> <!-- Иконка-указатель -->
+             </div>
+     
+             <!-- Выходной файл -->
+             <div class="col alert alert-success m-3"> <!-- Изменен цвет фона для выделения -->
+                <div class="container mt-1">
+                    <div class="card">
+                        <div class="card-header bg-success text-white h5"> <!-- Добавлен заголовок для выходного файла -->
+                            Выходной файл
+                        </div>
+                        <div class="card-body">
+                            
+                           {% if import.output_file %}
+                               <div class="uploaded-file-container text-center">
+                                   <div style="display: inline-block; position: relative;"> <!-- Обертка для позиционирования кнопки удаления -->
+                                       <a href="{{ import.output_file.url }}" class="uploaded-file-link" download>
+                                           <i class="fa fa-file-download fa-3x" aria-hidden="true" style="vertical-align: middle;"></i><br> <!-- Иконка для файла -->
+                                           <span class="uploaded-file-name">{{ import.output_file.name|basename }}</span> <!-- Имя файла -->
+                                       </a>
+                                   </div>
+                               </div>
+                           {% endif %}
+                        </div>
+                    </div>
+               </div>
+           </div>
+           
+            <!-- Выходной файл для администратора-->
+            <div class="col alert alert-success m-3"> <!-- Изменен цвет фона для выделения -->
+                <div class="container mt-1">
+                    <div class="card">
+                        <div class="card-header bg-success text-white h5"> <!-- Добавлен заголовок для выходного файла -->
+                            Выходной файл для superuseradmin
+                        </div>
+                        <div class="card-body">  
+                           {% if import.output_file_to_admin %}
+                               <div class="uploaded-file-container text-center">
+                                   <div style="display: inline-block; position: relative;"> <!-- Обертка для позиционирования кнопки удаления -->
+                                       <a href="{{ import.output_file_to_admin.url }}" class="uploaded-file-link" download>
+                                           <i class="fa fa-file-download fa-3x" aria-hidden="true" style="vertical-align: middle;"></i><br> <!-- Иконка для файла -->
+                                           <span class="uploaded-file-name">{{ import.output_file_to_admin.name|basename }}</span> <!-- Имя файла -->
+                                       </a>
+                                   </div>
+                               </div>
+                           {% endif %}
+                        </div>
+                    </div>
+               </div>
+           </div>
+
+         </div>
+     </div>
+     
+     
+    {% if error_input %}
+    <div class="row m-5 alert rounded bg-white ">                    
+        <div class="row">
+            <div class="h3 m-2">{{error_input}}</div>
+        </div>
+    </div>
+    {% else %}
+        {% if import.input_file %}
+            {% if not import.output_file %}
+                <div class="row m-5 alert rounded bg-white ">       
+                    
+                    <div class="row">
+                        <div class="h3 m-2">Шаг 1. Данные которые были взяты с документа</div>
+                    </div>
+                    
+                    <div class="row">
+                        {{ table_input_file|safe }}
+                    </div>     
+                </div> 
+                <div class="row m-5 alert rounded bg-white ">       
+
+                    <div class="row mb-4">
+                        <div class="col">
+                            <h3 class="m-2">Шаг 2. Проверка данных в столбцах: Подразделение, Должность, ФИО+Табельный номер</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-center mb-3 p-2 importStatus_{{ status_field.office }}">
+                        <div class="col-md-2">
+                            <span class="font-weight-bold">Подразделение</span>
+                        </div>
+                        <div class="col-md-6">
+                            {% if status_field.office %}
+                                <a class="btn btn-secondary" href="{% url 'user:import_check_input_status' 'office_reset' import.id %}" 
+                                    type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" 
+                                    data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" 
+                                    data-title="Весь импорт откатится до загрузочного состояния" data-original-title="" title="">
+                                    Откатить (Подразделение, Должность, ФИО) до исходного состояния
+                                </a>
+                            {% else %}
+                                <a class="btn btn-primary" href="{% url 'user:import_check_input_status' 'office' import.id %}">Начать проверку</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-center mb-3 p-2 importStatus_{{ status_field.post }}">
+                        <div class="col-md-2">
+                            <span class="font-weight-bold">Должность</span>
+                        </div>
+                        <div class="col-md-6">
+                            {% if status_field.office %}
+                                {% if status_field.post %}
+                                    <a class="btn btn-secondary" href="{% url 'user:import_check_input_status' 'post_reset' import.id %}" 
+                                        type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" 
+                                        data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" 
+                                        data-title="Столбец подразделения останется неизменным" data-original-title="" title="">
+                                        Откатить (Должность, ФИО) до исходного состояния
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-primary" href="{% url 'user:import_check_input_status' 'post' import.id %}">Начать проверку</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-center mb-3 p-2 importStatus_{{ status_field.fio }}">
+                        <div class="col-md-2">
+                            <span class="font-weight-bold">ФИО</span>
+                        </div>
+                        <div class="col-md-6">
+                            {% if status_field.post %}
+                                {% if status_field.fio %}
+                                    <a class="btn btn-secondary" href="{% url 'user:import_check_input_status' 'fio_reset' import.id %}" 
+                                        type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" 
+                                        data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" 
+                                        data-title="Столбцы подразделения и должности останутся неизменными" data-original-title="" title="">
+                                        Откатить столбец до исходного состояния
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-primary" href="{% url 'user:import_check_input_status' 'fio' import.id %}">Начать проверку</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>  
+                    
+                    <div class="row align-items-center mb-3 p-2 importStatus_{{ status_field.date }}">
+                        <div class="col-md-2">
+                            <span class="font-weight-bold">Даты</span>
+                        </div>
+                        <div class="col-md-6">
+                            {% if status_field.fio %}
+                                {% if status_field.date %}
+                                    <a class="btn btn-secondary" href="{% url 'user:import_check_input_status' 'date_reset' import.id %}" 
+                                        type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" 
+                                        data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" 
+                                        data-title="Остальные столбцы останутся неизменными" data-original-title="" title="">
+                                        Откатить столбец до исходного состояния
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-primary" href="{% url 'user:import_check_input_status' 'date' import.id %}">Начать проверку</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>  
+                    
+                    <div class="row align-items-center mb-3 p-2 importStatus_{{ status_field.reason }}">
+                        <div class="col-md-2">
+                            <span class="font-weight-bold">Причины</span>
+                        </div>
+                        <div class="col-md-6">
+                            {% if status_field.date %}
+                                {% if status_field.reason %}
+                                    <a class="btn btn-secondary" href="{% url 'user:import_check_input_status' 'reason_reset' import.id %}" 
+                                        type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" 
+                                        data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" 
+                                        data-title="Остальные столбцы останутся неизменными" data-original-title="" title="">
+                                        Откатить столбец до исходного состояния
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-primary" href="{% url 'user:import_check_input_status' 'reason' import.id %}">Начать проверку</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>  
+                    
+                    <div class="row align-items-center mb-3 p-2 importStatus_{{ status_field.shift }}">
+                        <div class="col-md-2">
+                            <span class="font-weight-bold">Смены</span>
+                        </div>
+                        <div class="col-md-6">
+                            {% if status_field.reason %}
+                                {% if status_field.shift %}
+                                    <a class="btn btn-secondary" href="{% url 'user:import_check_input_status' 'shift_reset' import.id %}" 
+                                        type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" 
+                                        data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" 
+                                        data-title="Остальные столбцы останутся неизменными" data-original-title="" title="">
+                                        Откатить столбец до исходного состояния
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-primary" href="{% url 'user:import_check_input_status' 'shift' import.id %}">Начать проверку</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>  
+                    
+                    <div class="row align-items-center mb-3 p-2 importStatus_{{ status_field.comment }}">
+                        <div class="col-md-2">
+                            <span class="font-weight-bold">Комментарии</span>
+                        </div>
+                        <div class="col-md-6">
+                            {% if status_field.shift %}
+                                {% if status_field.comment %}
+                                    <a class="btn btn-secondary" href="{% url 'user:import_check_input_status' 'comment_reset' import.id %}" 
+                                        type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" 
+                                        data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" 
+                                        data-title="Остальные столбцы останутся неизменными" data-original-title="" title="">
+                                        Откатить столбец до исходного состояния
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-primary" href="{% url 'user:import_check_input_status' 'comment' import.id %}">Начать проверку</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>  
+
+                </div>
+
+
+                <div class="row m-5 alert rounded bg-white ">   
+
+                    <div class="row">
+                        <div class="alert alert-warning">
+                            Пожалуйста, проверьте чтоб ФИО были через пробел, при добавлении в БД это будет 3 разных элемента: Фамилия, Имя, Отчество
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col">
+                            <h3 class="m-2">Предварительный просмотр итоговых данных</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {{ modify_file|safe }}
+                    </div>
+                </div>  
+                <div class="row m-5 alert rounded bg-white StartImportDiv">   
+                    {% if status_field.office %}
+                        {% if status_field.post %}
+                            {% if status_field.fio %}
+                                <div class="row text-center">
+                                    <h3 class="m-2">                            
+                                        <button id="StartImport">Выполнить импорт</button>
+                                    </h3>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </div>   
+                
+            {% else %}
+                <div class="row m-5 alert rounded bg-light StartImportDiv">   
+                    <div class="row text-center">
+                        <h3 class="m-2">                            
+                            <button id="RefreshImport">Откатить импорт</button>
+                        </h3>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+       
+   </div>
+{% endblock %}

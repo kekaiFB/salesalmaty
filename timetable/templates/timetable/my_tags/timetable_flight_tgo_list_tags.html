@@ -1,0 +1,66 @@
+
+{% load timetable_tags %}
+
+<div class="container timetablesContainer">
+    {% for timetable in timetables %}
+        <div class="card mt-3 mb-3 card_li">
+            <div class="card-header text-dark h4 bg-gradient-primary">
+                {{ timetable }} ({{ timetable.flight.type_flight }})
+                <span class="ml-4 h3">{% day_flight timetable %}</span>
+            </div>
+            <div class="card-body">
+                <a href="{% if timetable.tgo %}{{ timetable.tgo.get_absolute_url }}{% endif %}" target="_blank" class="text-primary">{{ timetable.tgo }}</a>
+                <br>
+                {% if timetable.flight and timetable.flight.type_flight %}
+                    <p class="card-text">
+                        {% if 'начальный' in timetable.flight.type_flight.title %}
+                            <span class="time-label">Вылет:</span> <span class="h4">{{ timetable.departure_time|display_if_exists }}</span><br>
+                            {% comment %} departure_time - tgo.absolute_length_tgo_hour {% endcomment %}
+                            
+                            <p class="alert alert-warning bg-gradient">
+                                <span class="time-label-tgo">Начало выполнения ТГО в:</span>
+                                {% if timetable.flight.type_flight and timetable.tgo %}
+                                    {% check_start_tgo_in_flight timetable.departure_time timetable.tgo.abstract_length_tgo_hour as start_tgo_in_flight %}
+                                    <span class="font-weight-bold border-bottom border-success h5">{{start_tgo_in_flight}}</span> <br>
+                                    {% comment %} timetable.arrival_time + timetable.tgo.get_start_tho_hour {% endcomment %}
+                                    <span class="time-label-tgo">Конец выполнения ТГО в:</span>
+                                    <span class="font-weight-bold border-bottom border-success h5">{% calculate_end_tgo start_tgo_in_flight timetable.tgo.abstract_length_tgo_hour %}</span><br>
+                                {% endif %}
+                            </p>
+                        {% elif 'конечный' in timetable.flight.type_flight.title %}
+                            <span class="time-label">Прилет:</span> <span class="h4">{{ timetable.arrival_time|display_if_exists }}</span><br>
+                            {% comment %} arrival_time - tgo.get_start_tho_hour {% endcomment %}
+                         
+                            <p class="alert alert-warning bg-gradient">
+                                <span class="time-label-tgo">Начало выполнения ТГО в:</span>
+                                {% if timetable.flight.type_flight and timetable.tgo %}
+                                    {% check_start_tgo_in_flight timetable.arrival_time timetable.tgo.get_start_tho_hour as start_tgo_in_flight %}
+                                    <span class="font-weight-bold border-bottom border-success h5">{{start_tgo_in_flight}}</span><br>
+                                    {% comment %} timetable.arrival_time + timetable.tgo.get_start_tho_hour {% endcomment %}
+                                    <span class="time-label-tgo">Конец выполнения ТГО в:</span>
+                                    <span class="font-weight-bold border-bottom border-success h5">{% calculate_end_tgo start_tgo_in_flight timetable.tgo.abstract_length_tgo_hour %}</span><br>
+                                {% endif %}
+                            </p>
+                        {% else %}
+                            <span class="time-label">Прилет:</span> <span class="h4">{{ timetable.arrival_time|display_if_exists }}</span><br>
+                            <span class="time-label">Вылет:</span> <span class="h4">{{ timetable.departure_time|display_if_exists }}</span><br>
+                            {% comment %} arrival_time - tgo.get_start_tho_hour {% endcomment %}
+                            
+                            <p class="alert alert-warning bg-gradient">
+                                <span class="time-label-tgo">Начало выполнения ТГО в:</span>
+                                {% if timetable.flight.type_flight and timetable.tgo %}
+                                    {% check_start_tgo_in_flight timetable.arrival_time timetable.tgo.get_start_tho_hour as start_tgo_in_flight %}
+                                    <span class="font-weight-bold border-bottom border-success h5">{{start_tgo_in_flight}}</span><br>
+                                    {% comment %} timetable.arrival_time + timetable.tgo.get_start_tho_hour {% endcomment %}
+                                    <span class="time-label-tgo">Конец выполнения ТГО в:</span>
+                                    <span class="font-weight-bold border-bottom border-success h5">{% calculate_end_tgo start_tgo_in_flight timetable.tgo.abstract_length_tgo_hour %}</span><br>
+                                {% endif %}
+                            </p>
+                            {% error_timetable_time timetable.check_length_tgo_arrival_departure %}
+                        {% endif %}
+                    </p>  
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,172 @@
+<form method="post" action="{% url 'table:addnew' %}">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h3 class="modal-title">Добавить продажу</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  
+
+  <div class="modal-body">
+      <div class="{% if form.non_field_errors %} alert alert-warning invalid{% endif %} mb-2">
+          {% for error in form.non_field_errors %}
+            {{ error }}
+          {% endfor %}
+      </div>
+
+      <div class="form-row">
+          <div class="form-group col-md-6 ">
+              <p><label class="form-label" for="{{ form.office.id_for_label }}">{{form.office.label}}: </label>{{ form.office }}</p>
+              <div class="form-error">{{ form.office.errors }}</div>
+          </div>
+          <div class="form-group col-md-6 ">
+            <p><label class="form-label" for="{{ form.post.id_for_label }}">{{form.post.label}}: </label>{{ form.post }}</p>
+            <div class="form-error">{{ form.post.errors }}</div>
+          </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-12 ">
+            <p><label class="form-label" for="{{ form.human.id_for_label }}">{{form.human.label}}: </label>{{ form.human }}</p>
+            <div class="form-error">{{ form.human.errors }}</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+          <div class="form-group col-md-6 ">
+              <p><label class="form-label" for="{{ form.reason.id_for_label }}">{{form.reason.label}}: </label>{{ form.reason }}</p>
+              <div class="form-error">{{ form.reason.errors }}</div>
+          </div>
+          <div class="form-group col-md-6">
+              <p><label class="form-label" for="{{ form.comment.id_for_label }}">{{form.comment.label}}: </label>{{ form.comment }}</p>
+              <div class="form-error">{{ form.comment.errors }}</div>
+          </div>
+      </div>
+
+      <div class="form-row">
+          <div class="form-group col-md-4 ">
+              <p><label class="form-label" for="{{ form.date_start.id_for_label }}">{{form.date_start.label}}: </label>{{ form.date_start }}</p>
+              <div class="form-error">{{ form.date_start.errors }}</div>
+          </div>
+          <div class="form-group col-md-4 ">
+              <p><label class="form-label" for="{{ form.length_time.id_for_label }}">{{form.length_time.label}}: </label>{{ form.length_time }}</p>
+              <div class="form-error">{{ form.length_time.errors }}</div>
+          </div>
+          <div class="form-group col-md-4 ">
+              <p><label class="form-label" for="{{ form.date_end.id_for_label }}">{{form.date_end.label}}: </label>{{ form.date_end }}</p>
+              <div class="form-error">{{ form.date_end.errors }}</div>
+          </div>
+      </div>
+      <div id='meta'></div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+    <input type="submit" class="btn btn-primary" value="Добавить" />
+  </div>
+
+</form> 
+
+<script>
+  $('#id_office, #id_post, #id_fleet, #id_human, #id_shift, #id_reason').attr('data-live-search', 'true');  
+  $('#id_office, #id_post, #id_fleet, #id_human, #id_shift, #id_reason').selectpicker({ 
+    noneResultsText:'   Результатов нет',
+   }); 
+
+  $('#id_office, #id_post, #id_human').change(function () {
+    $.ajax({                      
+      url: 'ajax/load_ajax_form',                 
+      data: {
+        'click': $(this).attr("id"),
+        'id_office': $("#id_office").val(),  
+        'id_post': $("#id_post").val(), 
+        'id_human': $("#id_human").val(),
+      },
+      success: function (data) {  
+        if (typeof data.id_post != 'undefined')
+        {
+            $('#id_post option').each(function () { 
+              if (jQuery.inArray( parseInt($(this).val()),  data.id_post )!= -1 || $(this).val() == '')
+              {
+                $(this).show()
+                if (data.id_post.length == 1) {
+                  $(this).prop('selected', true);
+                }
+              } else {
+                $(this).hide()
+              }
+            }); 
+            $('#id_post').selectpicker('refresh');           
+        }
+        
+
+       if (typeof data.id_office != 'undefined')
+        {
+            $('#id_office option').each(function () { 
+              if (jQuery.inArray( parseInt($(this).val()), data.id_office )!= -1 || $(this).val() == '')
+              {
+                $(this).show()
+                if (data.id_office.length == 1) {
+                  $(this).prop('selected', true);
+                }
+              } else {
+                $(this).hide()
+              }
+            });  
+            $('#id_office').selectpicker('refresh');            
+        }
+
+        if (typeof data.id_human  != 'undefined')
+        {
+            $('#id_human option').each(function () { 
+              if (jQuery.inArray( parseInt($(this).val()), data.id_human )!= -1 || $(this).val() == '')
+              {
+                $(this).show()
+                if (data.id_human.length == 1) {
+                  $(this).prop('selected', true);
+                }
+              } else {
+                $(this).hide()
+              }
+            });      
+            $('#id_human').selectpicker('refresh');      
+        }
+        
+      }
+    });
+  });
+
+  $('#id_length_time, #id_date_start, #id_date_end').change(function () {
+    $('#meta').addClass('alert alert-warning h6')
+    $('#meta').text('Если вычислены все 3 поля для даты, и нужно заново найти значение какого-нибудь из полей, сделайте значения нескольких полей для дат ПУСТЫМИ')
+    if ($(this).val() != '')
+    {
+      if ($('#id_date_start').val() != '' && $('#id_length_time').val() != '')
+      {
+        //нужно найти id_date_end      
+        $('#id_date_end').val(moment( $('#id_date_start').val(), 'YYYY-MM-DD').add(parseInt($('#id_length_time').val()), 'days').subtract(1, 'days').format('YYYY-MM-DD'));
+      }
+      else if ($('#id_date_start').val() != '' && $('#id_date_end').val() != '')
+      {
+        var startDate = moment($('#id_date_start').val(), 'YYYY-MM-DD');
+        var endDate = moment($('#id_date_end').val(), 'YYYY-MM-DD');
+        var dayDifference = endDate.diff(startDate, 'days');
+
+        if (dayDifference > 0) {
+          // Если разница положительна, добавляем один день
+          dayDifference += 1;
+        } else if (dayDifference < 0) {
+          // Если разница отрицательна, отнимаем один день
+          dayDifference -= 1;
+        }
+
+        $('#id_length_time').val(dayDifference);
+      }
+      else if ($('#id_date_end').val() != '' && $('#id_length_time').val() != '')
+      {
+        //нужно найти id_date_start
+        $('#id_date_start').val(moment( $('#id_date_end').val(), 'YYYY-MM-DD').subtract(parseInt($('#id_length_time').val()), 'days').add(1, 'days').format('YYYY-MM-DD'));
+      }
+    }
+  });
+</script>

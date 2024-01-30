@@ -1,0 +1,61 @@
+{% extends "timetable/models/model_base.html" %}
+{% load tgo_tags %}
+
+{% load cache %}
+
+{% block list %}
+   <div class="mt-2">
+      <a class="btn btn-outline-primary" href={{prev_url}}>Назад</a>
+      <span id="dt_resetFilter" class="btn btn-warning text-dark">Сбросить фильтры</span>
+      {% if request.user.is_superuser %}
+         {% add_button_text 'timetable:add_city' %}
+      {% endif %}
+   </div>
+   <hr>
+   {% cache 360000 city_objects %}
+      <table class="table rounded-lgn table_dt col-12 bg-white" style="width:100%">
+      <thead> 
+         <tr>
+            <th>Название</th>
+            <th>Страна</th>
+            <th>Тип</th>
+            <th>UTC</th>
+            {% if request.user.is_superuser %}
+               <th></th>
+               <th></th>
+            {% endif %}
+         </tr>
+      </thead>
+      <tbody>
+         {% for c in city %}  
+            <tr>
+               <td>{{ c.title }}</td>
+               <td>{{ c.country }}</td>
+               <td>{% if c.country.type %}{{ c.country.type }}{% endif %}</td>
+               <td>{{ c.plus_or_minus }}{{ c.utc }}</td>
+               {% if request.user.is_superuser %}
+                  <td>
+                        {% edit_button 'timetable:edit_city' c.id %}
+                  </td>
+                  <td>
+                        {% del_button 'timetable:delete_city' c.id %}
+                  </td>
+               {% endif %}
+            </tr>     
+         {% endfor %}
+      </tbody>
+      <tfoot> 
+         <tr>
+            <th>Название</th>
+            <th>Страна</th>
+            <th>Тип</th>
+            <th>UTC</th>
+            {% if request.user.is_superuser %}
+               <th></th>
+               <th></th>
+            {% endif %} 
+         </tr>
+      </tfoot>
+      </table>
+   {% endcache %}
+{% endblock %}

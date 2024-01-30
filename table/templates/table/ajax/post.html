@@ -1,0 +1,10 @@
+<option value="">---------</option>
+{% if posts|length == 1 %}
+    {% for post in posts %}
+        <option value="{{ post.pk }}" selected="selected">{{ post.title }}</option>
+    {% endfor %}
+{% else %}
+    {% for post in posts %}
+        <option value="{{ post.pk }}">{{ post.title }}</option>
+    {% endfor %} 
+{% endif %} 

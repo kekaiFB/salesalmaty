@@ -1,0 +1,124 @@
+{% extends "timetable/base.html" %}
+{% load tgo_tags %}
+{% load timetable_tags %}
+
+{% block content %}
+   {% include 'table/navbar.html' %}
+
+   <span class="h3">Контроль версий </span> 
+   <div class="mt-2">
+    <a class="btn btn-outline-primary" href={{prev_url}}>Назад</a>
+    
+    <a class="btn btn-outline-danger" href={% url 'timetable:index' prev_timetable %}>Расписание</a>
+
+    <span id="dt_resetFilter" class="btn btn-success">Сбросить фильтры</span>
+ </div>
+ <hr>
+ <table class="table rounded-lgn table_dt col-12 bg-white" style="width:100%">
+        <thead> 
+            <tr>
+                <th>Дата версии</th>
+                <th>Аваиакомпания</th>
+                <th>Рейс</th>
+                <th>ВС</th>
+                <th>Количество мест</th>
+                <th>Прилет</th>
+                <th>Вылет</th>
+                <th>Следующий день</th>
+                <th>Начало Регистрации</th>
+                <th>Конец Регистрации</th>
+                <th>Начало действия</th>
+                <th>Конец действия</th>
+                <th>ТГО (мин.)</th>
+                <th>Статус</th>
+                <th>Комментарий</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for t in timetable %} 
+                {% if forloop.counter == 1 %}
+                    <tr style="background-color: {% background t.timetablestatusight %}; color: {% color t.timetablestatusight %}">
+                        <td class="text-warning">{{ t.history_date }}</td>
+                        <td>{% check_exist 'airline' t.airline.id %}</td>
+                        <td>{% check_exist 'flight' t.flight.id %}</td>
+                        <td>{% check_exist 'airplane' t.airplane.id %}</td>
+                        <td>{% check_exist 'equipmentAirplane' t.equipmentAirplane.seats.id %}</td>
+        
+                        <td>{{ t.arrival_time }}</td>
+                        <td>{{ t.departure_time }}</td>
+                        <td>
+                            {% next_day_status t.next_day_status %} 
+                        </td>
+                        <td>{{ t.start_register_time }}</td>
+                        <td>{{ t.end_register_time }}</td>
+                        <td>{{ t.date_start|date:'Y-m-d' }}</td>
+                        <td>{{ t.date_end|date:'Y-m-d' }}</td>
+                         <td>{% check_exist 'tgo' t.tgo.id %}</td>
+                         <td>{{ t.timetablestatusight }}</td>
+                         <td>{% if t.comment %}{{ t.comment }}{% endif %}</td>
+                        <td> 
+                            <span>Текущая</span>
+                        </td>
+                        <td></td>
+                    </tr>  
+                {% else %}
+                    <tr style="background-color: {% background t.timetablestatusight %}; color: {% color t.timetablestatusight %}">
+                        <td class="text-danger">{{ t.history_date }}</td>
+                        <td>{% check_exist 'airline' t.airline.id %}</td>
+                        <td>{% check_exist 'flight' t.flight.id %}</td>
+                        <td>{% check_exist 'airplane' t.airplane.id %}</td>
+                        <td>{% check_exist 'equipmentAirplane' t.equipmentAirplane.seats.id %}</td>
+                        <td>{{ t.arrival_time }}</td>
+                        <td>{{ t.departure_time }}</td>
+                        <td>{% next_day_status t.next_day_status %}</td>
+                        <td>{{ t.start_register_time }}</td>
+                        <td>{{ t.end_register_time }}</td>
+                        <td>{{ t.date_start|date:'Y-m-d' }}</td>
+                        <td>{{ t.date_end|date:'Y-m-d' }}</td>
+                        <td>{% check_exist 'tgo' t.tgo.id %}</td>
+                        <td>{{ t.timetablestatusight }}</td>
+                        <td>{% if t.comment %}{{ t.comment }}{% endif %}</td>
+                        <td class="exists"> 
+                            <form method='post' action="{% url 'timetable:editHistoryObject' t.id t.history_id %}">
+                                {% csrf_token %}
+                                <input type="hidden"  name="author" value={{ t.author }}> 
+                                <button href="#" type="submit" class="btn btn-outline-primary">Сделать текущей</button>
+                            </form>   
+                        </td>
+                        <td>
+                            <form method='post' action="">
+                                {% csrf_token %}
+                                <input type="hidden"  name="author" value={{ t.author }}>
+                                {% del_button_timetable 'timetable:delete_historyTimetable' t.id t.history_id %} 
+                            </form>  
+                        </td>
+                    </tr>  
+                {% endif %}     
+            {% endfor %}
+        </tbody>
+        <tfoot> 
+            <tr>
+                <th>Дата версии</th>
+                <th>Аваиакомпания</th>
+                <th>Рейс</th>
+                <th>ВС</th>
+                <th>Количество мест</th>
+                <th>Прилет</th>
+                <th>Вылет</th>
+                <th>Следующий день</th>
+                <th>Начало Регистрации</th>
+                <th>Конец Регистрации</th>
+                <th>Начало действия</th>
+                <th>Конец действия</th>
+                <th>ТГО (мин.)</th>
+                <th>Статус</th>
+                <th>Комментарий</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}

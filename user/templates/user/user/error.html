@@ -1,0 +1,17 @@
+{% extends "user/base.html" %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <p class="alert alert-danger">Ошибка {{ error_code }}</p>
+    <p>
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        <a href="/">
+            <button class="mt-2 btn btn-dark">
+                Главная
+            </button> 
+        </a>
+    </p>
+{% endblock %}

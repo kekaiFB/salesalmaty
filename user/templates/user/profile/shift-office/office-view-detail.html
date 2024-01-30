@@ -1,0 +1,90 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+{% csrf_token %} 
+        <div class="models-content">
+            <div class="row h2 justify-content-center mt-4 alert text-dark">
+                    {{office}}
+            </div>
+        </div>
+        <div class="container mt-5">
+            <div class="alert rounded alert-warning" id="step-one">
+                <div class="row">
+                    <div class="h3 m-2">Шаг 1. Выбор Смены</div>
+                </div> 
+                <div class="row">
+                    <div class="col ml-2">
+                        <input type="num" value={{selected_shift}} id="selected_shift_input" hidden>
+                        <select name="shift_list" class="shift_list">
+                            <option value="">--------</option> 
+                            {% for shift in shifts %}
+                                <option value="{{ shift.id }}">{{ shift }}</option> 
+                            {% endfor %}
+                        </select> 
+                    </div> 
+                </div>
+            </div>
+        </div> 
+      
+        <div class="container mt-5">
+            <div class="alert rounded alert-warning" id="step-two">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="mt-2 mb-4">Шаг 2. Выбор диапазона дат</h3>
+                    </div>
+                </div>
+        
+                <!-- Информация о сменах -->
+                {% for shift_office in shift_office_list %}
+                    <span class="cycle_start_date d-none" data-id="{{ shift_office.id }}" data-shift="{{ shift_office.shift.id }}">{{ shift_office.cycle_start_date|date:'Y-m-d' }}</span>
+                    <span class="cycle_end_date d-none" data-id="{{ shift_office.id }}" data-shift="{{ shift_office.shift.id }}">{{ shift_office.cycle_end_date|date:'Y-m-d' }}</span>
+                    <span class="work_days_hours d-none" data-id="{{ shift_office.id }}">{{ shift_office.work_days_hours }}</span>
+                {% endfor %}
+        
+                <!-- Поля ввода дат -->
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="selected_start_date">Дата начала цикла</label>
+                        <input type="date" class="form-control" id="selected_start_date">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="selected_end_date">Дата окончания цикла</label>
+                        <input type="date" class="form-control" id="selected_end_date">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="full_cicle">Диапазон цикла</label>
+                        <input type="date" class="form-control" id="full_cicle" readonly>
+                        <label for="len_full_cicle" class="mt-2">Длительность цикла (дней)</label>
+                        <input type="number" class="form-control" id="len_full_cicle" readonly>
+                    </div>
+                </div>
+        
+                <!-- Кнопка применения изменений -->
+                <div class="row">
+                    <div class="col">
+                        <button id="apply_changes" class="btn btn-primary">Применить изменения</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="container mt-5">
+            <div class="alert rounded alert-warning" id="step-three">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="mt-2 mb-4">Шаг 3. Настройка графика</h3>
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col">
+                        <button id="apply_changes_work_days_hours" class="btn btn-primary">Применить изменения</button>
+                    </div>
+                </div>
+            </div>
+        </div>        
+
+
+{% endblock %} 
+
+

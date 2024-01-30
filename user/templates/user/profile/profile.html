@@ -1,0 +1,30 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+
+        <span id="user_history_dt-resetFilter" class="btn btn-warning text-dark">Сбросить фильтры</span>
+
+        {% for h in human %}
+            {% if forloop.counter == human|length %}
+                    {% csrf_token %}
+                        <div class="row">
+                            <div class="col m-2 bg-white rounded border border-white">
+                                {% include 'user/profile/company/employee/initials.html' %}
+                            </div>
+                                
+                            <div class="col m-2 bg-white rounded border border-white">
+                                {% include 'user/profile/company/employee/email.html' %}
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col m-2 bg-white rounded border border-white">
+                                {% include 'user/profile/company/employee/office.html' %}
+                            </div> 
+                        </div> 
+            {% endif %}  
+        {% endfor %}
+
+        {% include 'user/profile/company/employee/history.html' %}
+ 
+{% endblock %} 

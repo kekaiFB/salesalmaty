@@ -1,0 +1,63 @@
+{% comment %} {% load cache %}
+{% cache 360000 form_create_flight %}  {% endcomment %}
+    <div class="country">
+        {% for c in country %}
+            <span class="country" data-country_type="{{c.city__country__type__title}}" data-airport="{{ c.id }}"></span>
+        {% endfor %}
+    </div>
+    
+    <div class="form-row">
+        <div class="form-group col-md-6 mb-0">
+            <p><label class="form-label" for="{{ form.airline.id_for_label }}">{{form.airline.label}}: </label>{{ form.airline }}</p>
+            <div class="form-error">{{ form.airline.errors }}</div>
+        </div>
+        <div class="form-group col-md-6 mb-0">
+        <p><label class="form-label" for="{{ form.type.id_for_label }}">{{form.type.label}}: </label>{{ form.type }}</p>
+        <div class="form-error">{{ form.type.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        {% if airplane_view %} 
+            <div class="form-group col-md-4 mb-0">
+                <p><label class="form-label" for="{{ form.airplane.id_for_label }}">{{form.airplane.label}}: </label>{{ form.airplane }}</p>
+                <div class="form-error">{{ form.airplane.errors }}</div>
+            </div>
+            <div class="form-group col-md-6 mb-0">
+                <p><label class="form-label" for="{{ form.equipmentAirplane.id_for_label }}">{{form.equipmentAirplane.label}}: </label>{{ form.equipmentAirplane }}</p>
+                <div class="form-error">{{ form.equipmentAirplane.errors }}</div>
+            </div> 
+        {% else %}
+        {% endif %}
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6 mb-0">
+            <p><label class="form-label" for="{{ form.arrivalAirport.id_for_label }}">{{form.arrivalAirport.label}}: </label>{{ form.arrivalAirport }}</p>
+            <div class="form-error">{{ form.arrivalAirport.errors }}</div>
+        </div>
+        <div class="form-group col-md-6 mb-0">
+            <p><label class="form-label" for="{{ form.departurelAirport.id_for_label }}">{{form.departurelAirport.label}}: </label>{{ form.departurelAirport }}</p>
+            <div class="form-error">{{ form.departurelAirport.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6 mb-0">
+            <p><label class="form-label" for="{{ form.title.id_for_label }}">{{form.title.label}}: </label>{{ form.title }}</p>
+            <div class="form-error">{{ form.title.errors }}</div>
+        </div>
+        <div class="form-group col-md-6 mb-0">
+            <p><label class="form-label" for="{{ form.title_2.id_for_label }}">{{form.title_2.label}}: </label>{{ form.title_2 }}</p>
+            <div class="form-error">{{ form.title_2.errors }}</div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+            <p><label class="form-label" for="{{ form.type_flight.id_for_label }}">{{form.type_flight.label}}: </label>{{ form.type_flight }}</p>
+            <div class="form-error">{{ form.type_flight.errors }}</div>
+        </div>
+    </div>
+{% comment %} {% endcache %}  {% endcomment %}

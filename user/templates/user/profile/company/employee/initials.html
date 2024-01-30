@@ -1,0 +1,40 @@
+{% load tgo_tags %}
+{% load user_tags %}
+
+<div class="row">
+    <div class="col-8 mt-2" >
+        <div class="h4">
+            <strong class="font-weight-bold">ФИО:</strong> {{ h.last_name }} {{ h.first_name }} {{ h.sur_name }}
+        </div>
+        <div class="h4">
+            <strong class="font-weight-bold">Статус:</strong> {{ h.status }} 
+        </div>
+        <div class="h4">
+            <strong class="font-weight-bold">Смена:</strong>{% if h.shift %}{{h.shift}}{% endif %}
+
+        </div>
+        <div class="h4">
+            <strong class="font-weight-bold">Начало работы:</strong> {{ h.date_start }}
+        </div>
+        <div class="h4">
+            <strong class="font-weight-bold">Стаж работы:</strong> {% time_diff h.date_start|date:'d-m-Y' %}   
+        </div>
+        <div class="h4">
+            <strong class="font-weight-bold">Номер сотрудника в базе данных кадровой службы:</strong>  {{ h.employee_number }}
+        </div>
+    </div>
+    <div class="col">  
+        <div class="mt-2">   
+            {% if 'Администратор' in user_groups %} 
+                    {% button_text 'btn-success' 'user:edit_human' h.id 'Изменить' %}
+            {% elif h.id == request_human_id %} 
+                {% button_text 'btn-success' 'user:edit_human' h.id 'Изменить' %}
+            {% elif 'Начальник' in user_groups %} 
+                {% if 'Начальник'  in h.groups or 'Администратор' in h.groups %}{% else %}
+                    {% button_text 'btn-success' 'user:edit_human' h.id 'Изменить' %} 
+                {% endif %}
+            {% endif %}
+            
+        </div>
+    </div>
+</div>

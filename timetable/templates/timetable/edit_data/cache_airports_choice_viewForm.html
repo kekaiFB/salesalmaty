@@ -1,0 +1,9 @@
+{% load cache %}
+{% cache 360000 airports_choice_viewForm %}
+    <div class="form-row">
+        <div class="form-group col mb-0">
+            <p><label class="form-label" for="{{ form.baseAirport.id_for_label }}">{{form.baseAirport.label}}: </label>{{ form.baseAirport }}</p>
+            <div class="form-error">{{ form.baseAirport.errors }}</div>
+        </div>
+    </div>   
+{% endcache %}

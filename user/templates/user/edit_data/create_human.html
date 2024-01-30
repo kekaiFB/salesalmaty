@@ -1,0 +1,141 @@
+{% load crispy_forms_tags %}
+<form method="post">
+  {% csrf_token %}
+  {{ form.media.js }}
+
+  <div class="modal-header">
+    <h3 class="modal-title">Добавить сотрудника</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+  </div>
+  
+
+  <div class="modal-body">
+    <div class="{% if form.non_field_errors %} alert alert-warning invalid{% endif %} mb-2">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+    <div class="form-row">
+        <div class="form-group col-md-6 mb-0">
+            {{ form.office|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-6 mb-0">
+          {{ form.post|as_crispy_field }}
+        </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6 mb-0">
+          {{ form.last_name|as_crispy_field }}
+      </div>
+      <div class="form-group col-md-6 mb-0">
+          {{ form.first_name|as_crispy_field }}
+      </div>
+  </div>
+    <div class="form-row">
+      <div class="form-group col-md-6 mb-0">
+            {{ form.sur_name|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-6 mb-0">
+            {{ form.group|as_crispy_field }}
+        </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4 mb-0">
+          {{ form.shift|as_crispy_field }}
+      </div>
+        <div class="form-group col-md-4 mb-0">
+            {{ form.status|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-4 mb-0">
+            {{ form.date_start|as_crispy_field }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+            {{ form.email|as_crispy_field }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+            {{ form.employee_number|as_crispy_field }}
+        </div>
+    </div>
+    <div id='message_div'></div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" id="submitForm" class="btn btn-primary">Создать</button>
+  </div>
+
+</form>
+
+<script>
+  function validateEmail($email) {
+    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    return emailReg.test( $email );
+  }
+   
+  $('#id_office, #id_post').append('<option value="" selected="">---------</option>');
+  $('#id_group').find('option[value=""]').remove();
+  $('#id_status').find('option[value=""]').remove();
+
+  //Заполняем должность и оффис если они выбраны в таблицы должность
+  if (typeof $('#post_dt').DataTable().rows('.selected').data()[0]  !==  "undefined")
+  {
+      var office_option = `<option value=${$('#post_dt').DataTable().rows('.selected').data()[0][0]} selected="selected">${$('#post_dt').DataTable().rows('.selected').data()[0][1]}</option>`
+      $('#id_office').html(office_option);
+
+      var post = `<option value=${$('#post_dt').DataTable().rows('.selected').data()[0][2]} selected="selected">${$('#post_dt').DataTable().rows('.selected').data()[0][3]}</option>`
+      $('#id_post').html(post);
+  }
+
+  //Проверяем занят ли email
+  $('#id_email').change(function () {   
+    $('#message_div').text('')   
+    $("#message_div").removeClass();
+    $('button[type="submit"]').prop( "disabled", true);
+
+    if( validateEmail($('#id_email').val()) && $('#id_email').val() != '')
+    {  
+
+      $.ajax({             
+        url: "{% url 'user:check_user'  %}",
+        method : "post",
+        data: {
+            'email': $('#id_email').val(),
+        },               
+
+        success: function (data) {  
+          $('#message_div').append(data['message'])
+          $('#message_div').addClass('alert alert-success')
+          $('button[type="submit"]').prop( "disabled", false);
+        },
+        error: function(data){
+          $('#message_div').append(data.responseJSON['message'])
+          $('#message_div').addClass('alert alert-warning')
+        }
+    });
+      
+    }
+  });
+
+   //Создаем пользователя до валидации формы
+   $("form").submit(function(){
+    $('#message_div').text('Создаем сотрудника, пожалуйста не закрывайте страницу)')
+    $('#message_div').addClass('alert alert-warning h6')
+  });
+
+
+  $.ajax({             
+    url: "{% url 'user:get_free_email'  %}",
+    method : "get",               
+
+    success: function (data) {  
+      $('#id_email').val(data['test_email'])
+    },
+    error: function(data){
+      $('#message_div').append(data.responseJSON['message'])
+      $('#message_div').addClass('alert alert-warning')
+    }
+});
+</script>

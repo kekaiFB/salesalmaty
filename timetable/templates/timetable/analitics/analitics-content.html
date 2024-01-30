@@ -1,0 +1,95 @@
+{% load tgo_tags %}
+{% load timetable_tags %}
+{% load user_tags %}
+
+   {% csrf_token %}
+   <div class="containter mt-4 rounded">
+      <div class="row m-5 alert rounded bg-white mt-3">
+         <div class="row">
+            <div class="h3 m-2">
+               Настройки графика: 
+               {% include 'timetable/analitics/instructions_analitics.html' %} 
+               ️️<span class="analitics_edit_div mt-3">⚙️</span>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-3 alert alert-warning align-self-start m-3 ">
+               <div class="h5">
+                  <select name="resource_list" class="resource_list form-control">
+                     {% for res, val in resource_info.items %}
+                        <option value="{{ val }}">{{ res }}</option> 
+                     {% endfor %}
+                  </select>
+               </div>
+               <div>
+                  <input type="radio" id="single-date" name="date-selection">
+                  <label for="single-date" class="label-single-date h4">Дата</label>
+                  <div class="inputs-single-date"><input class="form-control" type="date" id="input-single-date" min={{timetable_list.date_start|date:"Y-m-d"}} max={{timetable_list.date_end|date:"Y-m-d"}}></div>
+               </div>
+               <div>
+                  <input type="radio" id="range-date" name="date-selection">
+                  <label for="range-date" class="label-range-date h4">Диапазон дат</label>
+                  <div class="inputs-range-date">   
+                     <div class="m-1 ml-2"> 
+                        от <input class="form-control" min={{timetable_list.date_start|date:"Y-m-d"}} max={{timetable_list.date_end|date:"Y-m-d"}} type="date" id="range-date-first">
+                     </div>
+                     <div class="m-1"> 
+                        до <input class="form-control"  type="date" id="range-date-second">
+                        {% comment %}  min={{timetable_list.date_start|date:"Y-m-d"}} max={{timetable_list.date_end|date:"Y-m-d"}} {% endcomment %}
+                     </div>
+                  </div> 
+                  <div class="meta-date-info"></div> 
+               </div>
+               <div class="d-flex justify-content-center">
+                  <span class="btn btn-success generate_graphic_button ml-1">Генерация графика</span>
+              </div>
+            </div>
+            <div class="col-8 alert rounded bg-white div-chart-analitics">
+               <canvas id="chart-analitics"></canvas>
+            </div>
+         </div>
+      </div>
+
+      
+      
+      
+      
+      <div class="row m-5 alert rounded bg-white div_data_analitics_meta">
+         <div class="col analitics-tgo">
+               <div class="h3 m-2">Все рейсы расписания:</div>
+               {% timetable_flight_tgo_list_tags timetables %}
+               <ul id="timetablesPagination" class="pagination justify-content-center"></ul>
+            </div>
+         <div class="col">
+            {% if errors %}
+            <div class="h3 m-2">Все ошибки и предупреждения:</div>
+
+                <div class="alert alert-danger m-3">
+                    <ul class="error-list">
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="errors_len" hidden>{{ errors | length }}</div>
+                </div>
+
+                <!-- Генерация клиентской bootstrap пагинации  с .js -->
+                
+                <ul id="pagination" class="pagination justify-content-center"></ul>
+            {% endif %}
+        </div>
+        <div class="row alert rounded bg-white div-chart-analitics">
+           <div class="justify-content-center h2 alert alert-warning">
+               Точные данные 
+               {% comment %} (если есть доступ то надпись меняется на Распределение ресурсов) {% endcomment %}
+           </div>
+           <div class="ressurce_time_list" style="max-height: 500px; overflow-y: auto;">
+               <!-- Ваш контент здесь -->
+           </div>
+       </div>
+      </div>
+     
+        
+   
+      .
+   </div>

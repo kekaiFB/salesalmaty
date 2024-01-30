@@ -1,0 +1,177 @@
+
+{% load static %} 
+<html>  
+   <head>  
+      {% load static %} 
+
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>{{title}}</title>
+      
+      <link rel="icon" href="{% static 'media/logo.png' %}" type="image/x-icon">
+      <link rel="shortcut icon" href="{% static 'media/logo.png' %}" type="image/x-icon">
+
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+      <link rel = "stylesheet" type = "text/css" href = "{% static 'css/table_tgo.css' %}"/>
+      <link rel = "stylesheet" type = "text/css" href = "{% static 'css/JQLoader.css' %}"/>
+
+      <!-- Jquery DataTable -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+      <!-- Jquery DataTable END -->
+
+      <!-- CheckBox Style Iphone -->
+      <link rel = "stylesheet" type = "text/css" href = "{% static 'css/iosCheckbox.min.css' %}"/>
+      <!-- CheckBox Style Iphone END -->
+
+      <!-- Toast Bootstrap -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+      <!-- Toast Bootstrap  END -->
+   </head> 
+   <body id="body-to-pdf" class="p-3 mb-2 bg-white bg-opacity-10 text-dark">
+      {% block content %}{% endblock %} 
+      
+      <!-- javascript -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap-confirmation2/dist/bootstrap-confirmation.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+      <!-- javascript  END --> 
+      
+      
+      
+      <!-- parseDates_to_yyyymmdd -->
+      <script src="{% static 'js/parseDates_to_yyyymmdd.js' %}"></script>
+      <!-- parseDates_to_yyyymmdd END -->
+
+
+      <!-- Toast Bootstrap -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+      <!-- Toast Bootstrap  END -->
+      
+      <!-- Bootstrap JavaScript -->
+      <script src="{% static 'js/BsMultiSelect.js' %}"></script>
+      
+      <!-- DataTable -->
+      <script src = "{% static 'jsNet/jquery.dataTables.min.js' %}"></script>
+      <script src = "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+      <script src = "https://cdn.datatables.net/select/1.6.2/js/dataTables.select.min.js"></script>
+      <!-- DataTable END -->
+
+      <!-- ChartJS -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+      <script src="{% static 'js/3.8.0_chart.js' %}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/underscore@1.12.0/underscore-min.js"></script> 
+      <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+      <script src="{% static 'js/graphic.js' %}"></script>
+      <!-- ChartJS END-->
+
+      <!-- html2canvas -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.min.js"></script>
+      
+      <!-- JExcel -->
+      <script src="{% static 'js/bossanova.uk_jspreadsheet_v4_jexcel.js' %}"></script>
+      <script src="{% static 'js/jsuites.net_v4_jsuites.js' %}"></script>
+      <script>
+         // для jexcel.js
+         var myTableTGO
+         var save_time
+         var all_value_cells
+         var coords
+
+         
+         var coords
+         var technology_change_merge = ''
+         var order_change_merge = ''
+      </script>
+
+      
+      <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+      <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Material+Icons" />
+      <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.datatables.css" type="text/css" />
+      <!-- JExcel END -->
+      
+      <!-- Include TableExport library -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.2/jszip.min.js"></script>
+      <script src="https://cdn3.devexpress.com/jslib/19.2.5/js/dx.all.js"></script>
+
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+      <script src="https://unpkg.com/exceljs@4.1.1/dist/exceljs.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
+      <script src="{% static 'js/table_tgo.js' %}"></script>
+      <script src="{% static 'js/select_filters_cascade.js' %}"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+      <script src="{% static 'js/jexcel.js' %}"></script>
+      <script src="{% static 'js/jexcel_merge.js' %}"></script>
+      <!-- funny -->
+      <script src="{% static 'js/random_boarding_pass.js' %}"></script>
+      <!-- END funny -->
+      
+      <!-- CheckBox Style Iphone -->
+      <script src="{% static 'js/iosCheckbox.min.js' %}"></script>
+      <!-- CheckBox Style Iphone END -->
+
+      <!-- selectpicker -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.css" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.js"></script>
+      
+      <!-- ModalForm -->
+      {% include 'table_tgo/data/modal.html' %}
+      <script id="sctiprt_modal_1" src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+      <script id="sctiprt_modal_2" src="{% static 'js/modal.js' %}"></script>
+      {% include 'table_tgo/data/modal_alert.html' %}
+      <!-- ModalForm END -->
+      <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js">
+
+      <!-- Загрузка экрана -->
+      <script src="{% static 'js/JQLoader.js' %}"></script>
+      <!-- Загрузка экрана END -->
+
+      <script>
+         $('[data-toggle=confirmation]').confirmation({
+            rootSelector: '[data-toggle=confirmation]'
+         });
+
+         setTimeout(
+            function() {
+            $("body").css("opacity", 1);
+         }, 1500);
+        
+         function showToast() {
+            toastr.options = {
+               closeButton: true,             // Показать кнопку закрытия
+               progressBar: true,             // Показывать прогресс-бар
+               positionClass: 'toast-bottom-right', // Положение тостов (нижний правый угол)
+               timeOut: '3000',               // Время отображения (3 секунд)
+               extendedTimeOut: '1000',       // Время отображения при клике (1 секунда)
+               // Настройка стилей
+               preventDuplicates: true,       // Предотвратить дублирование тостов
+               showEasing: 'swing',           // Анимация появления
+               hideEasing: 'linear',          // Анимация скрытия
+               showMethod: 'fadeIn',          // Метод показа
+               hideMethod: 'fadeOut',         // Метод скрытия
+               // Стили для успешных тостов
+               successClass: 'toast-success', // Класс стиля успешных тостов
+               // Стили для предупреждений
+               warningClass: 'toast-warning', // Класс стиля предупреждений
+               // Стили для ошибок
+               errorClass: 'toast-error'      // Класс стиля ошибок
+            };
+            return toastr;
+        }
+    
+  
+      </script>
+   </body> 
+</html> 

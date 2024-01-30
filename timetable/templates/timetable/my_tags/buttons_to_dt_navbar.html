@@ -1,0 +1,13 @@
+<div class="buttons_to_dt_navbar" id="buttons_to_dt_navbar_id">
+    <span id="{{ id }}" class="btn btn-warning text-dark">Сбросить фильтры</span>
+    <span class="ml-2 h6">Вид таблицы: </span>
+    
+    <select class="form-control form-control-sm" onchange="location = this.value;">
+        <option value="{% url 'timetable:index' timetable_id %}" {% if current_view == 'timetable:index' %} selected {% endif %}>Обычный</option>
+        <option value="{% url 'timetable:index_week' timetable_id %}" {% if current_view == 'timetable:index_week' %} selected {% endif %}>Недельный</option>
+        <option value="{% url 'timetable:index_week_group' timetable_id %}" {% if current_view == 'timetable:index_week_group' %} selected {% endif %}>Сгруппированный</option>
+    </select>
+    
+    
+</div>
+

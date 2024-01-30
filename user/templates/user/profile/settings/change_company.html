@@ -1,0 +1,22 @@
+{% load widget_tweaks %}
+{% load user_tags %}
+
+{% for h in human %}
+<div class="h4 ml-2 mt-2 bg-white rounded border p-4">
+    Изменить название
+    <form class="form-inline my-2 my-lg-0" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container mt-2">
+                <input type="text" name="name_company" class="form-control mr-sm-2" required placeholder={{ name_company }}>
+            <div class="row">
+                <div class="col">
+                    {% button_submit_confirmation 'Обновить' %}
+                </div>
+            </div> 
+        </div>
+    </form>
+</div>
+{% endfor %}
+
+
+

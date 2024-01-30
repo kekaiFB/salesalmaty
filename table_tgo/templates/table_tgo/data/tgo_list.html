@@ -1,0 +1,149 @@
+{% load tgo_tags %}
+{% include 'table/navbar.html' %}
+<span id="formFilter_" class="col-12">
+    <form action="" method="get"  class="form-inline justify-content-left">
+        {% csrf_token %}
+        <select onchange="this.form.submit()" name="select" class="ml-2 mb-1 form-select form-control">
+            {% if filter == 'all' %}
+                <option value="request">Мои ТГО</option>
+                <option value="all" selected>Все ТГО</option>
+            {% else %}
+                <option value="request" selected>Мои ТГО</option>
+                <option value="all">Все ТГО</option>
+            {% endif %}
+        </select>
+        <span class="ml-2 mb-1 btn btn-warning text-dark dt_resetFilter">Сбросить фильтры</span>
+        <button class="btn btn-primary dropdown-toggle mb-1 ml-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Справочники
+        </button> 
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{% url 'table_tgo:technology' %}">Технологии</a>
+            <a class="dropdown-item" href="{% url 'table_tgo:operation-view' %}">Операции</a>
+            <a class="dropdown-item" href="{% url 'table_tgo:ressource-view' %}">Ресурсы</a>
+        </div>    
+        <span class="ml-2 mb-1">
+            {% if 'table_tgo.add_tgo' in perms %}
+                {% add_button_text 'table_tgo:create_tgo' %}
+            {% endif %}
+        </span>    
+    </form>
+</span>
+<table id="table_tgo" class="table rounded-lg table_dt border col-12" style="width:100%">
+    <thead>
+        <tr>
+            <th>Автор</th>
+            <th>ТГО</th>
+            <th>Тип полета</th>
+            <th>Авиакомпании</th>
+            <th>ВС</th>
+            <th>Дата создания</th>
+            <th>Дата редаткирования</th>
+            <th>Начало</th>
+            <th>Длительность</th>
+            <th>Общая длительность</th>
+            <th>Срок действия</th>
+            <th></th>
+                  
+            {% if 'table_tgo.add_tgo' in perms %}
+                <th></th>
+                {% comment %} <th></th> {% endcomment %}
+                <th></th>
+                <th></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in tgo %}  
+            <tr>
+                <td>{{t.author}}</td>
+                <td class="{{ t.is_active }}">{{t.title}}</td>
+                <td>
+                    {% if t.typeflightcountry.all %}
+                      {% for t in t.typeflightcountry.all %}
+                        {{ t }}
+                        {% if not forloop.last %}
+                          <br>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if t.airlines.all %}
+                      {% for t in t.airlines.all %}
+                        {{ t }}
+                        {% if not forloop.last %}
+                          <br>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if t.airplane.all %}
+                      {% for t in t.airplane.all %}
+                        {{ t }}
+                        {% if not forloop.last %}
+                          <br>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                </td>
+                <td>{{t.time_create|date:"d-m-Y"}}</td>
+                <td>{{t.time_update|date:"d-m-Y"}}</td>
+                <td>{% if t.time_start %}{{t.time_start}}{% endif %}</td>                  
+                <td>{{t.abstract_length_tgo_hour}}</td>            
+                <td>{{t.absolute_length_tgo_hour}}</td>                                
+                <td>{% if t.date_end %}{{t.date_end}}{% endif %}</td>
+                <td><a class="btn btn-outline-warning" href={{ t.get_absolute_url }}>Подробнее</a></td>
+                {% if 'table_tgo.add_tgo' in perms %}
+                    {% comment %} <td>
+                        {% copy_button 'table_tgo:copy_tgo' t.id "Копия" "Создать копию операций ТГО?" %}
+                    </td> {% endcomment %}
+                    <td>
+                        {% copy_button 'table_tgo:copy_tgo_all' t.id "Полная копия" "Создать полную копию ТГО?" %} 
+                    </td>
+                    {% if request.user == t.author %}
+                        {% if t.is_active %}
+                            <td>
+                                {% edit_button 'table_tgo:edit' t.id %}
+                            </td>
+                            <td>
+                                {% del_button 'table_tgo:tgo-no-active' t.id %}
+                            </td>
+                        {% else %} 
+                            <td></td>
+                            <td>
+                                {% restore_button 'table_tgo:tgo-is-active' t.id %}
+                            </td>
+                        {% endif %}
+                    {% else %}
+                        <td></td>
+                        <td></td>
+                    {% endif %}
+                {% endif %}   
+            </tr>     
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Автор</th>
+            <th>ТГО</th>
+            <th>Тип полета</th>
+            <th>Авиакомпании</th>
+            <th>ВС</th>
+            <th>Дата создания</th>
+            <th>Дата редаткирования</th>
+            <th>Начало</th>
+            <th>Длительность</th>
+            <th>Общая длительность</th>
+            <th>Срок действия</th>
+            <th></th>
+                  
+            {% if 'table_tgo.add_tgo' in perms %}
+                <th></th>
+                {% comment %} <th></th> {% endcomment %}
+                <th></th>
+                <th></th>
+            {% endif %}
+        </tr>
+    </tfoot>
+</table>

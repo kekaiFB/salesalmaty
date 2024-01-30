@@ -1,0 +1,61 @@
+{% load widget_tweaks %}
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h3 class="modal-title">Обновить запись</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+  </div>
+
+  <div class="modal-body">
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+
+      {% for field in form %}
+      {% if not field.is_hidden %}
+        <div class="form-group">
+          <label class="ml-1" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {% render_field field class="form-control" %}
+          <div class="mt-2 {% if field.errors %} invalid{% endif %}">
+            {% for error in field.errors %}
+              <p class="alert alert-warning">{{ error }}</p>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+       {{ field }}
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Обновить</button>
+  </div>
+
+</form>
+
+{% if 'Администратор' in user_groups %}
+      <input id="user_groups" hidden value="admin">
+{% elif 'Начальник'  in user_groups %}
+  {% if id_human_update == request_human_id %}
+      <input id="user_groups" hidden value="">
+  {% else %}
+      <input id="user_groups" hidden value="admin">
+  {% endif %}
+{% else %}
+  <input id="user_groups" hidden value="">
+{% endif %}
+
+
+<script>
+    if ($('#user_groups').val() == '') {
+        $("#id_status").hide()
+        $("#id_date_start").hide()
+        $("label:contains('Статус')").hide();
+        $("label:contains('Начало работы')").hide();
+    }
+</script>

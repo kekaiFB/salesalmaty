@@ -1,0 +1,50 @@
+{% load tgo_tags %}
+{% load timetable_tags %}
+
+<table id="timetable-telegram-structure" class="table table-bordered table-hover table-condensed bg-white" cellspacing="0" style="width:100%">
+    <thead> 
+        <tr>
+            <th style="width: 40%;">Исходный текст</th>
+            <th style="width: 30%;">Информационные строки</th>
+            <th style="width: 30%;">Подробнее</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+            {% if message.message_used.is_used %}
+                <tr> 
+                    <td style="width: 40%;">{{ message.message_used.body | safe }}</td>
+                    <td style="width: 30%;">{% format_list message.message_used %}</td>  
+                                     
+                    <td style="width: 30%;">
+                        {% format_list_action message.message_used message.id %}
+                        <a class="btn btn-warning showTableButton" onclick="showTableButton_click({{message.id}})" data-id="{{message.id}}">Подробнее</a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th style="width: 40%;">Исходный текст</th>
+            <th style="width: 30%;">Информационные строки</th>
+            <th style="width: 30%;">Подробнее</th>
+        </tr>
+    </tfoot>
+</table>
+
+
+<div class="modal telegram-modal-actions" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title-actions"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body-actions"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  </div>

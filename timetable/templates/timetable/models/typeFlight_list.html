@@ -1,0 +1,73 @@
+{% extends "timetable/models/model_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+   <span class="h3">Типы рейсов</span>
+      <div class="mt-2">
+         <a class="btn btn-outline-primary" href={{prev_url}}>Назад</a>
+         <span id="dt_resetFilter" class="btn btn-warning text-dark">Сбросить фильтры</span>
+         {% if request.user.is_superuser %}
+            {% add_button_text 'timetable:add_type_flight' %}
+         {% endif %}
+      </div>
+      <hr>
+      <table class="table rounded-lgn table_dt col-12 bg-white" style="width:100%">
+         <thead> 
+            <tr>
+               <th>Название</th>
+               <th>Код (анг.)</th>
+               <th>Код(рус.)</th>
+               <th>Регулятность</th>
+               <th>Наименование</th>
+               <th>Для биллинга</th>
+               <th>Порядок для сортировки</th>
+               <th>Грузовой вид</th>
+               <th>30ГА</th>
+               {% if request.user.is_superuser %}
+                  <th>Редактировать</th>
+                  <th>Удалить</th>
+               {% endif %}
+            </tr>
+         </thead>
+         <tbody>
+            {% for tf in typeFligh %}  
+               <tr>
+                  <td>{% if tf.title %}{{ tf.title }}{% endif %}</td>
+                  <td>{% if tf.code %}{{ tf.code }}{% endif %}</td>
+                  <td>{% if tf.code_ru %}{{ tf.code_ru }}{% endif %}</td>
+                  <td>{% if tf.regularity %}{{ tf.regularity }}{% endif %}</td>
+                  <td>{% if tf.name %}{{ tf.name }}{% endif %}</td>
+                  <td>{% if tf.for_billing %}{{ tf.for_billing }}{% endif %}</td>
+                  <td>{% if tf.sort_order %}{{ tf.sort_order }}{% endif %}</td>
+                  <td>{% if tf.cargo_type %}{{ tf.cargo_type }}{% endif %}</td>
+                  <td>{% if tf.code_30GA %}{{ tf.code_30GA }}{% endif %}</td>
+                  {% if request.user.is_superuser %}
+                     <td>
+                           {% edit_button 'timetable:edit_type_flight' tf.id %}
+                     </td>
+                     <td>
+                           {% del_button 'timetable:delete_type_flight' tf.id %}
+                     </td>
+                  {% endif %}
+               </tr>     
+            {% endfor %}
+         </tbody>
+         <tfoot> 
+            <tr>
+               <th>Название</th>
+               <th>Код (анг.)</th>
+               <th>Код(рус.)</th>
+               <th>Регулятность</th>
+               <th>Наименование</th>
+               <th>Для биллинга</th>
+               <th>Порядок для сортировки</th>
+               <th>Грузовой вид</th>
+               <th>30ГА</th>
+               {% if request.user.is_superuser %}
+                  <th>Редактировать</th>
+                  <th>Удалить</th>
+               {% endif %}
+            </tr>
+         </tfoot>
+      </table>      
+{% endblock %} 

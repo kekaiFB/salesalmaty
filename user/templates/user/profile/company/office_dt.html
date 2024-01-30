@@ -1,0 +1,41 @@
+{% load tgo_tags %}
+
+<table border="3" id="office_dt" class="table table-bordered table-hover table-condensed table_dt_company" style="width:100%">
+    <thead> 
+        <tr>
+            <th>id</th>
+            <th>Подразделение</th>
+            {% if 'Администратор' in user_groups %}      
+                <th>{% add_button_parent 'user:add_office' id_company %}</th>
+                <th></th>
+            {% endif %}    
+        </tr>
+    </thead>
+    <tbody>
+        {% for o in office %}  
+            <tr>
+                <td>{{ o.id }}</td>
+                <td>{{ o.title }}</td>
+                    
+                {% if 'Администратор' in user_groups %}  
+                    <td>
+                        {% edit_button 'user:edit_office' o.id %}
+                    </td>
+                    <td>
+                        {% del_button 'user:delete_office' o.id %}
+                    </td>
+                {% endif %}    
+            </tr>     
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>id</th>
+            <th>Подразделение</th>
+            {% if 'Администратор' in user_groups %}      
+                <th></th>
+                <th></th>
+            {% endif %}    
+        </tr>
+    </tfoot>
+</table>

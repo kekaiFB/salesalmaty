@@ -1,0 +1,49 @@
+<table id="bootstrapdatatable" class="table rounded-lgn table_dt col-12 bg-white rounded p-2"  cellspacing="0"   style="width:100%"> 
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Смена</th>
+            <th>Служба</th> 
+            <th>Должность</th>
+            <th>Сотрудник</th>
+            <th>Причина</th>
+            <th>Примечание</th>
+            <th>Продолжительность</th>
+            <th>Начало</th>
+            <th>Окончание</th>
+            <th>Изменить</th>
+            <th>Удалить</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>Смена</th>
+            <th>Служба</th>
+            <th>Должность</th>
+            <th>Сотрудник</th>
+            <th>Причина</th>
+            <th>Примечание</th>
+            <th>Продолжительность</th>
+            <th>Начало</th>
+            <th>Окончание</th>
+            <th>Изменить</th>
+            <th>Удалить</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        {% include 'table/tableSNJ.html' %}
+    </tbody>
+
+    <span class="resetDiv insert_additional_options_after_path">
+        <span id="resetFilter" class="btn btn-warning text-dark btn-xs">Сбросить фильтры</span>
+        {% if 'table.add_schedulenotjob' in perms %}
+            <button
+                class="btn btn-outline-primary modalButton btn-xs"
+                data-form-url="{% url 'table:addnew' %}">
+                <span class="glyphicon glyphicon-pencil"></span> Добавить
+            </button>
+        {% endif %}
+    </span>
+</table>
+

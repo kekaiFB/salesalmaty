@@ -1,0 +1,43 @@
+{% extends "user/profile/profile_base.html" %}
+
+{% load tgo_tags %}
+{% block list %}        
+    <div class="p-4 rounded-lg">
+        <div class="row">
+            <div class="col">
+                <span id="office_dt-resetFilter" class="btn btn-warning text-dark">Сбросить фильтры</span>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            {% include 'user/profile/company/office_dt.html' %}
+          </div>
+          <div class="col">
+            {% include 'user/profile/company/post_dt.html' %}
+          </div>
+        </div>
+        <div class="row">
+            {% include 'user/profile/company/boss_dt.html' %}
+        </div>
+        <div class="row">
+            {% include 'user/profile/company/employe_dt.html' %}
+        </div>
+    </div>
+      
+
+        
+    <script>
+        //скрываем возможность добавления должности без выбора подразделения
+        var add_post = document.getElementsByClassName('add_post');
+        for (var i = 0; i < add_post.length; i ++) {
+            add_post[i].style.visibility = 'hidden';
+        }
+
+        //скрываем возможность добавления сотрудника без выбора должности
+        var add_human = document.getElementsByClassName('add_human');
+        for (var i = 0; i < add_human.length; i ++) {
+            add_human[i].style.visibility = 'hidden';
+        }
+    </script>
+
+{% endblock %} 

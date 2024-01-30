@@ -1,0 +1,119 @@
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h3 class="modal-title">Добавление технологии</h3>
+    
+    
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+  </div>
+  
+
+  <div class="modal-body">
+
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+      {% for error in form.non_field_errors %}
+        {{ error }}
+      {% endfor %}
+    </div>
+
+    {% for field in form %}
+      {% if not field.is_hidden %}
+        {% if field.label == 'Слияние' or field.label == 'Ручная настройка' %}
+            <div class="row form-group">
+                <div class="col-3 col-lg-2 col-xl-auto">
+                    <label>{{ field.label }}: <label for="{{ field.id_for_label }}"></label></label>
+                </div>
+                <div class="col-2">
+                    {{ field}}
+                </div>
+            </div>
+        {% else %}
+          <p><label for="{{ field.id_for_label }}">{{field.label}}: </label>{{ field }}</p>
+          {% for error in field.errors %}
+            <p class="alert alert-warning">{{ error }}</p>
+          {% endfor %}
+          {% endif %}
+        {% else %}
+          {{ field }}
+      {% endif %}
+    {% endfor %}
+    <div id="meta"></div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-sm fs-6">Добавить технологию</button>
+  </div>
+
+</form>
+
+<script>
+  $('#id_merge').removeClass('form-control')
+  $('#id_merge').iosCheckbox();
+  $('#id_manual_setting').removeClass('form-control')
+  $('#id_manual_setting').iosCheckbox();
+  $('#ios-checkbox-manual_setting').hide()
+  $("label:contains('Ручная настройка: ')").hide()
+    
+
+  // selectPicker -----------------
+  $('#id_tgo').attr('data-container', '#modal');
+  $('#id_tgo').attr('data-live-search', 'true');
+  $('#id_tgo').attr('data-hide-disabled', 'true');
+  $('#id_tgo').attr('title', 'Выберите операцию');
+  $('#id_tgo').selectpicker({ 
+    noneResultsText:'   Результатов нет',
+    });
+  // selectPicker ---------------
+
+  $('button[type="submit"]').prop( "disabled", true);
+
+  $('#id_tgo').change(function () { 
+    if ($('#id_tgo').val() != '') {
+      $('button[type="submit"]').prop( "disabled", false)
+    } else {
+      $('button[type="submit"]').prop( "disabled", true)
+    }
+  });
+
+    $('.ios-ui-select').click(function(){
+        if($('#id_merge').is(":checked")){
+          $('#ios-checkbox-manual_setting').show()
+          $("label:contains('Ручная настройка: ')").show()
+          $('#meta').text('При слияниии будут, ресурсы операций в технологии будут добавляться к существующим операциям в ТГО. Если таких же операций в ТГО нету, операции с ресурсами будут вставлены в конец ТГО')
+          $("#meta")[0].className = 'alert alert-warning h5'
+          if($('#id_manual_setting').is(":checked")){
+            $('button[type="submit"]').text( "Настраиваемое слияние");
+          } else {
+            $('button[type="submit"]').text( "Автоматическое слияние");
+          }
+        }
+        else if($('#id_merge').is(":not(:checked)")){
+          $('#ios-checkbox-manual_setting').hide()
+          $("label:contains('Ручная настройка: ')").hide()
+          $('#meta').text('')
+          $("#meta")[0].className = ''
+          $('button[type="submit"]').text( "Добавить технологию");
+        }
+    });
+
+  var flag = 0
+
+  if (technology_change_merge != '')
+  {
+    $('#id_order').val(order_change_merge)
+    $('#id_tgo').selectpicker('val', technology_change_merge);
+    $('.ios-ui-select').click()
+    $('button[type="submit"]').prop( "disabled", false)
+  }
+
+
+  $("form").submit(function(){
+    $('#meta').text('Пожалуйста не закрывайте страницу')
+    $('#meta').addClass('alert alert-warning h6')
+    $('button[type="submit"]').prop( "disabled", true);
+  });
+
+</script>

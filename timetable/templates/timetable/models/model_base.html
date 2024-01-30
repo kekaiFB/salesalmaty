@@ -1,0 +1,36 @@
+{% extends "timetable/base.html" %}
+
+{% block content %}
+    
+    {% include 'table/navbar.html' %}
+    <div class="row">
+      <div class="col">
+        <nav class ="navbar bg-light">
+          <ul class ="nav navbar-nav">
+            <li class ="nav-item">
+                <a class="btn btn-primary" href="{% url 'timetable:timetable_default_redirect' %}">Главная</a> 
+            </li>
+            <hr>
+            {% for m in menu %}
+              {% if title == m.title %}
+                  <li class ="nav-item">
+                      <span class="ml-2 nav-link text-dark h5">{{m.title}}</span>
+                  </li>
+              {% else %}
+                  <li class ="nav-item">
+                      <a class="ml-2 nav-link" href="{% url m.url_name %}">{{m.title}}</a>
+                  </li>
+              {% endif %}
+            {% endfor %}
+            <li class ="nav-item">
+              {% block foreign_key %}{% endblock %}
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col-10">
+        {% block list %}{% endblock %}
+      </div>
+    </div>
+      
+{% endblock %}

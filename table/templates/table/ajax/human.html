@@ -1,0 +1,10 @@
+<option value="">---------</option>
+{% if humans|length == 1 %}
+    {% for human in humans %}
+        <option value="{{ human.pk }}" selected="selected">{{ human }}</option>
+    {% endfor %}
+{% else %}
+    {% for human in humans %}
+        <option value="{{ human.pk }}">{{ human }}</option>
+    {% endfor %} 
+{% endif %} 

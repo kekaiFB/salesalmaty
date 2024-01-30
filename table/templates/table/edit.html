@@ -1,0 +1,44 @@
+{% load widget_tweaks %}
+
+<form method="post" action="{% url 'table:edit' form.instance.pk %}" class="js-product-update-form">  
+    {% csrf_token %}
+    <div class="modal-header">
+    <h5 class="modal-title modalLabel">Изменить запись</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        {% for field in form %}
+        <div class="form-group{% if field.errors %} has-error{% endif %}">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {% render_field field class="form-control" %}
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %} 
+        </div>
+      {% endfor %}
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+              <input type="submit" class="btn btn-primary" value="Изменить" />
+          </div>
+    </div> 
+</form>  
+    
+
+  <script>
+    $('#id_office, #id_post, #id_human').change(function () {
+      $.ajax({                      
+        url: 'ajax/load_ajax_form',                 
+        data: {
+          'click': $(this).attr("id"),
+          'id_office': $("#id_office").val(),  
+          'id_post': $("#id_post").val(), 
+          'id_human': $("#id_human").val(),
+        },
+        success: function (data) {  
+          $("#id_office").html(data.html_office);
+          $("#id_post").html(data.html_post);
+          $("#id_human").html(data.html_human);
+        }
+      });
+    });
+  </script>

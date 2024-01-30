@@ -1,0 +1,48 @@
+
+        # # Наполняем таблицу Страны (Без Типа)
+        # module_dir = os.path.dirname(__file__)  
+        # file_path = os.path.join(module_dir, 'country_ru.txt') 
+        # data_file = open(file_path , 'r')       
+        # data = str(data_file.read())
+        # for country in data.split('\n'):
+        #     if  len(country) > 0:
+        #         if country[0] == ' ':
+        #             if not Country.objects.filter(title = country[1:]).exists():
+        #                 Country.objects.create(title = country[1:])
+
+        module_dir = os.path.dirname(__file__)  
+        file_path = os.path.join(module_dir, 'dataframe/airport_RF_ru.txt') 
+        data_file = open(file_path , 'r')       
+        data = str(data_file.read())
+        
+        # Наполняем таблицу Города 
+        for data_list in data.split('\n'):
+            data_list = data_list.split(';')
+            if  len(data_list) == 4: 
+                if data_list[0] != '' and data_list[1] != 'Аэропорт':         
+                    country = Country.objects.filter(title='Россия')
+                    if len(country) == 1:
+                        if not City.objects.filter(title = data_list[0], country=country[0]).exists():
+                            city = City.objects.create(title = data_list[0], country=country[0])
+
+        # # Наполняем таблицу Аэропорты 
+        for data_list in data.split('\n'):
+            data_list = data_list.split(';')
+            if  len(data_list) == 4: 
+                if data_list[0] != '' and data_list[1] != 'Аэропорт'\
+                and data_list[1] != '' and data_list[2] != '' and data_list[3] != '':         
+                    city = City.objects.filter(title=data_list[0])
+                    if len(city) == 1:
+                        if not Airport.objects.filter(code_iata = data_list[2], city=city[0]).exists():
+                            Airport.objects.create(title =  data_list[1], code_iata = data_list[2], code_ikao = data_list[3], city=city[0])
+
+        # file_path = os.path.join(module_dir, 'airlanes_ru.txt') 
+        # data_file = open(file_path , 'r')       
+        # data = str(data_file.read())
+        # # Наполняем таблицу Авиакомпании 
+        # for data_list in data.split('\n'):
+        #     data_list = data_list.split(';')
+        #     if  len(data_list) == 2:
+        #         if data_list[0] != '' and data_list[1] != '':    
+        #             if not Airlines.objects.filter(title = data_list[1],).exists():
+        #                 Airlines.objects.create(title = data_list[1], character_code = data_list[0])

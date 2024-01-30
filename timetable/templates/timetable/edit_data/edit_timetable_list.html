@@ -1,0 +1,129 @@
+<form method="post">
+    {% csrf_token %}  
+  
+    <div class="modal-header">
+      <h3 class="modal-title">Изменить</h3>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+    </div>
+  
+    
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group col mb-0">
+            <p><label class="form-label" for="{{ form.title.id_for_label }}">{{form.title.label}}: </label>{{ form.title }}</p>
+            <div class="form-error">{{ form.title.errors }}</div>
+        </div>
+      </div>
+
+      {{ form.baseAirport}}
+
+      {% comment %} Кэшируем только нужные данные {% endcomment %}
+      {% comment %} {% include 'timetable/edit_data/cache_airports_choice_viewForm.html' %}  {% endcomment %}
+  
+      <div class="form-row">
+        <div class="form-group col mb-0">
+            <p><label class="form-label" for="{{ form.date_start.id_for_label }}">{{form.date_start.label}}: </label>{{ form.date_start }}</p>
+            <div class="form-error">{{ form.date_start.errors }}</div>
+        </div>
+        <div class="form-group col mb-0">
+            <p><label class="form-label" for="{{ form.date_end.id_for_label }}">{{form.date_end.label}}: </label>{{ form.date_end }}</p>
+            <div class="form-error">{{ form.date_end.errors }}</div>
+        </div>
+        <div class="form-group col">
+            <p><label class="form-label" for="{{ form.is_used.id_for_label }}">{{form.is_used.label}}: </label><div>{{ form.is_used }}</div></p>
+            <div class="form-error">{{ form.is_used.errors }}</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="meta"></div>  
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Обновить</button>
+    </div>
+    
+
+{% comment %}        
+    <div class='val_forms' hidden>
+        <div id="{{form.title.label}}" class="val_field">{{ form.title.value }}</div>
+        <div id="{{form.baseAirport.label}}" class="val_field">{{ form.baseAirport.value }}</div>
+    </div> {% endcomment %}
+  </form>
+  
+  
+
+  
+  <script> 
+    // Массив классов, к которым нужно применить изменения
+    var classesToApply = [
+    'id_ressource',
+    'id_fleet',
+    'id_airline',
+    'id_type',
+    'id_country',
+    'id_city',
+    'id_baseAirport',
+    ];
+
+    // Применяем атрибуты и selectpicker ко всем элементам по классам
+    $.each(classesToApply, function(index, className) {
+      $('#' + className).attr('data-live-search', 'true');
+      $('#' + className).attr('data-size', 9);
+      $('#' + className).selectpicker({ 
+          noneResultsText: '   Результатов нет',
+      });
+    });
+
+    
+    $('#id_is_used').removeClass('form-control')
+      
+    //Создаем операцию до валидации формы
+    $("form").submit(function(){
+        $('#meta').text('Пожалуйста не закрывайте страницу')
+        $('#meta').addClass('alert alert-warning h6')
+        $('button[type="submit"]').prop( "disabled", true);
+    });
+
+
+    {% comment %} // вставляем значения в закэшированную форму
+    $('div.val_forms div').each(function () { 
+      $('#'+$('label:contains('+ $(this).attr('id') +')').attr('for')).val('')
+      $('#'+$('label:contains('+ $(this).attr('id') +')').attr('for')).selectpicker('refresh'); 
+    });  {% endcomment %}
+
+
+
+  $('#id_date_start, #id_date_end, #id_is_used').change(function () {
+    if ($('#id_date_start').val() != '' && $('#id_date_end').val() != '' && $('#id_is_used').prop('checked') == true)
+    {
+      check_active_timetableList_ajax()
+    } else {
+      $('#meta').text('')
+      $('#meta').removeClass('alert alert-danger h6')
+      $('button[type="submit"]').prop( "disabled", false);
+    }
+  });
+  
+  function check_active_timetableList_ajax () {
+    $.ajax({                       
+      url: "{% url 'timetable:check_active_timetableList_ajax' %}",                 
+      data: {
+        'id_date_start': $('#id_date_start').val(),
+        'id_date_end': $('#id_date_end').val(),
+      },
+      success: function (data) { 
+        console.log(data, data['status'])
+        if (data['status'] == true)
+        {
+          $('#meta').text('На выбранный диапазон уже существует активное расписание')
+          $('#meta').addClass('alert alert-danger h6')
+          $('button[type="submit"]').prop( "disabled", true);
+        } else {
+          $('#meta').text('')
+          $('#meta').removeClass('alert alert-danger h6')
+          $('button[type="submit"]').prop( "disabled", false);
+        }
+      }
+    });
+  }
+  </script>

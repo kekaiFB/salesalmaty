@@ -1,0 +1,27 @@
+<!-- Кнопка-триггер модального окна -->
+<button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Инструкции
+</button>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Аналитика расписания</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <div id="instsructions_graphic_alert" class="alert alert-success h5 m-4 mt-0 alert-dismissible fade show" role="alert">
+          Управляйте графиком с помощью стрелок ⬆️⬇️⬅️➡️ и колесика мыши
+       </div>
+       {% comment %} <div id="instsructions_graphic_alert" class="alert alert-success h5 m-4 mt-0 alert-dismissible fade show" role="alert">
+         Для того чтобы программа смогла выгрузить время с рейса и его ТГО, у рейса должно быть время прилета
+      </div> {% endcomment %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>

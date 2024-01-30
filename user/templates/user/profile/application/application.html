@@ -1,0 +1,60 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+        <div class="models-content">
+            <div class="row h2 justify-content-center mt-4 alert text-dark">
+                    Заявки на удаление
+            </div>
+            <div class="row h4 ml-3 mr-3 mt-2 bg-white rounded border p-4 mt-5">
+                <div class="col text-center">
+                    <a class="ml-2 h2 nav-link" href="{% url 'user:applications-tgo' %}"><button class="button-52" role="button">ТГО</button></a>
+                </div>
+                <div class="col h2 text-danger mt-4">
+                    {% if applications_tgo != 0 %}
+                        {{applications_tgo}}
+                    {% endif %}
+                </div>
+                <div class="col">
+                </div>
+            </div>
+            <div class="row h4 ml-3 mr-3 mt-2 bg-white rounded border p-4">
+                <div class="col text-center">
+                    <a class="ml-2 h2 nav-link" href="{% url 'user:applications-timetable' %}"><button class="button-52" role="button">Расписание</button></a>
+                </div>
+                <div class="col h2 text-danger">
+                    {% if applications_timetable != 0 %}
+                        {{applications_timetable}}
+                    {% endif %}
+                </div>
+                <div class="col">
+                </div>
+            </div>
+            <div class="row h4 ml-3 mr-3 mt-2 bg-white rounded border p-4">
+                <div class="col text-center">
+                    <a class="ml-2 h2 nav-link" href="{% url 'user:applications-humans' %}"><button class="button-52" role="button">Сотрудники</button></a>
+                </div>
+                <div class="col h2 text-danger">
+                    {% if applications_humans != 0 %}
+                        {{applications_humans}}
+                    {% endif %}
+                </div>
+                <div class="col">
+                </div>
+            </div>
+            <div class="row h4 ml-3 mr-3 mt-2 bg-white rounded border p-4">
+                <div class="col text-center">
+                    <a class="ml-2 h2 nav-link" href="{% url 'user:applications-forum' %}"><button class="button-52" role="button">Форум</button></a>
+                </div>
+                <div class="col h2 text-danger">
+                    {% if applications_forum != 0 %}
+                        {{applications_forum}}
+                    {% endif %}
+                </div>
+                <div class="col">
+                </div>
+            </div>
+        </div>
+{% endblock %} 
+
+

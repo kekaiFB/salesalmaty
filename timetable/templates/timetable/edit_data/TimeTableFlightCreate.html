@@ -1,0 +1,472 @@
+<form method="post">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h3 class="modal-title">Добавление записи <a class="btn btn-primary" target="_blank"  href="{% url 'timetable:airlines' %}">Справочники</a></h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+  </div>
+  
+  <div class="modal-body">
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+    </div>
+
+    <div class="alert alert-warning">
+    Пожалуйста, во избежание ошибок вводите данные последовательно (слева на право) (сверху - вниз)  
+    </div>
+
+    {% comment %} Кэшируем только нужные данные {% endcomment %}
+    {% include 'timetable/edit_data/cache_flight_form_field.html' %} 
+    {{ form.timetablelist }}
+    {{ form.company }}
+    
+    <div class="form-row">
+        <div class="form-group col">
+          <p><label class="form-label" for="{{ form.arrival_time.id_for_label }}">{{form.arrival_time.label}}: </label>{{ form.arrival_time }}</p>
+          <div class="form-error">{{ form.arrival_time.errors }}</div>
+        </div>
+        <div class="form-group col">
+          <p><label class="form-label" for="{{ form.departure_time.id_for_label }}">{{form.departure_time.label}}: </label>{{ form.departure_time }}</p>
+          <div class="form-error">{{ form.departure_time.errors }}</div>
+        </div>
+        <div class="form-group col form-check form-switch ">
+          <p><label class="form-label" for="{{ form.next_day_status.id_for_label }}">{{form.next_day_status.label}}: </label><br>{{ form.next_day_status }}</p>
+          <div class="form-error">{{ form.next_day_status.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <p><label class="form-label" for="{{ form.start_register_time.id_for_label }}">{{form.start_register_time.label}}: </label>{{ form.start_register_time }}</p>
+            <div class="form-error">{{ form.start_register_time.errors }}</div>
+        </div>
+        <div class="form-group col">
+          <p><label class="form-label" for="{{ form.end_register_time.id_for_label }}">{{form.end_register_time.label}}: </label>{{ form.end_register_time }}</p>
+          <div class="form-error">{{ form.end_register_time.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6 mb-0">
+            <p><label class="form-label" for="{{ form.date_start.id_for_label }}">{{form.date_start.label}}: </label>{{ form.date_start }}</p>
+            <div class="form-error">{{ form.date_start.errors }}</div>
+        </div>
+        <div class="form-group col-md-6 mb-0">
+          <p><label class="form-label" for="{{ form.date_end.id_for_label }}">{{form.date_end.label}}: </label>{{ form.date_end }}</p>
+          <div class="form-error">{{ form.date_end.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+          <p><label class="form-label" for="{{ form.tgo.id_for_label }}">{{form.tgo.label}}:<a class="text-decoration-none" target="_blank" href="{% url 'table_tgo:index' %}">➕</a> </label>{{ form.tgo }}</p>
+          <div class="form-error">{{ form.tgo.errors }}</div>
+          </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+            <p><label class="form-label" for="{{ form.timetablestatusight.id_for_label }}">{{form.timetablestatusight.label}}: </label>{{ form.timetablestatusight }}</p>
+            <div class="form-error">{{ form.timetablestatusight.errors }}</div>
+          </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+            <p><label class="form-label" for="{{ form.comment.id_for_label }}">{{form.comment.label}}: </label>{{ form.comment }}</p>
+            <div class="form-error">{{ form.comment.errors }}</div>
+          </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col form-control m-1">
+            <p><label class="form-label" for="{{ form.monday.id_for_label }}">{{form.monday.label}}: </label>{{ form.monday }}</p>
+            <div class="form-error">{{ form.monday.errors }}</div>
+        </div>
+        <div class="form-group col form-control m-1">
+            <p><label class="form-label" for="{{ form.tuesday.id_for_label }}">{{form.tuesday.label}}: </label>{{ form.tuesday }}</p>
+            <div class="form-error">{{ form.tuesday.errors }}</div>
+        </div>
+        <div class="form-group col form-control m-1">
+            <p><label class="form-label" for="{{ form.wednesday.id_for_label }}">{{form.wednesday.label}}: </label>{{ form.wednesday }}</p>
+            <div class="form-error">{{ form.wednesday.errors }}</div>
+        </div>
+        <div class="form-group col form-control m-1">
+            <p><label class="form-label" for="{{ form.thursday.id_for_label }}">{{form.thursday.label}}: </label>{{ form.thursday }}</p>
+            <div class="form-error">{{ form.thursday.errors }}</div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col form-control m-1">
+            <p><label class="form-label" for="{{ form.friday.id_for_label }}">{{form.friday.label}}: </label>{{ form.friday }}</p>
+            <div class="form-error">{{ form.friday.errors }}</div>
+        </div>
+        <div class="form-group col form-control m-1">
+            <p><label class="form-label" for="{{ form.saturday.id_for_label }}">{{form.saturday.label}}: </label>{{ form.saturday }}</p>
+            <div class="form-error">{{ form.saturday.errors }}</div>
+        </div>
+        <div class="form-group col form-control m-1">
+            <p><label class="form-label" for="{{ form.sunday.id_for_label }}">{{form.sunday.label}}: </label>{{ form.sunday }}</p>
+            <div class="form-error">{{ form.sunday.errors }}</div>
+        </div>
+    </div>
+    <div id="meta"></div>
+    <div id="group" hidden>{{user_groups}}</div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Создать</button>
+  </div>
+
+</form>
+
+<script>
+  var queryset = []
+  $.ajax({    
+    url: "{% url 'timetable:get_airlane_information'  %}",                  
+    success: function (data) {  
+      queryset = data.queryset
+    }
+  });
+  country_airport = $.map(  $('span.country'), function( val, i ) {
+      return {
+        country_type: val.dataset.country_type,
+        airport: val.dataset.airport
+      };
+  });
+  
+
+
+ 
+  $('#id_departurelAirport, #id_arrivalAirport').change(function () {
+    check_flight()
+  });
+
+  function check_flight () {
+    //Кнопка отправки
+    if ($('#id_arrivalAirport').val() == '' && $('#id_departurelAirport').val() == '')
+    {
+      $('button[type="submit"]').prop( "disabled", true);
+    } else {
+      $('button[type="submit"]').prop( "disabled", false);
+    }
+    var option_text = ''
+    
+    //Тип рейса
+    if ($('#id_arrivalAirport').val() == '' && $('#id_departurelAirport').val() != '') //заполнен только вылет
+    {
+      option_text = country_airport[country_airport.findIndex(c => c.airport == $('#id_departurelAirport').val())].country_type + ' начальный'
+    }
+    else if ($('#id_departurelAirport').val() == '' && $('#id_arrivalAirport').val() != '') //заполнен только прилет
+    {
+      option_text = country_airport[country_airport.findIndex(c => c.airport == $('#id_arrivalAirport').val())].country_type + ' конечный'
+    }
+    else if ($('#id_departurelAirport').val() != '' && $('#id_arrivalAirport').val() != '') //заполнены оба поля
+    {
+      option_text = country_airport[country_airport.findIndex(c => c.airport == $('#id_departurelAirport').val())].country_type + ' -> ' + country_airport[country_airport.findIndex(c => c.airport == $('#id_arrivalAirport').val())].country_type + ' оборотный'
+    }
+    else if ($('#id_departurelAirport').val() == '' && $('#id_arrivalAirport').val() == '') // не заполнены оба поля
+    {
+      option_text = ''
+    } 
+    
+    if (option_text == '')
+    {
+      $('#id_type_flight').val('')
+
+    } else {
+      $('#id_type_flight option:contains('+ option_text +')').prop('selected', true);
+      $('#id_type_flight').trigger('change');
+    }
+    $('#id_type_flight').selectpicker('refresh');           
+
+  }
+
+  // Массив классов, к которым нужно применить изменения
+  var classesToApply = [
+  'id_type',
+  'id_airline',
+  'id_airplane',
+  'id_equipmentAirplane',
+  'id_departurelAirport',
+  'id_arrivalAirport',
+  'id_city',
+  'id_type_flight'
+  ];
+
+  // Применяем атрибуты и selectpicker ко всем элементам по классам
+  $.each(classesToApply, function(index, className) {
+    $('#' + className).attr('data-live-search', 'true');
+    $('#' + className).attr('data-size', 9);
+    $('#' + className).selectpicker({ 
+        noneResultsText: '   Результатов нет',
+    });
+  });
+
+  
+
+  // меняем данные для ВС
+  $('#id_airline').change(function () {
+    get_airplane_ajax()
+  });
+  // меняем данные для ВС
+
+  function get_airplane_ajax () {
+    $.ajax({                       
+      url: "{% url 'timetable:get_airplane_ajax' %}",                 
+      data: {
+        'id_airline': $("#id_airline").val(),  
+      },
+      success: function (data) { 
+      
+        var select = $("#id_airplane");
+
+        // Очистите существующие элементы (за исключением первой опции)
+        select.find("option:not(:first)").remove();
+        // Добавьте новые опции на основе полученных данных
+        $.each(data.queryset, function(index, item) {
+            select.append($('<option>', {
+                value: item.id,
+                text: item.name
+            }));
+        });
+        $('#id_airplane').selectpicker('refresh');  
+
+        $("#id_equipmentAirplane").find("option:not(:first)").remove();
+        $('#id_equipmentAirplane').selectpicker('refresh');  
+      }
+    });
+  }
+
+
+  //   // меняем данные для комплектации
+  $('#id_airplane').change(function () {
+    get_equipmentAirplane_ajax()
+  });
+  
+  function get_equipmentAirplane_ajax () {
+      $.ajax({                       
+        url: "{% url 'timetable:get_equipmentAirplane_ajax' %}",                 
+        data: {
+          'id_airplane': $("#id_airplane").val(),  
+        },
+        success: function (data) { 
+        
+          var select = $("#id_equipmentAirplane");
+
+          // Очистите существующие элементы (за исключением первой опции)
+          select.find("option:not(:first)").remove();
+          // Добавьте новые опции на основе полученных данных
+          $.each(data.queryset, function(index, item) {
+              select.append($('<option>', {
+                  value: item.id,
+                  text: item.name
+              }));
+          });
+          $('#id_equipmentAirplane').selectpicker('refresh');  
+        }
+      });
+  }
+  
+
+  // уникальное имя+рейс
+  $('#id_title, #id_airline').change(function () {
+    unique_title_airline()
+  });
+  
+  function unique_title_airline () {
+    if ($('#id_title').val()!='' && $('#id_airline').val()!='')
+    {
+      $.ajax({                       
+        url: "{% url 'timetable:load_ajax_unique_title_airline' %}",                 
+        data: {
+          'id_title': $("#id_title").val(),  
+          'id_airline': $("#id_airline").val(),  
+        },
+        success: function (data) { 
+          if (data.count != '') 
+          {
+            $('#meta').text('Рейс с такой парой значений (название авиакомпания) уже существует')
+            $('#meta').addClass('alert alert-danger h6')
+            $('button[type="submit"]').prop( "disabled", true);
+          } else {
+            $('#meta').text('')
+            $('#meta').removeClass('alert alert-danger h6')
+            $('button[type="submit"]').prop( "disabled", false);
+          }
+        }
+      });
+    }
+  }
+
+
+
+
+  
+  $("input[type='checkbox']").addClass('ml-2');
+
+
+   
+   // Массив классов, к которым нужно применить изменения
+   var classesToApplyTimetable = [
+    'id_tgo',
+    'id_timetablestatusight',
+   ];
+ 
+   // Применяем атрибуты и selectpicker ко всем элементам по классам
+   $.each(classesToApplyTimetable, function(index, className) {
+     $('#' + className).attr('data-live-search', 'true');
+     $('#' + className).attr('data-size', 9);
+     $('#' + className).selectpicker({ 
+         noneResultsText: '   Результатов нет',
+     });
+   });
+   
+   var flight_type = '';
+   $('#id_departure_time').change(function () {
+     departure_time_registration()
+   });
+
+  // уникальное имя+рейс
+   $('#id_title, #id_airline').change(function () {
+    unique_title_airline()
+  });
+  
+  function unique_title_airline () {
+    if ($('#id_title').val()!='' && $('#id_airline').val()!='')
+    {
+      $.ajax({                       
+        url: "{% url 'timetable:load_ajax_unique_title_airline' %}",                 
+        data: {
+          'id_title': $("#id_title").val(),  
+          'id_airline': $("#id_airline").val(),  
+        },
+        success: function (data) { 
+          if (data.count != '') 
+          {
+            $('#meta').text('Рейс с такой парой значений (название авиакомпания) уже существует')
+            $('#meta').addClass('alert alert-danger h6')
+            $('button[type="submit"]').prop( "disabled", true);
+          } else {
+            $('#meta').text('')
+            $('#meta').removeClass('alert alert-danger h6')
+            $('button[type="submit"]').prop( "disabled", false);
+          }
+        }
+      });
+    }
+  }
+
+
+   // показываем или скрываем ТГО
+  $('#id_airline, #id_airplane, #id_type_flight').change(function () {
+    get_tgo_ajax()
+  });
+
+  // время вылета, регистрации
+  function get_tgo_ajax () {
+    if ($('#id_airline').val()!='' && $('#id_airplane').val()!='' && $('#id_type_flight').val()!='')
+    {
+      $.ajax({                       
+        url: "{% url 'timetable:load_ajax_fligh_data_field' %}",                 
+        data: {
+          'id_airplane': $("#id_airplane").val(),  
+          'id_airline': $("#id_airline").val(),  
+          'id_type_flight': $("#id_type_flight").val(),  
+        },
+        success: function (data) { 
+            var select = $("#id_tgo");
+
+            // Очистите существующие элементы (за исключением первой опции)
+            select.find("option:not(:first)").remove();
+            // Добавьте новые опции на основе полученных данных
+            $.each(data.queryset, function(index, item) {
+              console.log(item, item.name)
+                select.append($('<option>', {
+                    value: item.id,
+                    text: item.name
+                }));
+            });
+            $('#id_tgo').selectpicker('refresh');       
+            if( $('#id_departure_time').val() != '')
+            {
+              departure_time_registration()
+            }     
+        }
+      });
+    }
+  }
+
+  // время вылета, регистрации
+  function departure_time_registration () {
+    if ($('#id_departure_time').val() != '')
+    {
+      if( $('#id_departure').val() == '' ||  $('#id_arrival').val() == '')
+      {
+        flight_type = 'Внутренний'
+      } else if ($('#id_departure').val() != '' &&  $('#id_arrival').val() != '') {
+        if( $("#id_departure option[value='" + $('#id_departure').val() + "']").text().split(' ')[0] ==
+        $("#id_arrival option[value='" + $('#id_arrival').val() + "']").text().split(' ')[0] )
+        { 
+          flight_type = 'Внутренний'
+        } else 
+        {
+          flight_type = 'Международный'
+        }
+      }      
+  
+        Toast.setTheme(TOAST_THEME.DARK);
+        Toast.setPlacement(TOAST_PLACEMENT.TOP_RIGHT);
+        Toast.create("Статус полета", flight_type, TOAST_STATUS.SUCCESS, 3000);
+  
+        var departure_time = $('#id_departure_time').val()
+        var date = moment(departure_time, 'HH:mm')
+        if (flight_type == 'Международный') {
+          $("#id_start_register_time").val(date.subtract(3, 'hours').format('HH:mm')) 
+          $("#id_end_register_time").val(moment(departure_time, 'HH:mm').subtract(40, 'minutes').format('HH:mm')) 
+        } 
+        else if (flight_type == 'Внутренний') {
+          $("#id_start_register_time").val(date.subtract(2, 'hours').format('HH:mm')) 
+          $("#id_end_register_time").val(moment(departure_time, 'HH:mm').subtract(40, 'minutes').format('HH:mm')) 
+        }
+    }
+  }
+  
+    //Создаем операцию до валидации формы
+    $("form").submit(function(){
+      $('#meta').text('Пожалуйста не закрывайте страницу')
+      $('#meta').addClass('alert alert-warning h6')
+    //  $('button[type="submit"]').prop( "disabled", true);
+  });
+
+  
+  $('#id_departure_time, #id_arrival_time').change(function () {
+    check_next_day_status() 
+  });
+
+  function check_next_day_status () {
+    var id_departure_time = $('#id_departure_time').val()
+    var id_arrival_time = $('#id_arrival_time').val()
+
+    if (id_departure_time != '' && id_arrival_time != '')
+    {
+      // Разбивка строк на часы и минуты
+      var departure_time_parts = id_departure_time.split(':');
+      var arrival_time_parts = id_arrival_time.split(':');
+
+      // Получение часов и минут
+      var departure_hours = parseInt(departure_time_parts[0]);
+      var departure_minutes = parseInt(departure_time_parts[1]);
+      var arrival_hours = parseInt(arrival_time_parts[0]);
+      var arrival_minutes = parseInt(arrival_time_parts[1]);
+
+      // Создание объектов Date для departure и arrival time
+      var departure_time = new Date(0, 0, 0, departure_hours, departure_minutes);
+      var arrival_time = new Date(0, 0, 0, arrival_hours, arrival_minutes);
+
+      // Проверка, если arrival_time меньше departure_time
+      if (arrival_time > departure_time) {
+        // если arrival меньше departrure то след день
+        $('#id_next_day_status').prop('checked', true);
+      } else {
+        $('#id_next_day_status').prop('checked', false);
+      }
+    }
+  }
+
+  
+</script> 

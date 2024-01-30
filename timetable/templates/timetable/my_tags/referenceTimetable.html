@@ -1,0 +1,18 @@
+
+<span class="dropdown">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Справочники
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="{% url 'timetable:airlines' %}">Авиакомпании</a>
+        <a class="dropdown-item" href="{% url 'timetable:fleet' %}">Воздушные судна</a>
+        <a class="dropdown-item" href="{% url 'timetable:airplane' %}">Флот</a>
+        <a class="dropdown-item" href="{% url 'timetable:country' %}">Страны</a>
+        <a class="dropdown-item" href="{% url 'timetable:city' %}">Города</a>
+        <a class="dropdown-item" href="{% url 'timetable:airport' %}">Аэропорты</a>
+        <a class="dropdown-item" href="{% url 'timetable:flight' %}">Рейсы</a>
+        <hr>
+        <a class="dropdown-item" href="{% url 'timetable:timetableStatus' %}">Статусы Рейсов</a>
+        <a class="dropdown-item" href="{% url 'timetable:type_flight' %}">Типы Рейсов</a>
+    </div>
+</span> 

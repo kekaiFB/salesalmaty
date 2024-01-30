@@ -1,0 +1,11 @@
+<td style="background-color: {{ style }};" 
+    class=
+        "{% for c in clas %}  
+        {{ c }}
+        {% endfor %}">
+    {% if t_label == 'date_start' or  t_label == 'date_end' %}
+        {{ t_value|date:'d-m-Y' }}
+    {% else %}
+        {{ t_value }}
+    {% endif %}
+</td>

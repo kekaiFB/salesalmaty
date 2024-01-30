@@ -1,0 +1,73 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+{% load user_tags %}
+
+{% block list %}
+    <script>
+        var data = {
+            rows: [
+                {% for entry in row_field_checked %}
+                {
+                    office: "{{ entry.office }}",
+                    post: "{{ entry.post }}",
+                    fio: "{{ entry.fio|default:"" }}",
+                    // employee_number: "{{ entry.employee_number|default:"" }}",
+                    exists: {{ entry.exists|lower }},
+                    options: [{% for option in entry.existing_options %}"{{ option }}"{% if not forloop.last %},{% endif %}{% endfor %}]
+                },
+                {% endfor %}
+            ]
+        };
+    </script>
+
+    <div hidden class="modify_column">{{modify_column}}</div>
+    <input hidden class="filed_name_input" value={{field_name}}>
+
+    <a class="btn btn-outline-primary" href={% url 'user:import-snj-detail' import_id %}>Назад</a>
+
+    {% csrf_token %}
+    <div class="container mt-4 rounded">
+        <div class="p4 h3 m-2 mt-3 text-center">
+            Проверка данных в столбце "{{ field_name }}"
+            <button class="btn btn-primary calculate_fio mr-3">Расчитать ФИО</button>
+        </div>
+
+        <table id="data-table-fio" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="column1">Статус</th>
+                    <th class="column2">Подразделение</th>
+                    <th class="column3">Должность</th>
+                    <th class="column4">ФИО</th>
+                    {% comment %} <th class="column5">Номер сотрудника</th> <!-- Добавленный столбец --> {% endcomment %}
+                    <th class="column6">Существует</th>
+                    <th class="column7">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Записи будут добавляться динамически с помощью JavaScript -->
+            </tbody>
+        </table>
+        <button id="applyChanges" class="btn btn-success" style="display: none;">Применить изменения</button>
+    </div>
+
+    <!-- Модальное окно для редактирования ФИО -->
+    <div class="modal" tabindex="-1" id="textEditorModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактировать ФИО</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="textEditor" class="form-control">
+                    <div id="textError" class="text-danger h6 mt-1" style="display: none;">Такая запись уже существует!</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="saveTextEditor">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

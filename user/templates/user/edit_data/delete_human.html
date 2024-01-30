@@ -1,0 +1,19 @@
+{% load widget_tweaks %}
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h3 class="modal-title">Удаление сотрудника</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button> 
+  </div>
+
+  <div class="modal-body">
+    <p>Вы действительно хотите удалить сотрудника навсегда?</p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-danger">Удалить навсегда</button>
+  </div>
+
+</form>

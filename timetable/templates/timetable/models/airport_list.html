@@ -1,0 +1,70 @@
+{% extends "timetable/models/model_base.html" %}
+{% load tgo_tags %}
+
+{% load cache %}
+
+{% block list %}
+   <div class="mt-2">
+      
+      <a class="btn btn-outline-primary" href={{prev_url}}>Назад</a>
+      <span id="dt_resetFilter" class="btn btn-warning text-dark">Сбросить фильтры</span>
+      {% if request.user.is_superuser %}
+         {% add_button_text 'timetable:add_airport' %}
+      {% endif %}
+   </div>
+   <hr>
+   {% cache 360000 airport_objects %}
+
+      <table class="table rounded-lgn table_dt col-12 bg-white" style="width:100%">
+      <thead> 
+         <tr>
+            <th>Название</th>
+            <th>Город</th>
+            <th>Страна</th>
+            <th>Код ИАТО</th>
+            <th>Код ИКАО</th>
+            <th>Код (рус.)</th>
+            {% if request.user.is_superuser %}
+               <th></th>
+               <th></th>
+            {% endif %}
+         </tr>
+      </thead>
+      <tbody>
+         {% for a in airport %}  
+            <tr>
+               <td>{% if a.title %}{{ a.title }}{% endif %}</td>
+               <td>{% if a.city %}{{ a.city }}{% endif %}</td>
+               <td>{% if a.city and a.city.country %}{{ a.city.country }}{% endif %}</td>
+               <td>{% if a.code_iata %}{{ a.code_iata }}{% endif %}</td>
+               <td>{% if a.code_ikao %}{{ a.code_ikao }}{% endif %}</td>
+               <td>{% if a.code_ru %}{{ a.code_ru }}{% endif %}</td>
+               {% if request.user.is_superuser %}
+                  <td>
+                        {% edit_button 'timetable:edit_airport' a.id %}
+                  </td>
+                  <td>
+                        {% del_button 'timetable:delete_airport' a.id %}
+                  </td>
+               {% endif %}
+            </tr>     
+         {% endfor %}
+      </tbody>
+      <tfoot> 
+         <tr>
+            <th>Название</th>
+            <th>Город</th>
+            <th>Страна</th>
+            <th>Код ИАТО</th>
+            <th>Код ИКАО</th>
+            <th>Код (рус.)</th>
+            {% if request.user.is_superuser %}
+               <th></th>
+               <th></th>
+            {% endif %}
+         </tr>
+      </tfoot>
+      </table>
+   {% endcache %}
+
+{% endblock %}

@@ -1,0 +1,198 @@
+
+{% extends "table_tgo/base.html" %}
+{% load tgo_tags %} 
+{% block content %}
+        <div class="container m-0 p-0">
+            <div class="row m-2 doc_1">  
+                <div class="col-2" align="right"></div>
+                <div class="col-4" align="right">
+                    <div align="center" class="sohlasovanie1 bg-white rounded m-0 p-0" style="display: none;">
+                        <h2>Согласовано </h2>
+                        <h6 class="dolznost1">{% if tgo_home.dolznost1 %}{{tgo_home.dolznost1}}{% endif %}</h6>
+                        <h6 class="company1">{% if tgo_home.company1 %}{{tgo_home.company1}}{% endif %}</h6>
+                        <h6></h6>
+                        <h6 class="fio1">{% if tgo_home.fio1 %}______________{{tgo_home.fio1}}{% endif %}</h6>
+                        <h6 class="date_1">{% if tgo_home.date_1 %}{{tgo_home.date_1|date:'d-m-Y'}}{% endif %}</h6>
+                        <span class="save_1 btn btn-success btn-sm">Сохранить</span></h4>
+                        {% comment %} <span class="text-light"><h4 align="right" class="sohlasovanie_edit_button1">⚙️</h4></span> {% endcomment %}
+                    </div>
+                </div>
+                <div class="col" align="right"></div>
+
+                <div class="col-4" align="center">
+                    <div align="center" class="sohlasovanie2 bg-white rounded m-0 p-0" style="display: none;">
+                        <h2>Утверждено</h2>
+                        <h6 class="dolznost2">{% if tgo_home.dolznost2 %}{{tgo_home.dolznost2}}{% endif %}</h6>
+                        <h6 class="company2">{% if tgo_home.company2 %}{{tgo_home.company2}}{% endif %}</h6>
+                        <h6></h6>
+                        <h6 class="fio2">{% if tgo_home.fio2 %}______________{{tgo_home.fio2}}{% endif %}</h6>
+                        <h6 class="date_2">{% if tgo_home.date_2 %}{{tgo_home.date_2|date:'d-m-Y'}}{% endif %}</h6>
+                        <span class="save_2 btn btn-success btn-sm">Сохранить</span></h4>
+                        {% comment %} <span class="text-light sohlasovanie_span"><h4 align="right" class="sohlasovanie_edit_button2">⚙️</h4></span> {% endcomment %}
+                </div>
+                <div class="col" align="right"></div>
+            </div>
+            <div class="row m-2  doc_2">  
+                <div class="col">  
+                </div>
+                <div class="col-11"> 
+                    <div class="d-flex align-items-center justify-content-center">
+                        <span id="title" class="h3 m-2">{{ title_TGO }}</span>
+                        <h4 class="title_edit mt-3">⚙️</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2 edit_version" style="display: none">  
+                <div class="d-flex align-items-center justify-content-center">
+                    <span class="edit_mode h5 m-2"></span>
+                    <select class="select_history_tgo selectpicker show-tick" data-live-search="true" placeholder="Версия не выбрана">
+                        <option val="this">Используемая</option>
+                    </select>
+                    <span
+                        class="btn btn-outline-primary btn-sm tgo_save_version ml-2"
+                        data-toggle="confirmation"
+                        data-btn-ok-label="Да" 
+                        data-btn-ok-class="btn btn-outline-success"
+                        data-btn-cancel-label="Нет" 
+                        data-btn-cancel-class="btn btn-outline-secondary"
+                        data-title="Вы уверены что вы хотите сохранить верисю?">
+                        Сохранить версию
+                    </span>
+                    <span
+                        class="btn btn-outline-danger btn-sm tgo_delete_version"
+                        data-toggle="confirmation"
+                        data-btn-ok-label="Да" 
+                        data-btn-ok-class="btn btn-outline-danger"
+                        data-btn-cancel-label="Нет" 
+                        data-btn-cancel-class="btn btn-outline-success"
+                        data-title="Вы уверены что вы хотите удалить верисю?"
+                        style="display: none;">
+                        Удалить версию
+                    </span>
+                    <span
+                        class="btn btn-outline-primary btn-sm tgo_replace_this_version"
+                        data-toggle="confirmation"
+                        data-btn-ok-label="Да" 
+                        data-btn-ok-class="btn btn-outline-success"
+                        data-btn-cancel-label="Нет" 
+                        data-btn-cancel-class="btn btn-outline-secondary"
+                        data-title="Текущая версия сохранится как история, а выбранная версия станет текущей"
+                        style="display: none;">
+                        Сделать текущей версией
+                    </span>
+                </div>
+            </div>
+            <div class="row m-2" style="display: none;">  
+                {% history_tgo op res op_history res_history users as history_tables %}
+                {% for t_lists in history_tables.values %}  
+                    <table id="{{t_lists.0.15.key_id}}" name="{{t_lists.0.14.key_name}}" class="history_tgo">
+                        <tbody>
+                            {% for t in t_lists %}
+                                <tr>
+                                    <td>{{t.0.order}}</td>
+                                    <td>{{t.1.op}}</td>
+                                    <td>{{t.2.res}}</td>
+                                    <td>{{t.3.count}}</td>
+                                    <td>{{t.4.comment}}</td>
+                                    <td>{{t.5.time_start}}</td>
+                                    <td>{{t.6.time_end}}</td>
+                                    <td>{{t.7.time_lenght}}</td>
+                                    <td>{{t.8.office}}</td>
+                                    <td class="id">{{t.9.id}}</td>
+                                    <td class="status_elem">{{t.10.status_elem}}</td>
+                                    <td class="author">{{t.author}}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endfor %}
+            </div>
+            <div class="row m-2">  
+                <div class="col-3">
+                    {% unique_ressource tgo_objects as ressources %} 
+                    <select id="ressource_filter_select" data-placeholder="..." multiple="multiple" style="display: none;">
+                        {% for ressource in ressources %}  
+                                <option val="{{ ressource }}">{{ ressource }}</option>
+                        {% endfor %}
+                    </select>
+          
+                    {% unique_operation tgo_objects as operations %} 
+                    <select id="operation_filter_select" data-placeholder="..." multiple="multiple" style="display: none;">
+                        {% for operation in operations %}  
+                                <option val="{{ operation }}">{{ operation }}</option>
+                        {% endfor %}
+                    </select>
+                </div>  
+                <div class="col-12 tgo_hide_buttons">
+                    <span class="mt-1 btn btn-warning text-dark tgo-resetFilter ml-2 btn-sm">Сбросить фильтры</span>
+                    <span class="mt-1 btn btn-outline-warning tgo-hide_all_res ml-1 btn-sm">Скрыть ресурсы</span>
+                    {% include 'table_tgo/data/tgo/instructions.html' %} 
+                    <span id="text_save_status" style="display: none;"></span>
+                </div>               
+            </div>
+            <div class="row  doc_3">
+                <div class="col">   
+                </div>
+                <div class="col-10 alert bg-white rounded p-0 meta_tgo" style="display: none;"> 
+                    <div class="row m-2">
+                        <table class="table">
+                            {% for excel_data in excel_data_list %}
+                                <tr>
+                                    <td class="{{ excel_data.class_title }}">{{ excel_data.title }}</td>
+                                    <td class="{{ excel_data.class_content }}"> 
+                                        {% if excel_data.data_content %}
+                                            {% if excel_data.data_content|length > 0 %}
+                                                {% for t in excel_data.data_content %}
+                                                    {{ t }}
+                                                    {% if not forloop.last %},{% endif %}
+                                                    {% if forloop.counter|divisibleby:5 %}<br>{% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                            {% endif %}
+                                        {% else %}
+                                            {% if excel_data.data_object %}
+                                                {{excel_data.data_object}}
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        
+                    </div>                    
+                </div>
+            </div>
+            <div class="row note_row">
+                <div class="col"></div>
+                <div class="col-10 mt-5">  
+                    <div class="alert bg-white rounded mt-3 meta_tgo" style="display: none;">
+                        <h4 class="note_text">Примечания
+                            {% comment %} <span class="note_edit mt-3">⚙️</span> {% endcomment %}
+                            <span class="note_save btn btn-success btn-sm">Сохранить</span></h4>
+                            <div class="notes" contenteditable="true" multiline="true" style="white-space: pre-wrap;">{% if tgo_home.notes %}{{ tgo_home.notes | safe }}{% else %}Примечания...{% endif %}</div>
+                    </div> 
+                </div>
+            </div>
+
+            
+            <div class="row">
+                {% include 'table_tgo/data/tgo/graphic.html' %}
+                {% include 'table_tgo/data/tgo/tgo_ojects_table.html' %}
+            </div>
+        </div>
+        <div class="tgo_home_notes" hidden>
+            <div class="tgo_home_note mt-4">
+                {% if tgo_home.notes %}{{tgo_home.notes}}{% else %}Примечания...{% endif %}
+            </div>
+        </div>
+        <input type="hidden" id="tgo_id" value={{ tgo_id }} />
+        <input type="hidden" class="add_tgo_object modalButton" data-form-url="{% url  'table_tgo:create_tgo_object' tgo_id order %}" />
+        <input type="hidden" class="add_technology modalButton" data-form-url="{% url  'table_tgo:create_technology_tgo' tgo_id order %}" />
+        <input type="hidden" id="status_merge" value={{ status_merge }} />
+        <input type="hidden" id="technology_change" value={{ technology_change }} />
+        <input type="hidden" id="order_change" value={{ order_change }} />
+{% endblock %}
+
+

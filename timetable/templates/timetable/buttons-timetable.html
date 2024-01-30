@@ -1,0 +1,29 @@
+{% load tgo_tags %}
+{% load timetable_tags %}
+<h4 class="ml-2">
+    <span class="h4 title_timetable">{{title_timetable}}</span>
+    <span hidden class="h4 timetableList_date_start">{{timetableList.date_start}}</span>
+    <span hidden class="h4 timetableList_date_end">{{timetableList.date_end}}</span>
+    <a class="btn btn-outline-primary" href="{% url 'timetable:timetable_list' %}">Все расписания</a>
+    <br>
+    <div class="mt-2">
+        {% if 'timetable.add_flight' in perms %}
+            <a class="btn btn-primary modalButton" data-form-url="{% url 'timetable:add_timetable' timetable_id %}">Добавить рейс</a>
+            {% comment %} <a class="btn btn-outline-primary modalButton" data-form-url="{% url 'timetable:add_timetable_flight' timetable_id %}">Добавить рейс</a> {% endcomment %}
+        {% endif %}
+        <span>
+            <a class="btn btn-primary telegram_btn" href={% url 'timetable:timetable-telegram' %}>Телеграммы</a>
+        </span>
+        {% multiple_set_tgo_button %}
+        {% referenceTimetable %}
+        <span class="dropdown">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Экспорт
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item export_excel">Excel</a>
+            </div>
+        </span>             
+    </div>
+    <hr>
+</h4>

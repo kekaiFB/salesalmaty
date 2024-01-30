@@ -1,0 +1,103 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+   <a class="btn btn-outline-primary" href={% url 'user:import-humans' %}>Назад</a>
+
+   {% csrf_token %}
+   <div class="containter mt-4  rounded">
+      <div class="p4 h3 m-2 mt-3 text-center">
+         {{ import.title }}</a>
+      </div>
+      
+
+
+      <div class="row m-5 alert rounded bg-white">
+         <div class="row">
+             <div class="h3 m-2">Файлы:</div>
+         </div>
+         <div class="row">
+             <!-- Входной файл -->
+             <div class="col alert alert-warning m-3">
+                 <div class="container mt-1">
+                     <div class="card">
+                         <div class="card-header bg-light text-dark h5"> <!-- Добавлен заголовок для входного файла -->
+                             Входной файл
+                         </div>
+                         <div class="card-body">
+                           {% if import.input_file %}
+                              <div class="uploaded-file-container text-center">
+                                 <div style="display: inline-block; position: relative;"> <!-- Обертка для позиционирования кнопки удаления -->
+                                    <a href="{{ import.input_file.url }}" class="uploaded-file-link" download>
+                                       <i class="fa fa-file-download fa-3x" aria-hidden="true" style="vertical-align: middle;"></i><br> <!-- Иконка для файла -->
+                                       <span class="uploaded-file-name">{{ import.input_file.name|basename }}</span> <!-- Имя файла -->
+                                    </a>
+                                    {% if not import.output_file %}
+                                       <span class="text-danger delete-file-btn" style="position: absolute; top: 0; right: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path></svg></span>
+                                    {% endif %}
+                                 </div>
+                              </div>
+                           {% else %}
+                              <!-- Если файла нет, показываем область для загрузки -->
+                              <div class="d-flex justify-content-center align-items-center upload-drop-zone file_input_import" id="drop_zone">
+                                 <div class="text-center">
+                                       <i class="fa fa-file-upload fa-3x" aria-hidden="true"></i>
+                                       <p class="soft-font-text">Перетащите файл сюда или <span class="file-browse">кликните для выбора</span></p>
+                                       <!-- Input остается скрытым -->
+                                       <input type="file" id="file_input" class="d-none" accept=".txt">
+                                 </div>
+                              </div>
+                           {% endif %}
+                         </div>
+                     </div>
+                 </div>
+             </div>
+     
+             <!-- Иконка указатель -->
+             <div class="col-1 d-flex align-items-center justify-content-center">
+                 <i class="fa fa-arrow-right fa-3x" aria-hidden="true"></i> <!-- Иконка-указатель -->
+             </div>
+     
+             <!-- Выходной файл -->
+             <div class="col alert alert-success m-3"> <!-- Изменен цвет фона для выделения -->
+                 <div class="container mt-1">
+                     <div class="card">
+                         <div class="card-header bg-success text-white h5"> <!-- Добавлен заголовок для выходного файла -->
+                             Выходной файл
+                         </div>
+                         <div class="card-body">
+                             <!-- Содержимое для выходного файла (если есть скрипт или логика для этого) -->
+                             ...
+                             <!-- (Здесь может быть представление выходного файла или инструкции для пользователя) -->
+                             ...
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
+         {% if not import.output_file %}
+         <div class="row">
+             <div class="col-11"></div>
+             <div class="col text-center">
+                 <span class="btn btn-success start_import_button ml-1">Подготовить данные для импорта</span>
+             </div>
+         </div>
+         {% endif %}
+     </div>
+     
+     
+      {% comment %} 
+        <div class="row m-5 alert rounded bg-white div-chart-analitics">            
+            <div class="d-flex justify-content-center h2 alert alert-warning">
+                Точные данные 
+            </div>
+            <div class="ressurce_time_list">
+            </div>
+        </div>      
+      {% endcomment %}
+        
+   
+      
+   </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+        <div class="models-content">
+            <div class="row h2 justify-content-center mt-4 alert text-dark">
+                    Подразделения
+            </div>
+        </div>
+
+
+        <table class="table_dt_application table table-bordered table-hover table-condensed bg-white rounded-lg border border-white" style="width:100%">
+            <thead> 
+                <tr>
+                    <th>Подразделение</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for office in offices %} 
+                    <tr>  
+                        <td>
+                            <a class="ml-2 h2 nav-link" href={% url 'user:shift-office-detail' office.pk %}><button class="button-52" role="button">{{office}}</button></a>
+                        </td>
+                    </tr>  
+                {% endfor %}    
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Подразделение</th>
+                </tr>
+            </tfoot>
+        </table>
+
+{% endblock %} 
+
+

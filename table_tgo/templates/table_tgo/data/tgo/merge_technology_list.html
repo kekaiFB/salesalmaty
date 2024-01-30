@@ -1,0 +1,84 @@
+
+{% extends "table_tgo/base.html" %}
+{% load tgo_tags %} 
+{% block content %}
+
+        <div class="container rounded bg-white">
+            <div class="d-flex align-items-center justify-content-center">
+                <span id="title" class="h3 m-2">Слияние технологии "{{ technology.title }}" с ТГО "{{tgo.title}}" </span>
+                <h4 class="edit_merge mt-3">⚙️</h4>
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="col"></div>
+                <div class="col-5 merge_instructions alert alert-warning">
+                    При слияниии будут, ресурсы операций в технологии будут добавляться 
+                    к существующим операциям в ТГО. Если таких же операций в ТГО нету, 
+                    операции с ресурсами будут вставлены в конец ТГО
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="">
+                <h6 align="center" class="h5 text-primary">Зеленые таблицы редактируемые!</h6>
+            </div>
+            <div class="d-flex align-items-center justify-content-center p-2">
+                <a class="btn btn-primary btn-sm mr-5" href="{% url 'table_tgo:pref_tgo_merge' tgo.title  tgo.id 'open_add_technology' technology.id order  %}">Назад</a> 
+                {% if request.user == tgo.author%}
+                    <a class="btn btn-success btn-sm merge_finish" href="#">Слияние</a> 
+                {% endif %} 
+            </div>
+        </div>
+        <div class="container rounded mt-3">
+            {% merge_technology_list tgo_objects technology_objects order as lists_objects %}
+            {% for objects in lists_objects %}
+                    <div class="row alert bg-white">
+                        <div class="col-11 tables_{{forloop.counter}}_allTable">
+                            {% if objects|length == 2 %}
+                                <div class="alert alert-danger">
+                                    <h3 align="center">Технология</h3>
+                                    {% merge_table objects.1.0 forloop.counter %}
+                                </div>
+                                <div class="">
+                                    <h6 align="center" class="h5 text-primary">+</h6>
+                                </div>
+                                <div class="alert alert-danger">
+                                    <h3 align="center">ТГО </h3>
+                                    {% merge_table objects.0.0 %}
+                                </div>
+                                <div class="">
+                                    <h6 align="center" class="h5 text-primary">=</h6>
+                                </div>
+                                <div class="alert alert-success">
+                                    <h3 align="center">Слияние </h3>
+                                    {% merge_merge_table objects.1.0 objects.0.0 %}
+                                </div>
+                            {% else %}
+                            <div class="alert alert-success">
+                                <h3 align="center">Добавление в конец ТГО </h3>
+                                {% merge_table objects.1.0 0 objects.2  %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="tables_{{forloop.counter}} col alert alert-success h4 cancel_tables_button">✅</div>
+                        <div class="operation_{{forloop.counter}}" style="display:none;">{{objects.1.0}}</div>
+                    </div>
+            {% endfor %}
+        </div>
+
+<div class="container rounded">
+    <div class="d-flex align-items-center justify-content-center">
+        <a class="btn btn-primary btn-sm mr-5" href="{% url 'table_tgo:pref_tgo_merge' tgo.title  tgo.id 'open_add_technology' technology.id order  %}">Назад</a> 
+        {% if request.user == tgo.author%}
+            <a class="btn btn-success btn-sm merge_finish" href="#">Слияние</a> 
+        {% endif %}     
+    </div>
+</div>
+<input type="hidden" id="tgo_id" value={{ tgo_id }} />
+<input type="hidden" id="tgo" value={{ tgo }} />
+<input type="hidden" id="tgo_title" value="{{tgo.title}}" />
+<input type="hidden" id="id_tgo" value={{ tgo.id }} />
+<input type="hidden" value={{ request.user }} class="requestUser"/>
+<input type="hidden" name="author_tgo" value={{ author }}>
+
+{% endblock %}
+
+

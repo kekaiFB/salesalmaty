@@ -1,0 +1,10 @@
+<option value="">---------</option>
+{% if offices|length == 1 %}
+    {% for office in offices %}
+        <option value="{{ office.pk }}" selected="selected">{{ office.title }}</option>
+    {% endfor %}
+{% else %}
+    {% for office in offices %}
+        <option value="{{ office.pk }}">{{ office.title }}</option>
+    {% endfor %} 
+{% endif %} 

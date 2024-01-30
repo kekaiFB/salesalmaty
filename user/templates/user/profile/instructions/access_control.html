@@ -1,0 +1,41 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+        <div class="container-fluid">
+            {% comment %} <div class="row h2 justify-content-center mt-4 alert text-dark">
+                    Инструкции
+            </div> {% endcomment %}
+            
+            <div class="row h3">
+                <div class="col btn btn-success text-white h1 border border-2 p-2 text-center border-end-0"  style="font-size: 100%;">
+                    Роль
+                </div>
+                <div class="col btn btn-success text-white h1 border border-2 p-2 text-center border-end-0"  style="font-size: 100%;">
+                    Доступ
+                </div>
+            </div>
+
+            {% for item in data %}
+                {% for key, value in item.items %}
+                    <div class="row h3 ml-4 mt-4">
+                        {{ key }}
+                    </div>
+
+                    {% for role, access in value.items %}
+                        <div class="row h3 row_instructions">
+                            <div class="col_instructions h4 bg-white rounded col h3 border border-1 p-2 text-center border-end-0">
+                                {{ role }}
+                            </div>
+                            <div class="col_instructions h4 bg-white rounded col h3 border border-1 p-2 text-center">
+                                {{ access }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="w-100"></div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+{% endblock %} 
+
+

@@ -1,0 +1,27 @@
+db.sqlite3
+polyslot_cache
+
+**/__pycache__/**
+*pyc
+*env
+**/.vscode/**
+
+data_dump.json
+
+.env
+polyslot_cache/*
+
+
+# Но не игнорировать эти файлы в директории media
+!static/media/.gitignore
+!static/media/full_logo.jpg
+!static/media/full_logo.svg
+!static/media/logo.png
+
+# Игнорировать все файлы в директории static, кроме указанных
+static/*
+
+# Игнорировать все файлы в директории media
+static/media/*
+
+mailbox_attachments

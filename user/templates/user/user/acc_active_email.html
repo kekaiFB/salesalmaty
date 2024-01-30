@@ -1,0 +1,18 @@
+{% extends "user/user/email.html" %}
+
+{% block content %}
+    <div class="container alert-info rounded p-4">
+        <div class="h3 btn btn-success">
+            Polyslot.ru
+        </div>
+        Здравствуйте 
+        <span class="h5">
+            {{ user.username }}
+        </span>. 
+        
+        <div class="">
+            Пожалуйста, нажмите на <a href="http://{{ domain }}{% url 'user:activate' uidb64=uid token=token %}">ссылку</a>
+            <br> чтобы завершить регистрацию.
+        </div>
+    </div> 
+{% endblock %}

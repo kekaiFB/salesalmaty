@@ -1,0 +1,187 @@
+{% extends "timetable/base.html" %}
+{% load tgo_tags %}
+{% load timetable_tags %}
+{% block content %}
+    {% include 'table/navbar.html' %}
+    {% buttons_to_dt_navbar 'timetable_week_group-resetFilter' timetable_id current_view %}    
+    <h4 class="ml-2 insert_additional_options_after_path"> 
+        {% include 'timetable/buttons-timetable.html' %}
+    </h4> 
+
+    <table id="timetable_week_group" class="table table-bordered table-hover table-condensed bg-white custom-table"  cellspacing="0"  style="width:100%">
+        <thead> 
+            <tr>
+                <th>День</th>
+                <th>Тип</th>
+                <th>Авиакомпания</th>
+                <th>Рейс</th>
+                <th>Прилет из</th>
+                <th>Базовый аэропорт</th>
+                <th>Вылет в</th>
+                <th>Тип ВС</th>
+                <th>Количество кресел</th>
+                
+                <th>Прилет</th>
+                <th>Начало Регистрации</th>
+                <th>Конец Регистрации</th>
+                <th>Вылет</th>
+                <th>Следующий день</th>
+                <th>Переход ч-з сутки</th>
+                <th>Стоянка</th>              
+                <th>ТГО(время)</th>
+                <th>ТГО</th>
+
+                <th>С</th>
+                <th>По</th>
+                <th>Период</th>
+
+                <th>Дополнительные даты</th>
+                <th>Исключенные даты</th>
+
+                <th>Дни полетов</th>
+                <th>Статус</th>
+                <th>Комментарий</th>
+                {% if 'timetable.add_flight' in perms %}
+                    <th>Изменить</th>
+                    <th>Удалить</th>
+                {% endif %}
+                <th>ID</th>
+            </tr>
+        </thead>
+        <tbody>  
+            {% for t, th in timetable %}
+                {% for dw in days_week %}
+                    {% check_days_week dw t as days_week_status %}
+
+                    {% if days_week_status != None %}
+                        <tr style="background-color: {% background t.timetablestatusight %}; color: {% color t.timetablestatusight %}">
+                            <td>
+                                {{ days_week_status }} {% label_week days_week_status %}
+                            </td>
+                            {% classTimetable t.flight.type_flight 'flight' th %}
+                            {% classTimetable t.airline 'airline' th %}
+                            {% classTimetable t.flight 'flight' th %}
+                            {% classTimetable t.flight.arrival 'flight' th %}
+                            {% classTimetable t.timetablelist.baseAirport.code_iata 'baseAirport' th %}
+                            {% classTimetable t.flight.departure 'flight' th %} 
+                            {% classTimetable t.airplane 'flight' th %}
+                            {% classTimetable t.equipmentAirplane.seats 'flight' th %}
+
+                            {% classTimetable t.arrival_time 'arrival_time' th %}
+                            {% classTimetable t.start_register_time 'start_register_time' th %}
+                            {% classTimetable t.end_register_time 'end_register_time' th %}
+                            {% classTimetable t.departure_time 'departure_time' th %}
+                            {% class_next_day_status t.next_day_status 'next_day_status' th %}
+                            {% classTimetable t.transition_day 'transition_day' th %}
+                            {% classTimetable t.parking 'departure_time' th %}
+                            {% classTimetable t.tgo.abstract_length_tgo_hour 'tgo' th %}
+                            {% classTimetable_link t.tgo.get_absolute_url 'tgo' th t %}
+            
+                            {% classTimetable t.date_start 'date_start' th %} 
+                            {% classTimetable t.date_end 'date_end' th %}
+                            {% classTimetable t.date_length 'date_length' th %}
+                            
+                            <td>{% list_to_select t.additional_dates %}</td>
+                            <td>{% list_to_select t.excluded_dates %}</td>
+            
+                            <td>{% day_flight t %}</td>
+                            {% classTimetable t.timetablestatusight 'timetablestatusight' th %}
+                            {% classTimetable t.comment 'comment' th %}
+                            {% if 'timetable.add_flight' in perms %} 
+                                {% check_type_perms_timetable t.flight.type_flight  user_groups as  type_perms_timetable_exist %} 
+                                {% if type_perms_timetable_exist %}     
+                                    <td>                   
+                                        {% edit_button 'timetable:edit_timetable' t.id %}
+                                    </td>
+                                    <td> 
+                                        {% del_button 'timetable:delete_timetable' t.id %}
+                                    </td>
+                                {% else %}
+                                    <td></td>
+                                    <td></td>
+                                {% endif %}  
+                            {% endif %}
+                            <td>{{ t.id }}</td>
+                        </tr>  
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>День</th>
+                <th>Тип</th>
+                <th>Авиакомпания</th>
+                <th>Рейс</th>
+                <th>Прилет из</th>
+                <th>Базовый аэропорт</th>
+                <th>Вылет в</th>
+                <th>Тип ВС</th>
+                <th>Количество кресел</th>
+                
+                <th>Прилет</th>
+                <th>Начало Регистрации</th>
+                <th>Конец Регистрации</th>
+                <th>Вылет</th>
+                <th>Следующий день</th>
+                <th>Переход ч-з сутки</th>
+                <th>Стоянка</th>              
+                <th>ТГО(время)</th>
+                <th>ТГО</th>
+
+                <th>С</th>
+                <th>По</th>
+                <th>Период</th>
+
+                <th>Дополнительные даты</th>
+                <th>Исключенные даты</th>
+
+                <th>Дни полетов</th>
+                <th>Статус</th>
+                <th>Комментарий</th>
+                {% if 'timetable.add_flight' in perms %}
+                    <th>Изменить</th>
+                    <th>Удалить</th>
+                {% endif %}
+                <th>ID</th>
+            {% comment %} <tr>
+                <th rowspan="2">День</th>
+                <th colspan="8" class="h5" style="text-align: center;">Рейс</th>
+                <th colspan="7" class="h5" style="text-align: center;">Время</th>
+                <th colspan="3" class="h5" style="text-align: center;">Период</th>
+
+                <th rowspan="2" class="h5">Дни полетов</th>
+                <th rowspan="2" class="h5">Статус</th>
+                <th rowspan="2" class="h5">Комментарий</th>
+                {% if 'timetable.add_flight' in perms %}
+                    <th rowspan="2"></th>
+                    <th rowspan="2"></th>
+                {% endif %}
+                <th rowspan="2" class="h5">ID</th>
+            </tr>
+            <tr>
+                <th>Тип</th>
+                <th>Авиакомпания</th>
+                <th>Рейс</th>
+                <th>Прилет из</th>
+                <th>Базовый аэропорт</th>
+                <th>Вылет в</th>
+                <th>Тип ВС</th>
+                <th>Количество кресел</th>
+                
+                <th>Прилет</th>
+                <th>Начало Регистрации</th>
+                <th>Конец Регистрации</th>
+                <th>Вылет</th>
+                <th>Следующий день</th>
+                <th>Стоянка</th>
+                <th>ТГО (мин.)</th>
+
+                <th>С</th>
+                <th>По</th>
+                <th>Период (дни)</th>
+            </tr> {% endcomment %}
+        </tfoot>
+    </table>
+    {% include 'timetable/analitics/analitics-content.html' %} 
+{% endblock %}

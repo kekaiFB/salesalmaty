@@ -1,0 +1,61 @@
+<table class="jexcelMerge jexcelTable jexcel_{{counter}}" id="jexcel_{{counter}}" style="display:none">
+    <tbody>
+            <tr>
+                <td>{{order}}</td>
+                <td>{{ tgo.operation }}</td>
+                <td></td>
+                <td></td>
+                <td>{% if tgo.comment %}{{tgo.comment}}{% endif %}</td>
+                <td>{{tgo.time_start}}</td>
+                <td>{{tgo.time_end}}</td>
+                <td>{{tgo.time_lenght}}</td>
+                <td>{{tgo.id}}</td>
+                <td>{{tgo.id}}</td>
+                <td class="merge_td">обновить</td>
+            </tr>
+            {% for r in tgo.ressource.all %}
+                <tr>
+                    <td>{{order}}</td>
+                    <td></td>
+                    <td>{{ r.ressource }} </td>
+                    <td>{{ r.count }} </td>
+                    <td>{% if r.comment %}{{r.comment}}{% endif %}</td>
+                    <td>{{r.time_start}} </td>
+                    <td>{{r.time_end}}</td>
+                    <td>{{r.time_lenght}}</td>
+                    <td>{{r.id}}</td>
+                    <td>{{tgo.id}}</td>
+                    <td>обновить</td>
+                </tr>
+            {% endfor %}  
+            {% for r in technology.ressource.all %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{{ r.ressource }} </td>
+                    <td>{{ r.count }} </td>
+                    <td>{% if r.comment %}{{r.comment}}{% endif %}</td>
+                    <td>=F_tgo_object_{{tgo.id}}</td>
+                    <td>{{r.time_end}}</td>
+                    <td>=H_tgo_object_{{tgo.id}}</td>
+                    <td>{{r.id}}</td>
+                    <td>{{tgo.id}}</td>
+                    <td>добавить</td>
+                </tr>
+            {% endfor %}   
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+<div id="newJexcel_jexcel_{{counter}}"  style='width:100%;' class=""></div>

@@ -1,0 +1,56 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+            <div class="d-flex justify-content-center h2 alert alert-success">ТГО</div>
+                <div class="models-content">
+                    <table class="table_dt_application table table-bordered table-hover table-condensed bg-white rounded-lg border border-white" style="width:100%">
+                        <thead> 
+                            <tr>
+                                <th>Таблица</th>
+                                <th>Название</th>
+                                <th>Комментарий пользователя</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            {% for elem in tgo %} 
+                                <tr>  
+                                    <td>{% if elem.technology_status %}<a target="_blank" class="navbar-brand" href="{% url 'table_tgo:technology' %}">Технология</a>{% else %}<a target="_blank" class="navbar-brand" href="{% url 'table_tgo:index' %}">ТГО</a>{% endif %}</td>
+                                    <td>{{ elem }}</td>
+                                    <td>{% if elem.comment %}{{ elem.comment }}{% else %}...{% endif %}</td>
+                                    <td>{% if elem.technology_status %}{% del_button 'table_tgo:delete_technology' elem.id %}{% else %}{% del_button 'table_tgo:delete_tgo' elem.id %}
+                                        {% endif %}</td>
+                                </tr>  
+                            {% endfor %}  
+
+                            {% for elem in operation %} 
+                                <tr>  
+                                    <td><a target="_blank" class="navbar-brand" href="{% url 'table_tgo:operation-view' %}">Операция</a></td>
+                                    <td>{{ elem }}</td>
+                                    <td>{% if elem.comment %}{{ elem.comment }}{% else %}...{% endif %}</td>
+                                    <td>{% del_button 'table_tgo:operation-delete' elem.id %}</td>
+                                </tr>  
+                            {% endfor %} 
+                            {% for elem in ressource %} 
+                                <tr>  
+                                    <td><a target="_blank" class="navbar-brand" href="{% url 'table_tgo:ressource-view' %}">Ресурс</a></td>
+                                    <td>{{ elem }}</td>
+                                    <td>{% if elem.comment %}{{ elem.comment }}{% else %}...{% endif %}</td>
+                                    <td>{% del_button 'table_tgo:ressource-delete' elem.id %}</td>
+                                </tr>  
+                            {% endfor %}  
+                            
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Таблица</th>
+                                <th>Название</th>
+                                <th>Комментарий пользователя</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+{% endblock %} 

@@ -1,0 +1,75 @@
+
+{% load tgo_tags %}
+
+<table id="current_tgo">
+    <tbody style="display:none">
+        {% for t in tgo_objects %}  
+            <tr>
+                <td>{{t.order}}</td>
+                <td>{{t.operation}}</td>
+                <td>{% if request.user == t.author %}<span class="modalButton text-success" data-form-url="{% url 'table_tgo:create_tgo_object_resource' tgo_id t.id  %}">+</span>{% endif %}</td>
+                <td></td>
+                <td>{% if t.comment %}{{t.comment}}{% endif %}</td>
+                <td>{{t.time_start}}</td>
+                <td>{{t.time_end}}</td>
+                <td>{{t.time_lenght}}</td>
+                <td>{% unique_list t.ressource.all %}</td>
+
+                <td>{{t.id}}</td>
+                <td>table_tgo_tgo_object</td>
+                <td class="author">{{t.author}}</td>
+                <td>{% if request.user == t.author %}<span class="text-warning modalButton" data-form-url="{% url 'table_tgo:edit_tgo_object' t.id %}">⚙️</span>{% endif %}</td>
+                <td>{% if request.user == t.author %}<span class="text-danger delete" data-form-url="{% url 'table_tgo:delete_tgo_object' t.id %}">❌</span>{% endif %}</td>
+                <td>{% if request.user == t.author %}{% if t.technology  %}{% toInt t.technology  as t_technology %}<span class="technology_span technology_{{t_technology}}_{{forloop.counter}}"><span class="text-warning modalButton" data-form-url="{% url 'table_tgo:edit_technology_object' t.id t_technology t.order %}">⚙️</span><span class="text-danger delete" data-form-url="{% url 'table_tgo:delete_technology_object' t.id %}">❌</span></span>{% endif %}{% endif %}</td>
+            </tr>
+            {% for r in t.ressource.all %}
+                <tr>
+                    <td>{{t.order}}.{{forloop.counter}}</td>
+                    <td></td>
+                    <td>{{ r.ressource }} </td>
+                    <td>{{ r.count }}</td>
+                    <td>{% if r.comment %}{{r.comment}}{% endif %}</td>
+                    <td>{{r.time_start}} </td>
+                    <td>{{r.time_end}}</td>
+                    <td>{{r.time_lenght}}</td>
+                    <td>{{ r.ressource.office.title }}</td>
+
+                    <td>{{r.id}}</td>
+                    <td>table_tgo_ressourceoperation</td>
+                    <td>{{t.author}}</td>
+                    <td>{% if request.user == t.author %}<span class="text-warning modalButton" data-form-url="{% url 'table_tgo:edit_resource' r.id %}">⚙️</span>{% endif %}</td>
+                    <td>{% if request.user == t.author %}<span class="text-danger delete" data-form-url="{% url 'table_tgo:delete_resource' r.id %}">❌</span>{% endif %}</td> 
+                    <td>{% if request.user == t.author %}{% if t.technology  %}{% toInt t.technology  as t_technology %}<span class="technology_span technology_{{t_technology}}_{{forloop.counter}}"></span>{% endif %}{% endif %}</td>
+                </tr>
+            {% endfor %}   
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<div id="spreadsheet" style='width:100%;max-width:600px;height:100px;'></div>
+<input type="hidden" value={{ request.user }} class="requestUser"/>
+<input type="hidden" name="author_tgo" value={{ author }}> 
+<input type="hidden" name="author" value={{ tgo_home.author }}>  
+{% if tgo_home.technology_status == 0 %}
+    <a type="hidden" id="urlIndex" href="{% url 'table_tgo:index' %}"></a>
+{% else %}
+    <a type="hidden" id="urlIndex" href="{% url 'table_tgo:technology' %}"></a>
+{% endif %}
+

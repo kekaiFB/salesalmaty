@@ -1,0 +1,20 @@
+{% extends "user/profile/profile_base.html" %}
+{% load tgo_tags %}
+
+{% block list %}
+        <div class="models-content">
+            <div class="row h2 justify-content-center mt-4 alert text-dark">
+                    Импорт
+            </div>
+            {% for m in import_modules %}
+                <div class="row h4 ml-3 mr-3 mt-2 bg-white rounded border p-4 mt-5">
+                    <div class="col text-center">
+                        <a class="ml-2 h2 nav-link" href="{% url m.url_name %}"><button class="button-52" role="button">{{m.title}}</button></a>
+                    </div>
+                </div>
+            {% endfor %}
+            
+        </div>
+{% endblock %} 
+
+

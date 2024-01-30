@@ -1,0 +1,284 @@
+{% extends "timetable/base.html" %}
+{% load tgo_tags %}
+{% load timetable_tags %}
+{% load user_tags %}
+
+{% block content %}
+
+    {% include 'table/navbar.html' %}
+    <div class="alert ">
+        {% if 'timetable.add_flight' in perms %}
+            {% add_button_text 'timetable:add_timetable_list' %}
+        {% endif %}
+        <input hidden id="dom-settings" value="timetable-list"></span>
+
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Справочники
+        </button> 
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{% url 'timetable:airlines' %}">Авиакомпании</a>
+            <a class="dropdown-item" href="{% url 'timetable:airplane' %}">Флот</a>
+            <a class="dropdown-item" href="{% url 'timetable:country' %}">Страны</a>
+            <a class="dropdown-item" href="{% url 'timetable:city' %}">Города</a>
+            <a class="dropdown-item" href="{% url 'timetable:airport' %}">Аэропорты</a>
+            <a class="dropdown-item" href="{% url 'timetable:flight' %}">Рейсы</a>
+            <hr>
+            <a class="dropdown-item" href="{% url 'timetable:timetableStatus' %}">Статусы Рейсов</a>
+        </div>
+        <span id="dt_resetFilter" class="btn btn-success">Сбросить фильтры</span>    
+    </div>
+   
+    <div class="ml-3 m-3 text-dark base_airport_div">
+        <span class="h4">Базовый аэропорт: </span>
+        {% if base_airport %}
+            <span class="span_base_airport">
+                <span class="h4">{{ base_airport.0.baseAirport }}</span>
+                <input hidden id="id_base_airport" value={{ base_airport.0.id }} />
+                <a class="text-primary delete_base_airport" type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" data-title="Вы хотите изменить базовый аэропрот на пустое значение?" data-original-title="" title="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path></svg>
+                </a>
+            </span>
+        {% else %}  
+            {% if 'Администратор' in user_groups  %}
+                <span class="span_base_airport"><input type="text" id="base_airport" maxlength="3" placeholder="первые буквы города"/></span>
+            {% endif %}
+        {% endif %}
+
+        <button class="btn btn-success btn-sm save_base_airport" type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" data-title="Вы уверены?" data-original-title="" title="">
+            Сохранить
+        </button>
+        <button class="btn btn-danger btn-sm cancel_base_airport" type="submit" data-toggle="confirmation" data-btn-ok-label="Да" data-btn-ok-class="btn btn-outline-success" data-btn-cancel-label="Нет" data-btn-cancel-class="btn btn-outline-secondary" data-title="Вы уверены?" data-original-title="" title="">
+            Отмена
+        </button>
+    </div>
+
+    <div class="alert timetable_list text-dark boreder border-1 border-dark">
+        <div class="text-center h3 mt-3">Сейчас используется</div>
+        {% if timetableList_used_active %}
+            <table class="table rounded-lgn col-12 bg-white rounded-3 overflow-hidden used_timetable" style="width:100%">
+                <thead>
+                    <tr class="h5">
+                        <th>Автор</th>
+                        <th>Название</th>
+                        <th>Действует с</th>
+                        <th>Действует по</th>
+                        <th>По умолчанию</th>
+                        {% if perm_analitics_dontWorking %}
+                            <th>Аналитика</th>
+                        {% endif %}
+                        {% comment %} {% if perm_resource_allocation %}
+                            <th>Распределение ресурсов</th>
+                        {% endif %} {% endcomment %}
+                        <th></th>
+                        {% if 'timetable.add_flight' in perms %}
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in timetableList_used_active %}  
+                        <tr class="h5">
+                            <td class={{t.is_active}}>{{t.author}}</td>
+                            <td class={{t.is_active}}>{{t.title}}</td>
+                            <td class={{t.is_active}}>{{t.date_start|date:"d-m-Y"}}</td>
+                            <td class={{t.is_active}}>{{t.date_end|date:"d-m-Y"}}</td>
+                            <td class={{t.is_active}}>{% is_default_checkbox  t.is_default t.id %}</td>
+                            {% if perm_analitics_dontWorking %}
+                                <td class={{t.is_active}}>{% button_analitics 'timetable:analitics' t.id %}</td>
+                            {% endif %}
+                            {% comment %} {% if perm_resource_allocation %}
+                                <td>{% button_allocation 'timetable:allocation' t.id %}</td>
+                            {% endif %} {% endcomment %}
+                            <td>
+                                <a class="btn btn-outline-warning" href={{ t.get_absolute_url }}>Подробнее</a>
+                            </td> 
+                            {% if 'timetable.add_flight' in perms %}
+                                <td>
+                                    {% copy_button 'timetable:copy_timetable' t.id "Копия" "Создать копию расписания?" %}
+                                </td>                            
+                                    {% if t.is_active %}
+                                        <td>
+                                            {% edit_button 'timetable:edit_timetable_list' t.id %}
+                                        </td>
+                                        <td>
+                                            {% del_button 'timetable:timetable-no-active' t.id %}
+                                        </td>
+                                    {% else %}
+                                        <td></td>
+                                        <td>
+                                            {% restore_button 'timetable:timetable-is-active' t.id %}
+                                        </td>
+                                    {% endif %}
+                            {% endif %}
+                            
+                        </tr>     
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="text-center">На текующую дату нету активного расписания.</div>
+        {% endif %}
+        <div></div>
+        <div class="text-center h3 mt-5">Активные расписания</div>
+        
+        {% if timetableList_active %}
+            <table class="table rounded-lgn col-12 bg-white used_timetable" style="width:100%">
+                <thead>
+                    <tr class="h5">
+                        <th>Автор</th>
+                        <th>Название</th>
+                        <th>Действует с</th>
+                        <th>Действует по</th>
+                        <th>По умолчанию</th>
+                        {% if perm_analitics_dontWorking %}
+                            <th>Аналитика</th>
+                        {% endif %}
+                        {% comment %} {% if perm_resource_allocation %}
+                            <th>Распределение ресурсов</th>
+                        {% endif %} {% endcomment %}
+                        <th></th>
+                        {% if 'timetable.add_flight' in perms %}
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in timetableList_active %}  
+                        <tr class="h5">
+                            <td class={{t.is_active}}>{{t.author}}</td>
+                            <td class={{t.is_active}}>{{t.title}}</td>
+                            <td class={{t.is_active}}>{{t.date_start|date:"d-m-Y"}}</td>
+                            <td class={{t.is_active}}>{{t.date_end|date:"d-m-Y"}}</td>
+                            <td class={{t.is_active}}>{% is_default_checkbox  t.is_default t.id %}</td>
+                            {% if perm_analitics_dontWorking %}
+                                <td class={{t.is_active}}>{% button_analitics 'timetable:analitics' t.id %}</td>
+                            {% endif %}
+                            {% comment %} {% if perm_resource_allocation %}
+                                <td>{% button_allocation 'timetable:allocation' t.id %}</td>
+                            {% endif %} {% endcomment %}
+                            <td>
+                                <a class="btn btn-outline-warning" href={{ t.get_absolute_url }}>Подробнее</a>
+                            </td> 
+                            
+                            {% if 'timetable.add_flight' in perms %}
+                                <td>
+                                    {% copy_button 'timetable:copy_timetable' t.id "Копия" "Создать копию расписания?" %}
+                                </td>                            
+                                    {% if t.is_active %}
+                                        <td>
+                                            {% edit_button 'timetable:edit_timetable_list' t.id %}
+                                        </td>
+                                        <td>
+                                            {% del_button 'timetable:timetable-no-active' t.id %}
+                                        </td>
+                                    {% else %}
+                                        <td></td>
+                                        <td>
+                                            {% restore_button 'timetable:timetable-is-active' t.id %}
+                                        </td>
+                                    {% endif %}
+                            {% endif %}
+                            
+                        </tr>     
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="text-center">Нет активных расписаний</div>
+        {% endif %}
+        <div></div>
+        <div class="text-center mt-5 h3">Неактивные расписания</div>
+        {% if timetableList_no_active %}
+            <table class="table rounded-lgn col-12 table_dt bg-white rounded-3 overflow-hidden used_timetable" style="width:100%">
+                <thead>
+                    <tr class="h5">
+                        <th>Автор</th>
+                        <th>Название</th>
+                        <th>Действует с</th>
+                        <th>Действует по</th>
+                        <th>По умолчанию</th>
+                        {% if perm_analitics_dontWorking %}
+                            <th>Аналитика</th>
+                        {% endif %}
+                        {% comment %} {% if perm_resource_allocation %}
+                            <th>Распределение ресурсов</th>
+                        {% endif %} {% endcomment %}
+                        <th></th>
+                        {% if 'timetable.add_flight' in perms %}
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in timetableList_no_active %}  
+                        <tr class="h5">
+                            <td class={{t.is_active}}>{{t.author}}</td>
+                            <td class={{t.is_active}}>{{t.title}}</td>
+                            <td class={{t.is_active}}>{{t.date_start|date:"d-m-Y"}}</td>
+                            <td class={{t.is_active}}>{{t.date_end|date:"d-m-Y"}}</td>
+                            <td class={{t.is_active}}>{% is_default_checkbox  t.is_default t.id %}</td>
+                            {% if perm_analitics_dontWorking %}
+                                <td>{% button_analitics 'timetable:analitics' t.id %}</td>
+                            {% endif %}
+                            {% comment %} {% if perm_resource_allocation %}
+                                <td>{% button_allocation 'timetable:allocation' t.id %}</td>
+                            {% endif %} {% endcomment %}
+                            <td>
+                                <a class="btn btn-outline-warning" href={{ t.get_absolute_url }}>Подробнее</a>
+                            </td> 
+                            
+                            {% if 'timetable.add_flight' in perms %}
+                                <td>
+                                    {% copy_button 'timetable:copy_timetable' t.id "Копия" "Создать копию расписания?" %}
+                                </td>                            
+                                    {% if t.is_active %}
+                                        <td>
+                                            {% edit_button 'timetable:edit_timetable_list' t.id %}
+                                        </td>
+                                        <td>
+                                            {% del_button 'timetable:timetable-no-active' t.id %}
+                                        </td>
+                                    {% else %}
+                                        <td></td>
+                                        <td>
+                                            {% restore_button 'timetable:timetable-is-active' t.id %}
+                                        </td>
+                                    {% endif %}
+                            {% endif %}
+                            
+                        </tr>     
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="h5">
+                        <th>Автор</th>
+                        <th>Название</th>
+                        <th>Действует с</th>
+                        <th>Действует по</th>
+                        <th>По умолчанию</th>
+                        {% if perm_analitics_dontWorking %}
+                            <th>Аналитика</th>
+                        {% endif %}
+                        {% comment %} {% if perm_resource_allocation %}
+                            <th>Распределение ресурсов</th>
+                        {% endif %} {% endcomment %}
+                        <th></th>
+                        {% if 'timetable.add_flight' in perms %}
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        {% endif %}
+                    </tr>
+                </tfoot>
+            </table>
+        {% else %}
+            <div class="text-center">Нет данных</div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% if has_options %}
+    <select>
+        {% for option in options %}
+            <option value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select>
+{% endif %}

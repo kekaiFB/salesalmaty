@@ -1,0 +1,95 @@
+{% if order == '' %}
+<table class="jexcelTable jexcel_{{counter}}" id="jexcel_{{counter}}" style="display:none">
+    <tbody>
+            <tr>
+                <td>{{order}}</td>
+                <td>{{ t.operation }}</td>
+                <td></td>
+                <td></td>
+                <td>{% if t.comment %}{{t.comment}}{% endif %}</td>
+                <td>{{t.time_start}}</td>
+                <td>{{t.time_end}}</td>
+                <td>{{t.time_lenght}}</td>
+                <td>{{t.id}}</td>
+                <td>{{t.id}}</td>
+                <td>обновить</td>
+            </tr>
+            {% for r in t.ressource.all %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{{ r.ressource }} </td>
+                    <td>{{ r.count }} </td>
+                    <td>{% if r.comment %}{{r.comment}}{% endif %}</td>
+                    <td>{{r.time_start}} </td>
+                    <td>{{r.time_end}}</td>
+                    <td>{{r.time_lenght}}</td>
+                    <td>{{r.id}}</td>
+                    <td>{{t.id}}</td>
+                    <td>обновить</td>
+                </tr>
+            {% endfor %}   
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+<div id="newJexcel_jexcel_{{counter}}"  style='width:100%;' class=""></div>
+{% else %}
+<table class="jexcelMerge jexcelTable jexcel_{{counter}}" id="jexcel_{{counter}}" style="display:none">
+    <tbody>
+            <tr>
+                <td>{{order}}</td>
+                <td>{{ t.operation }}</td>
+                <td></td>
+                <td></td>
+                <td>{% if t.comment %}{{t.comment}}{% endif %}</td>
+                <td>{{t.time_start}}</td>
+                <td>{{t.time_end}}</td>
+                <td>{{t.time_lenght}}</td>
+                <td>{{t.id}}</td>
+                <td>{{t.id}}</td>
+                <td>добавить</td>
+            </tr>
+            {% for r in t.ressource.all %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>{{ r.ressource }} </td>
+                    <td>{{ r.count }} </td>
+                    <td>{% if r.comment %}{{r.comment}}{% endif %}</td>
+                    <td>{{r.time_start}} </td>
+                    <td>{{r.time_end}}</td>
+                    <td>{{r.time_lenght}}</td>
+                    <td>{{r.id}}</td>
+                    <td>{{t.id}}</td>
+                    <td>добавить</td>
+                </tr>
+            {% endfor %}   
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+<div id="newJexcel_jexcel_{{counter}}"  style='width:100%;' class=""></div>
+{% endif %}
