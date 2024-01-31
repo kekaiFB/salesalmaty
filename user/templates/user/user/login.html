@@ -46,7 +46,7 @@
             <button type="submit" class="btn btn-dark">Войти</button>
             
             <p class="alternate">
-                <a class="lefttPosition" href="{% url 'user:password_reset' %}">Забыли пароль?</a>
+                {% comment %} <a class="lefttPosition" href="{% url 'user:password_reset' %}">Забыли пароль?</a> {% endcomment %}
                 <a class="rightPosition" href="{% url 'user:register' %}">Регистрация</a>
             </p>
         </form>

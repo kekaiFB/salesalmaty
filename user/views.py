@@ -90,7 +90,8 @@ def registerUserForm(request):
                 if form.is_valid():
                     with transaction.atomic():
                         user = form.save(commit=False)
-                        user.is_active = False
+                        # user.is_active = False
+                        user.is_active = True
                         user.username = user.email
                         user.save()
 
@@ -103,19 +104,20 @@ def registerUserForm(request):
                         #Создаем сотрудника
                         Human.objects.create(user=user,  groups='Администратор', date_start = datetime.today().strftime('%Y-%m-%d'))
 
-                        mail_subject = 'Активируйте учетную запись'
-                        message = render_to_string('user/user/acc_active_email.html', {
-                            'user': user,
-                            'domain': my_current_site(request),
-                            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-                            'token': default_token_generator.make_token(user),                
-                        })
-                        to_email = form.cleaned_data.get('email')
-                        email = EmailMessage(mail_subject, message, to=[to_email])
-                        email.content_subtype = 'html' 
-                        email.send()
+                        # mail_subject = 'Активируйте учетную запись'
+                        # message = render_to_string('user/user/acc_active_email.html', {
+                        #     'user': user,
+                        #     'domain': my_current_site(request),
+                        #     'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                        #     'token': default_token_generator.make_token(user),                
+                        # })
+                        # to_email = form.cleaned_data.get('email')
+                        # email = EmailMessage(mail_subject, message, to=[to_email])
+                        # email.content_subtype = 'html' 
+                        # email.send()
 
-                        message = 'Проверьте электронную почту чтобы завершить регистрацию'
+                        # message = 'Проверьте электронную почту чтобы завершить регистрацию'
+                        message = 'Вы успешно зарегистрированы'
                     return render(request, 'user/user/message.html', {'message': message})
     else:
         form = RegisterUserForm()
